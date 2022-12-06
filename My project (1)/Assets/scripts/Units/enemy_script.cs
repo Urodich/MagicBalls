@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class enemy_script : unit_script
 {
-    [SerializeField] DamageType damageType;
-    [SerializeField] Collider attackCol;
-    [SerializeField] Collider visibleCol;
+    [SerializeField] protected DamageType damageType;
+    [SerializeField] protected Collider attackCol;
+    [SerializeField] protected Collider visibleCol;
     [SerializeField] protected float attackDistance=4f;
     [SerializeField] protected float attackDelay=1f;
     [SerializeField] protected float attackSpeed=1f;
@@ -27,7 +27,7 @@ public class enemy_script : unit_script
         aims = new List<GameObject>();
     }
 
-    new void FixedUpdate()
+    void FixedUpdate()
     {
         //base.FixedUpdate();
         if(isStunned) return;

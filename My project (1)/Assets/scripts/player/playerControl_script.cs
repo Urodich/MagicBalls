@@ -77,22 +77,64 @@ public class playerControl_script : MonoBehaviour
     //CASTS
     //
     void Update(){
-        if(Input.GetKeyDown("q")) {if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(1);} //fire
-        if(Input.GetKeyDown(KeyCode.W)) {if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(4);} //water
-        if(Input.GetKeyDown("e")) {if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(13);} //air
-        if(Input.GetKeyDown(KeyCode.A)) {if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(40);} //earth
-        if(Input.GetKeyDown(KeyCode.S)) {if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(121);} //life
-        if(Input.GetKeyDown(KeyCode.D)) {if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(364);} //thunder
-
+        if(Input.GetKeyDown("q")) CastSphere(0); //fire 1
+        if(Input.GetKeyDown(KeyCode.W)) CastSphere(1); //water 4
+        if(Input.GetKeyDown("e")) CastSphere(2); //air 13
+        if(Input.GetKeyDown(KeyCode.A)) CastSphere(3); //earth 40
+        if(Input.GetKeyDown(KeyCode.S)) CastSphere(4); //life 121
+        if(Input.GetKeyDown(KeyCode.D)) CastSphere(5); //thunder 364
+//{if (Spheres.Count == 3) Spheres.Dequeue(); Spheres.Enqueue(364);}
         if(Input.GetMouseButtonDown(1)){
             int sum = 0;
-            while (Spheres.Count !=0 )
+            while (Spheres.Count !=0 ){
                 sum+=Spheres.Dequeue();
+                Destroy(spheres.Dequeue());
+                }
             if(spells_Script.Spells.ContainsKey(sum))
                 spells_Script.Spells[sum]();
             else
                 spells_Script.Spells[0]();
             sum=0;
+        }
+    }
+    [SerializeField]List<ParticleSystem> sphere = new List<ParticleSystem>();
+    Queue<ParticleSystem> spheres = new Queue<ParticleSystem>();
+    void CastSphere(int i){
+        if (Spheres.Count == 3) {
+            Spheres.Dequeue();
+            Destroy(spheres.Dequeue());
+            } 
+        switch(i){
+            case 0:{
+                Spheres.Enqueue(1);
+                spheres.Enqueue(Instantiate(sphere[i],transform));
+                break;
+                }
+            case 1:{
+                Spheres.Enqueue(4);
+                spheres.Enqueue(Instantiate(sphere[i],transform));
+                break;
+                }
+            case 2:{
+                Spheres.Enqueue(13);
+                spheres.Enqueue(Instantiate(sphere[i],transform));
+                break;
+                }
+            case 3:{
+                Spheres.Enqueue(40);
+                spheres.Enqueue(Instantiate(sphere[i],transform));
+                break;
+                }
+            case 4:{
+                Spheres.Enqueue(121);
+                spheres.Enqueue(Instantiate(sphere[i],transform));
+                break;
+                }
+            case 5:{
+                Spheres.Enqueue(364);
+                spheres.Enqueue(Instantiate(sphere[i],transform));
+                break;
+                }
         }
     }
 }

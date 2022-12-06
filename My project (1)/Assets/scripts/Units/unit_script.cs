@@ -35,7 +35,7 @@ public class unit_script : MonoBehaviour
     Material mainMaterial;
     //[SerializeField] Material damageMaterial;
     Color main;
-    new SkinnedMeshRenderer ModelRenderer;
+    SkinnedMeshRenderer ModelRenderer;
     new MeshRenderer renderer;
     [SerializeField] GameObject model;
     [SerializeField] public Animator animator;
