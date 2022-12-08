@@ -57,7 +57,11 @@ MonoBehaviour:
   FireResist: 0
   ThunderResist: 0
   PhysicalResist: 0
+  damageFactor: 1
   isFlying: 0
+  isStunned: 0
+  model: {fileID: 5823782873271094268}
+  animator: {fileID: 2736296087662041987}
   destination: {x: 0, y: 0, z: 0}
 --- !u!195 &3657693517107505914
 NavMeshAgent:
@@ -105,6 +109,7 @@ GameObject:
   - component: {fileID: 8469789176884675694}
   - component: {fileID: 7775101894591418193}
   - component: {fileID: 3989978674101778759}
+  - component: {fileID: 2736296087662041987}
   m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
@@ -175,3 +180,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!95 &2736296087662041987
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5823782873271094268}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
