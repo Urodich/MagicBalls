@@ -16,6 +16,6 @@ public class torrent_script : MonoBehaviour
         if (collider.gameObject.tag!="enemy") return;
         enemy_script enemy = collider.gameObject.GetComponent<enemy_script>();
         //enemy.Stun(stunDuration*air);
-        enemy.Move(Vector3.up, 3*air, stunDuration*air, true);
+        enemy.Move(Vector3.up, air, stunDuration*air, true);
     }
 }

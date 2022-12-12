@@ -6,7 +6,7 @@ using System;
 
 public class unit_script : MonoBehaviour
 {
-    [SerializeField]protected UnityEngine.UI.Slider hpBar;
+    [SerializeField] protected UnityEngine.UI.Slider hpBar;
     [SerializeField] protected float maxHp;
     protected float maxHpFactor=1;
     protected float curHp;
@@ -30,16 +30,18 @@ public class unit_script : MonoBehaviour
 
     public bool isFlying=false;
     public bool isStunned=false;
+    public bool isGrounded=true;
     protected Vector3 startAim=Vector3.zero;
 
     Material mainMaterial;
     //[SerializeField] Material damageMaterial;
     Color main;
     SkinnedMeshRenderer ModelRenderer;
-    new MeshRenderer renderer;
+    MeshRenderer renderer;
     [SerializeField] GameObject model;
     [SerializeField] public Animator animator;
     protected NavMeshAgent navMesh;
+    Rigidbody rb;
 
     public void Start(){
         navMesh=gameObject.GetComponent<NavMeshAgent>();
@@ -50,10 +52,14 @@ public class unit_script : MonoBehaviour
         ModelRenderer = model.GetComponentInChildren<SkinnedMeshRenderer>();
         if(ModelRenderer!=null)mainMaterial = ModelRenderer.material;
         else {renderer = gameObject.GetComponentInChildren<MeshRenderer>();mainMaterial = renderer.material;} //delete this
-        
+        rb = GetComponent<Rigidbody>();
+
         StartCoroutine(regen());
         mainMaterial.DisableKeyword("HOVERED");
         mainMaterial.DisableKeyword("DAMAGED");
+    }
+    void FixedUpdate(){
+        
     }
     public void SetAim(Vector3 pos){
         startAim=pos;
@@ -74,7 +80,7 @@ public class unit_script : MonoBehaviour
     }
     //работает как говно не трогать
     Coroutine cor=null;
-    public void Move(Vector3 direction, float power, float time, bool Stunned){
+    public void Move1 (Vector3 direction, float power, float time, bool Stunned){
         if(Stunned) Stun(time);
         if(cor==null) cor=StartCoroutine(move(direction, power, time));
         else {
@@ -96,6 +102,23 @@ public class unit_script : MonoBehaviour
         }
         navMesh.baseOffset=(float)baseOffset;
         if(time<=0)baseOffset=null;
+    }
+    //Move2
+    public void Move(Vector3 direction, float power, float time, bool Stunned){
+        if(Vector3.Dot(direction, Vector3.up)>0)
+            isGrounded=false;
+        if (Stunned) {
+            Stun(time+0.1f);
+            navMesh.enabled=false;
+        }
+        Invoke("remove", time);
+        rb.isKinematic = false;
+        rb.AddForce(direction*power,ForceMode.Impulse);
+    }
+    IEnumerator remove(){
+        yield return new WaitUntil(()=>isGrounded);
+            rb.isKinematic=true;
+            navMesh.enabled=true;
     }
     public virtual void Stun(float time){
         isStunned=true;
