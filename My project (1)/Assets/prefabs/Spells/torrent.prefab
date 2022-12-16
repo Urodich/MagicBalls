@@ -778,7 +778,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.84
+      value: 1
       mode: 0
       spread: 0
       speed:
@@ -2714,7 +2714,7 @@ ParticleSystem:
     strength:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.55
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4009,14 +4009,14 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     minVertexDistance: 0.2
-    textureMode: 0
+    textureMode: 1
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
     dieWithParticles: 1
     sizeAffectsWidth: 1
     sizeAffectsLifetime: 1
-    inheritParticleColor: 1
+    inheritParticleColor: 0
     generateLightingData: 1
     splitSubEmitterRibbons: 0
     attachRibbonsToTransform: 0
@@ -4085,29 +4085,29 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     widthOverTrail:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 1
+      minMaxState: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0.060342327
+          inSlope: 0.5306011
+          outSlope: 0.5306011
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.11397738
         - serializedVersion: 3
-          time: 1
-          value: 0.21538544
-          inSlope: -1.0065007
-          outSlope: -1.0065007
+          time: 0.99786377
+          value: 0.84469604
+          inSlope: -0.12454168
+          outSlope: -0.12454168
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.10699588
+          inWeight: 0.13979335
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -4144,7 +4144,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0, g: 0.65112835, b: 0.8301887, a: 1}
-        key1: {r: 0.0047169924, g: 0.3117939, b: 1, a: 1}
+        key1: {r: 0, g: 0.21712977, b: 0.6981132, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -5578,7 +5578,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.7
+      value: 1
       mode: 0
       spread: 0
       speed:
