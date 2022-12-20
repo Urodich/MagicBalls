@@ -70,7 +70,7 @@ public class arena_script : MonoBehaviour
             yield return new WaitWhile(()=>Boost_panel.active);
             center.position+=new Vector3(Random.Range(0,5),0,Random.Range(0,5));
             Instantiate(bonus, center.position, new Quaternion());
-            Debug.Log("bonus spawned");
+            //Debug.Log("bonus spawned");
         }
     }
     int waveNumber=1;
@@ -82,12 +82,12 @@ public class arena_script : MonoBehaviour
             infoText.enabled=false;
             foreach(GameObject enemy in wave){
                 GameObject unit = Instantiate(enemy,spawnPoints[Random.Range(0,spawnPoints.Length-1)].position, new Quaternion());
-                Debug.Log("spawn enemy");
+                //Debug.Log("spawn enemy");
                 aliveEnemies.Add(unit);
                 enemy_script _enemy = unit.GetComponent<enemy_script>();
                 _enemy.dieEvent+=(GameObject)=>aliveEnemies.Remove(GameObject);
                 //_enemy.SetAim(player.transform.position);
-                Debug.Log("1 step");
+                //Debug.Log("1 step");
                 yield return new WaitForSeconds(2f);
             }
             yield return new WaitWhile(()=>aliveEnemies.Count>0);

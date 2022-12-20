@@ -78,8 +78,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 019b8a88c955d0141a50ebe245159a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 0.1
-  rotateSpeed: 15
   mousePos: {x: 0, y: 0, z: 0}
   layer:
     serializedVersion: 2
@@ -89,7 +87,8 @@ MonoBehaviour:
   mouseTarget: {fileID: 0}
   enemies:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
+  sphereParent: {fileID: 4489135174467704389}
   sphere:
   - {fileID: 2951065586091326984, guid: 8658de5dc3818d946adfb2eaec1c3281, type: 3}
   - {fileID: 2951065586091326984, guid: c53ad0caf7c93284c98f3bdb8cd39b11, type: 3}

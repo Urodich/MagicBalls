@@ -5,18 +5,18 @@ using UnityEngine.AI;
 
 public class playerControl_script : MonoBehaviour
 {
-    public float distance;
-    public float rotateSpeed;
+    //public float distance;
+    //public float rotateSpeed;
     //public float speed = 5f;
     public Vector3 mousePos;
-    [SerializeField]
-    public LayerMask layer;
+    [SerializeField] LayerMask layer;
     Spells_script spells_Script;
     public NavMeshAgent navMesh;
     [SerializeField] Animator animator;
     player_script player;
     public GameObject mouseTarget;
     [SerializeField] LayerMask enemies;
+    [SerializeField] Transform sphereParent;
     Queue<int> Spheres = new Queue<int>(3);
     
     void Start()
@@ -90,10 +90,7 @@ public class playerControl_script : MonoBehaviour
                 sum+=Spheres.Dequeue();
                 Destroy(spheres.Dequeue());
                 }
-            if(spells_Script.Spells.ContainsKey(sum))
-                spells_Script.Spells[sum]();
-            else
-                spells_Script.Spells[0]();
+            spells_Script.CastSpell(sum);
             sum=0;
         }
     }
@@ -107,32 +104,32 @@ public class playerControl_script : MonoBehaviour
         switch(i){
             case 0:{
                 Spheres.Enqueue(1);
-                spheres.Enqueue(Instantiate(sphere[i],transform));
+                spheres.Enqueue(Instantiate(sphere[i],sphereParent));
                 break;
                 }
             case 1:{
                 Spheres.Enqueue(4);
-                spheres.Enqueue(Instantiate(sphere[i],transform));
+                spheres.Enqueue(Instantiate(sphere[i],sphereParent));
                 break;
                 }
             case 2:{
                 Spheres.Enqueue(13);
-                spheres.Enqueue(Instantiate(sphere[i],transform));
+                spheres.Enqueue(Instantiate(sphere[i],sphereParent));
                 break;
                 }
             case 3:{
                 Spheres.Enqueue(40);
-                spheres.Enqueue(Instantiate(sphere[i],transform));
+                spheres.Enqueue(Instantiate(sphere[i],sphereParent));
                 break;
                 }
             case 4:{
                 Spheres.Enqueue(121);
-                spheres.Enqueue(Instantiate(sphere[i],transform));
+                spheres.Enqueue(Instantiate(sphere[i],sphereParent));
                 break;
                 }
             case 5:{
                 Spheres.Enqueue(364);
-                spheres.Enqueue(Instantiate(sphere[i],transform));
+                spheres.Enqueue(Instantiate(sphere[i],sphereParent));
                 break;
                 }
         }

@@ -19,6 +19,7 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject spellCooDown;
     [SerializeField] public bool GodMod {get;set;}=false;
     [SerializeField] Animator animator;
+    public Coroutine currentCast;
     void Start(){
         spellPanel=GameObject.Find("SpellPanel");
         player = GameObject.FindGameObjectWithTag("Player");
@@ -39,13 +40,13 @@ public class Spells_script : MonoBehaviour
         [9] = ()=>Smoke(1,2),
         [12] = ()=>Wave(3),
         [13] = ()=>Wind(1),
-        [14] = ()=>Fireball(1,1),
-        [15] = ()=>Fireball(1,2),
+        //[14] = Fireball(1,1),
+        //[15] = Fireball(1,2),
         [17] = ()=>Torrent(1,1),
         [18] = ()=>FireStorm(),
         [21] = ()=>Torrent(1,2),
         [26] = ()=>Wind(2),
-        [27] = ()=>Fireball(2,1),
+        //[27] = Fireball(2,1),
         [30] = ()=>Torrent(2,1),
         [39] = ()=>Wind(3),
         [40] = ()=>Earhtquake(1),
@@ -97,7 +98,21 @@ public class Spells_script : MonoBehaviour
         [1092] = ()=>Chain(3)
         };
     }
-    public void castEmpty(){
+
+    public void CastSpell(int hex){
+        Debug.Log("Casting" + hex+"  currentCor"+currentCast);
+        if (Spells.ContainsKey(hex))
+            Spells[hex]();
+        else
+            Spells[0]();
+    }
+    void NotEnoughtMana(){
+        Debug.Log("NotMana");
+    }
+    void CoolDawn(){
+        Debug.Log("CoolDown");
+    }
+    void castEmpty(){
         Debug.Log("empty");
         animator.SetTrigger("");
     }
@@ -112,59 +127,74 @@ public class Spells_script : MonoBehaviour
         spell.SrcImage=image;
         spell.SetTime(CDTime,true);
     }
+
     //FIREBALL
-    
     [SerializeField] GameObject fireball;
     bool fireballCollDown=false;
     float fireballManaCost=10f;
+    float fireballDelay=0.5f;
     void Fireball(float damage, float speed){
         if(!GodMod){
-            if(fireballCollDown) return;
-            if(stats.CurMana<fireballManaCost) return;
-            stats.CurMana-=fireballManaCost;
-            fireballCollDown=true;}
-            CastSpell(2f,"FireBall",()=>fireballCollDown=false);
-        
-        Debug.Log("fireball");
-        animator.SetTrigger("cast8");
-        for(int i = 0; i < buffs.projectile; i++){
-            fireball_script fb = Instantiate(fireball, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion()).GetComponent<fireball_script>();
-            fb.damage *=damage;
-            fb.speed *=speed;
-            if(buffs.projectile==1) return;
-            fb = Instantiate(fireball, player.transform.position+player.transform.forward-player.transform.right*i*0.3f, new Quaternion()).GetComponent<fireball_script>();
-            fb.damage *=damage;
-            fb.speed *=speed;
+            if(fireballCollDown) {CoolDawn(); return;}
+            if(stats.CurMana<fireballManaCost) {NotEnoughtMana(); return;}
         }
+        currentCast=StartCoroutine(fireball_core());
+        IEnumerator fireball_core(){
+            Debug.Log("fireball");
+            animator.SetTrigger("cast8");
+            yield return new WaitForSeconds(fireballDelay);
+            if(!GodMod){
+                stats.CurMana-=fireballManaCost;
+                fireballCollDown=true;
+                CastSpell(2f,"FireBall",()=>fireballCollDown=false);
+            }
+            fireball_script fb = Instantiate(fireball, player.transform.position+player.transform.forward, new Quaternion()).GetComponent<fireball_script>();
+            fb.damage *=damage;
+            fb.speed *=speed;
+            for(int i = 1; i < buffs.projectile; i++){
+                fb = Instantiate(fireball, player.transform.position+player.transform.forward-player.transform.right*i*0.3f, new Quaternion()).GetComponent<fireball_script>();
+                fb.damage *=damage;
+                fb.speed *=speed;
+            }
+        }
+        
     }
     //PHOENIX
     [SerializeField] GameObject phoenix;
     bool phoenixCollDown = false;
     float phoenixManaCost=20f;
+    float phoenixDelay=0.2f;
     GameObject phoen;
     void Phoenix(int time, int strength){
         if(!GodMod){
-            if(phoenixCollDown) return;
-            if(stats.CurMana<phoenixManaCost) return;
-            stats.CurMana-=phoenixManaCost;
-            phoenixCollDown=true;}
-            CastSpell(30f,"Phoenix",()=>phoenixCollDown=false);
-        
-        if(phoen) Destroy(phoen);
-        Debug.Log("phoenix");
-        animator.SetTrigger("cast1");
-        StartCoroutine(Damage(10*time));
+            if(phoenixCollDown) {CoolDawn(); return;}
+            if(stats.CurMana<phoenixManaCost) {NotEnoughtMana(); return;}
+        }
+        currentCast=StartCoroutine(phoenix_core());
+        IEnumerator phoenix_core(){
+            animator.SetTrigger("cast1");
+            yield return new WaitForSeconds(phoenixDelay);
+            if(!GodMod){
+                stats.CurMana-=phoenixManaCost;
+                phoenixCollDown=true;
+                CastSpell(30f,"Phoenix",()=>phoenixCollDown=false);
+            }
+            if(phoen) Destroy(phoen);
+            Debug.Log("phoenix");
+            
+            StartCoroutine(Damage(10*time));
 
-        IEnumerator Damage(float time){
-            while (time>0)
-            {
-                Collider[] aims = Physics.OverlapSphere(gameObject.transform.position, 3, enemies);
-                foreach(Collider i in aims){
-                    if(i.tag!="enemy") continue;
-                    i.gameObject.GetComponent<enemy_script>().TakeDamage(5*buffs.damage*buffs.fireDamage*strength, DamageType.Fire);
+            IEnumerator Damage(float time){
+                while (time>0)
+                {
+                    Collider[] aims = Physics.OverlapSphere(gameObject.transform.position, 3, enemies);
+                    foreach(Collider i in aims){
+                        if(i.tag!="enemy") continue;
+                        i.gameObject.GetComponent<enemy_script>().TakeDamage(5*buffs.damage*buffs.fireDamage*strength, DamageType.Fire);
+                    }
+                    yield return new WaitForSeconds(0.5f);
+                    time-=.5f;
                 }
-                yield return new WaitForSeconds(0.5f);
-                time-=.5f;
             }
         }
     }
@@ -172,46 +202,61 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject waveOrig;
     bool waveCollDown=false;
     float waveManaCost=10f;
+    float waveDelay=0.5f;
     void Wave(int scale){
         if(!GodMod){
-            if(waveCollDown) return;
-            if(stats.CurMana<waveManaCost*scale) return;
-            stats.CurMana-=waveManaCost*scale;
-            waveCollDown=true;}
-            CastSpell(5f*scale,"Wave",()=>waveCollDown=false);
-
-            Debug.Log("wave");
+            if(waveCollDown) {CoolDawn(); return;}
+            if(stats.CurMana<waveManaCost*scale) {NotEnoughtMana(); return;}
+        }
+        currentCast=StartCoroutine(wave_core());
+        IEnumerator wave_core(){
             animator.SetTrigger("cast9");
-        for(int i = 0; i < buffs.projectile; i++){
-            GameObject wave = Instantiate(waveOrig, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
-            wave.transform.localScale.Scale(new Vector3(scale,1,scale));
-            if(buffs.projectile==1) return;
-            wave = Instantiate(waveOrig, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
-            wave.transform.localScale.Scale(new Vector3(scale,1,scale));
+            yield return new WaitForSeconds(waveDelay);
+            if (!GodMod){
+                stats.CurMana-=waveManaCost*scale;
+                waveCollDown=true;
+                CastSpell(5f*scale,"Wave",()=>waveCollDown=false);
+            }
+                Debug.Log("wave");
+            for(int i = 0; i < buffs.projectile; i++){
+                GameObject wave = Instantiate(waveOrig, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
+                wave.transform.localScale.Scale(new Vector3(scale,1,scale));
+                if(buffs.projectile==1) yield break;
+                wave = Instantiate(waveOrig, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
+                wave.transform.localScale.Scale(new Vector3(scale,1,scale));
+            }
         }
     }
     //Earthquake
     bool EarthqukeCoolDowm=false;
     float EarhtquakeManaCost=15f;
+    float earhtquakeDelay=0.7f;
     [SerializeField] ParticleSystem _earthquake;
     void Earhtquake(int strength){
         if(!GodMod){
-        if(EarthqukeCoolDowm) return;
-        if(stats.CurMana<EarhtquakeManaCost*strength) return;
-        stats.CurMana-=EarhtquakeManaCost*strength;
-        EarthqukeCoolDowm=true;}
-        CastSpell(7f*strength,"Earthquake",()=>EarthqukeCoolDowm=false);
+            if(EarthqukeCoolDowm) {CoolDawn(); return;}
+            if(stats.CurMana<EarhtquakeManaCost*strength) {NotEnoughtMana(); return;}
+        }
+        currentCast=StartCoroutine(earthquake_core());
+        IEnumerator earthquake_core(){
+            Debug.Log("earthquake");
+            animator.SetTrigger("cast6");
+            yield return new WaitForSeconds(earhtquakeDelay);
 
-        Debug.Log("earthquake");
-        animator.SetTrigger("cast6");
-        _earthquake.Play();
-        Collider[] colliders = Physics.OverlapSphere(player.transform.position, 2*strength, enemies);
-        foreach (Collider collider in colliders){
-            if (collider.tag!="enemy") continue;
-            enemy_script enemy = collider.gameObject.GetComponent<enemy_script>();
-            if(enemy.isFlying) continue;
-            enemy.Stun(0.5f*strength);
-            enemy.TakeDamage(strength*20*buffs.damage*buffs.physicalDamage, DamageType.Physical);
+            if(!GodMod){
+                stats.CurMana-=EarhtquakeManaCost*strength;
+                EarthqukeCoolDowm=true;
+                CastSpell(7f*strength,"Earthquake",()=>EarthqukeCoolDowm=false);
+            }
+            _earthquake.Play();
+            Collider[] colliders = Physics.OverlapSphere(player.transform.position, 2*strength, enemies);
+            foreach (Collider collider in colliders){
+                if (collider.tag!="enemy") continue;
+                enemy_script enemy = collider.gameObject.GetComponent<enemy_script>();
+                if(enemy.isFlying) continue;
+                enemy.Stun(0.5f*strength);
+                enemy.TakeDamage(strength*20*buffs.damage*buffs.physicalDamage, DamageType.Physical);
+            }
         }
     }
     //BLINK
@@ -720,10 +765,10 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject _fireStorm;
     void FireStorm(){
         if(!GodMod){
-            if(fireballCollDown) return;
-            if(stats.CurMana<fireballManaCost) return;
-            stats.CurMana-=fireballManaCost;
-            fireballCollDown=true;}
+            if(FireStormCoolDown) return;
+            if(stats.CurMana<FireStormManaCost) return;
+            stats.CurMana-=FireStormManaCost;
+            FireStormCoolDown=true;}
         
         Debug.Log("Fire Storm");
         StartCoroutine(cast());
@@ -737,7 +782,7 @@ public class Spells_script : MonoBehaviour
             StopCoroutine(fire);
             navMesh.isStopped=false;
             animator.SetBool("casting", false);
-            CastSpell(20f,"Fire Storm",()=>ManaRegenCoolDown=false);
+            CastSpell(20f,"Fire Storm",()=>FireStormCoolDown=false);
         }
         IEnumerator damage(){
             while(true){

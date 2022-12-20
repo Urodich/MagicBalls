@@ -12,7 +12,7 @@ public class spheresParent_script : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         gameObject.transform.rotation = staticRotation;
     }
