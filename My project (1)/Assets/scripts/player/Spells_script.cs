@@ -262,20 +262,27 @@ public class Spells_script : MonoBehaviour
     //BLINK
     bool blinkCollDown=false;
     float blinkManaCost=15f;
+    float blinkDelay=0.6f;
     [SerializeField] ParticleSystem _blink;
     void Blink(int earth, int thunder){
         Vector3 mousePos;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
             if(!GodMod){
-                if(blinkCollDown) return;
-                if(stats.CurMana<blinkManaCost*thunder) return;
-                stats.CurMana-=blinkManaCost*thunder;
-                blinkCollDown=true;}
-            CastSpell(5f,"Blink",()=>blinkCollDown=false);
-
-            Debug.Log("blink");
+                if(blinkCollDown) {CoolDawn(); return;}
+                if(stats.CurMana<blinkManaCost*thunder) {NotEnoughtMana(); return;}
+            }
             animator.SetTrigger("jump");
+            currentCast=StartCoroutine(blink_core());
+        }
+        IEnumerator blink_core(){
+            yield return new WaitForSeconds(blinkDelay);
+            if(!GodMod){
+                stats.CurMana-=blinkManaCost*thunder;
+                blinkCollDown=true;
+                CastSpell(5f,"Blink",()=>blinkCollDown=false);
+            }
+            Debug.Log("blink");
             mousePos= hit.point;
             player.GetComponent<playerControl_script>().navMesh.enabled=false;
             player.transform.position=mousePos;
@@ -302,8 +309,6 @@ public class Spells_script : MonoBehaviour
             if(stats.CurMana<windManaCost*strength) return;
             stats.CurMana-=windManaCost*strength;
             windCoolDown=true;}
-        
-        
         Vector3 mousePos1 = new Vector3();
         Vector3 mousePos2;
         Vector3 direction = new Vector3();
@@ -341,18 +346,26 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject torrentOrig;
     bool torrentCoolDown = false;
     float torrentManaCost = 20f;
+    float torrentDelay=0.3f;
     void Torrent(int air, int water){
         if(!GodMod){
             if(torrentCoolDown) return;
             if(stats.CurMana<torrentManaCost*water) return;
-            stats.CurMana-=torrentManaCost*water;
-            torrentCoolDown=true;}
-        CastSpell(10f*air,"Torrent",()=>torrentCoolDown=false);
-
-        Debug.Log("torrent");
-        animator.SetTrigger("cast1");
+        }
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
+            animator.SetTrigger("cast1");  
+            currentCast=StartCoroutine(torrent_core());
+        }
+        IEnumerator torrent_core(){
+            yield return new WaitForSeconds(torrentDelay);
+            Debug.Log("torrent");
+            if(!GodMod){
+                stats.CurMana-=torrentManaCost*water;
+                torrentCoolDown=true;
+                CastSpell(10f*air,"Torrent",()=>torrentCoolDown=false);
+            }
             torrent_script torrent = Instantiate(torrentOrig, hit.point, new Quaternion()).GetComponent<torrent_script>();
             torrent.air=air;
             torrent.water=water;
@@ -365,8 +378,8 @@ public class Spells_script : MonoBehaviour
     float mudManaCost = 40f;
     void Mud(int water, int earth){
         if(!GodMod){
-            if(mudCoolDown) return;
-            if(stats.CurMana<mudManaCost*earth) return;
+            if(mudCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<mudManaCost*earth) {NotEnoughtMana(); return;}
             stats.CurMana-=mudManaCost*earth;
             mudCoolDown=true;}
         CastSpell(7f*earth,"Mud",()=>mudCoolDown=false);
@@ -385,8 +398,8 @@ public class Spells_script : MonoBehaviour
     float lavaManaCost=30f;
     void Lava(int earht, int fire){
         if(!GodMod){
-            if(lavaCoolDown) return;
-            if(stats.CurMana<lavaManaCost*fire) return;
+            if(lavaCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<lavaManaCost*fire) {NotEnoughtMana(); return;}
             stats.CurMana-=lavaManaCost*fire;
             lavaCoolDown=true;}
         CastSpell(15f*earht,"Lava",()=>lavaCoolDown=false);
@@ -405,8 +418,8 @@ public class Spells_script : MonoBehaviour
     float ElectricPoolManaCost=20f;
     void ElectricPool(int water, int thunder){
         if(!GodMod){
-            if(ElectricPoolCoolDown) return;
-            if(stats.CurMana<ElectricPoolManaCost*((thunder-1)/2+1)) return;
+            if(ElectricPoolCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<ElectricPoolManaCost*((thunder-1)/2+1)) {NotEnoughtMana(); return;}
             stats.CurMana-=ElectricPoolManaCost*((thunder-1)/2+1);
             ElectricPoolCoolDown=true;}
         CastSpell(15f*water,"Pool",()=>ElectricPoolCoolDown=false);
@@ -425,8 +438,8 @@ public class Spells_script : MonoBehaviour
     float value; //try to fix it
     void Haste(int thunder, int air){
         if(!GodMod){
-            if(HasteCoolDown) return;
-            if(stats.CurMana<HasteManaCost*thunder) return;
+            if(HasteCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<HasteManaCost*thunder) {NotEnoughtMana(); return;}
             stats.CurMana-=HasteManaCost*thunder;
             HasteCoolDown=true;}
         CastSpell(10f*air,"Haste",()=>HasteCoolDown=false);
@@ -441,40 +454,49 @@ public class Spells_script : MonoBehaviour
     //Lightning chain
     bool chainCoolDown=false;
     float chainManaCost=15f;
+    float chainDelay=0.3f;
     void Chain(int strength){
         if(!GodMod){
-            if(chainCoolDown) return;
-            if(stats.CurMana<chainManaCost*strength) return;
-            stats.CurMana-=chainManaCost*strength;
-            chainCoolDown=true;}
-        CastSpell(3f,"Chain",()=>chainCoolDown=false);
-        animator.SetTrigger("cast8");
-        float radius = 2f;
-        int steps=5+strength*2;
-        Vector3 oldPoint;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
-            StartCoroutine(ChainStep(hit.point, radius, null));
+            if(chainCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<chainManaCost*strength) {NotEnoughtMana(); return;}
         }
+        currentCast=StartCoroutine(chain_core());
+        IEnumerator chain_core(){
+            animator.SetTrigger("cast8");
+            yield return new WaitForSeconds(chainDelay);
+            if(!GodMod){
+                stats.CurMana-=chainManaCost*strength;
+                chainCoolDown=true;
+                CastSpell(3f,"Chain",()=>chainCoolDown=false);
+            }
+            
+            float radius = 2f;
+            int steps=5+strength*2;
+            Vector3 oldPoint;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
+                StartCoroutine(ChainStep(hit.point, radius, null));
+            }
 
-        IEnumerator ChainStep(Vector3 position, float radius, Collider last){
-            while(steps>0){
-                bool hit=false;
-                Collider[] colliders = Physics.OverlapSphere(position, radius, enemies);
-                foreach(Collider col in colliders){
-                    if(col.tag!="enemy")continue;
-                    if(col==last) continue;
-                    colliders=null;
-                    enemy_script enemy = col.GetComponent<enemy_script>();
-                    enemy.TakeDamage(15*buffs.thunderDamage*buffs.damage, DamageType.Thunder);
-                    last=col;
-                    hit=true;
-                    steps--;
-                    oldPoint=col.gameObject.transform.position;
-                    break;
+            IEnumerator ChainStep(Vector3 position, float radius, Collider last){
+                while(steps>0){
+                    bool hit=false;
+                    Collider[] colliders = Physics.OverlapSphere(position, radius, enemies);
+                    foreach(Collider col in colliders){
+                        if(col.tag!="enemy")continue;
+                        if(col==last) continue;
+                        colliders=null;
+                        enemy_script enemy = col.GetComponent<enemy_script>();
+                        enemy.TakeDamage(15*buffs.thunderDamage*buffs.damage, DamageType.Thunder);
+                        last=col;
+                        hit=true;
+                        steps--;
+                        oldPoint=col.gameObject.transform.position;
+                        break;
+                    }
+                    if(!hit) break;
+                    yield return new WaitForSeconds(.1f);
                 }
-                if(!hit) break;
-                yield return new WaitForSeconds(.1f);
             }
         }
     }
@@ -485,8 +507,8 @@ public class Spells_script : MonoBehaviour
     float illusionManaCost=20f;
     void Illusion(){
         if(!GodMod){
-            if(illusionCoolDown) return;
-            if(stats.CurMana<illusionManaCost) return;
+            if(illusionCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<illusionManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=illusionManaCost;
             illusionCoolDown=true;}
         CastSpell(10f,"Illusion",()=>illusionCoolDown=false);
@@ -503,8 +525,8 @@ public class Spells_script : MonoBehaviour
     float reincarnationManaCost=80f;
     void Reincarnation(){
         if(!GodMod){
-            if(reincarnationCoolDown) return;
-            if(stats.CurMana<reincarnationManaCost) return;
+            if(reincarnationCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<reincarnationManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=reincarnationManaCost;
             reincarnationCoolDown=true;}
         CastSpell(90f,"Reincarnation",()=>reincarnationCoolDown=false);
@@ -520,8 +542,8 @@ public class Spells_script : MonoBehaviour
     float meteorManaCost=45f;
     void Meteor(){
         if(!GodMod){
-            if(meteorCoolDown) return;
-            if(stats.CurMana<meteorManaCost) return;
+            if(meteorCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<meteorManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=meteorManaCost;
             meteorCoolDown=true;}
         
@@ -564,8 +586,8 @@ public class Spells_script : MonoBehaviour
     [SerializeField] ParticleSystem _manaRegen;
     void ManaRegen(int water, int life){
         if(!GodMod){
-            if(ManaRegenCoolDown) return;
-            if(stats.CurMana<ManaRegenManaCost*life) return;
+            if(ManaRegenCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<ManaRegenManaCost*life) {NotEnoughtMana(); return;}
             stats.CurMana-=ManaRegenManaCost*life;
             ManaRegenCoolDown=true;}
         
@@ -590,20 +612,27 @@ public class Spells_script : MonoBehaviour
     //BIRD
     bool BirdCoolDown=false;
     float BirdManaCost=10f;
+    float birdDelay=0.3f;
     [SerializeField] ParticleSystem _bird;
     void Bird(int air, int life){
         if(!GodMod){
-            if(BirdCoolDown) return;
-            if(stats.CurMana<BirdManaCost) return;
-            stats.CurMana-=BirdManaCost;
-            BirdCoolDown=true;}
-        CastSpell(10f,"Bird",()=>BirdCoolDown=false);
-        StartCoroutine(cast());
-        IEnumerator cast(){
+            if(BirdCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<BirdManaCost) {NotEnoughtMana(); return;}
+        }
+        
+        StartCoroutine(bird_core());
+        IEnumerator bird_core(){
+            animator.SetTrigger("cast6");
+            yield return new WaitForSeconds(birdDelay);
+            if(!GodMod){
+                stats.CurMana-=BirdManaCost;
+                BirdCoolDown=true;
+                CastSpell(10f,"Bird",()=>BirdCoolDown=false);
+            }
             _bird.Play();
             yield return new WaitForSeconds(.6f);
             Debug.Log("Bird");
-            animator.SetTrigger("cast6");
+            
             Collider[] enemy = Physics.OverlapSphere(player.transform.position, 3f*life,enemies);
             foreach(Collider i in enemy){
                 if(i.tag!="enemy") continue;
@@ -622,8 +651,8 @@ public class Spells_script : MonoBehaviour
     float WispManaCost=15f;
     void Wisp(int strength){
         if(!GodMod){
-            if(windCoolDown) return;
-            if(stats.CurMana<windManaCost*strength) return;
+            if(windCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<windManaCost*strength) {NotEnoughtMana(); return;}
             stats.CurMana-=windManaCost*strength;
             windCoolDown=true;}
         CastSpell(15*strength,"Wisp",()=>windCoolDown=false);
@@ -647,8 +676,8 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject _tornado;
     void Tornado(){
         if(!GodMod){
-            if(tornadoCoolDown) return;
-            if(stats.CurMana<tornadoManaCast) return;
+            if(tornadoCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<tornadoManaCast) {NotEnoughtMana(); return;}
             stats.CurMana-=tornadoManaCast;
             tornadoCoolDown=true;}
         CastSpell(2f,"Tornado",()=>tornadoCoolDown=false);
@@ -666,8 +695,8 @@ public class Spells_script : MonoBehaviour
     float blastManaCost=30f;
     void Blast(int fire, int thunder){
         if(!GodMod){
-            if(blastCoolDown) return;
-            if(stats.CurMana<blastManaCost) return;
+            if(blastCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<blastManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=blastManaCost;
             blastCoolDown=true;}
         
@@ -703,41 +732,57 @@ public class Spells_script : MonoBehaviour
     //ZOMBIE
     bool zombieCoolDown=false;
     float zombieManaCost=15f;
+    float zombieDelay=0.3f;
     [SerializeField] GameObject _zombie;
     void Zombie(int life, int thunder){
         if(control.mouseTarget==null) return;
         if(!GodMod){
-            if(zombieCoolDown) return;
-            if(stats.CurMana<zombieManaCost) return;
-            stats.CurMana-=zombieManaCost;
-            zombieCoolDown=true;}
-        Debug.Log("zombie");
-        CastSpell(15f,"Zombie",()=>zombieCoolDown=false);
-        animator.SetTrigger("cast4");
-
-        for(int i=0;i<2*life;i++){
-            Instantiate(_zombie, control.mouseTarget.transform.position, new Quaternion()).GetComponent<zombie>().SetZombieAim(control.mouseTarget);
+            if(zombieCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<zombieManaCost) {NotEnoughtMana(); return;}
         }
-        
+        currentCast=StartCoroutine(zombie_core());
+        IEnumerator zombie_core(){
+            animator.SetTrigger("cast4");
+            yield return new WaitForSeconds(zombieDelay);
+            if(!GodMod){
+                stats.CurMana-=zombieManaCost;
+                zombieCoolDown=true;
+                CastSpell(15f,"Zombie",()=>zombieCoolDown=false);
+            }
+            Debug.Log("zombie");
+
+            for(int i=0;i<2*life;i++){
+                Instantiate(_zombie, control.mouseTarget.transform.position, new Quaternion()).GetComponent<zombie>().SetZombieAim(control.mouseTarget);
+            }
+        }
     }
 
     //MIND CONTROL
     bool mindCoolDown=false;
     float mindManaCost=50f;
+    float controlDelay=0.4f;
     void MindControl(){
         if(control.mouseTarget==null) return;
         if(!GodMod){
-            if(mindCoolDown) return;
-            if(stats.CurMana<mindManaCost) return;
-            stats.CurMana-=mindManaCost;
-            mindCoolDown=true;}
-        CastSpell(80f,"Mind Control",()=>mindCoolDown=false);
-        animator.SetTrigger("cast4");
-        Debug.Log("mind control");
+            if(mindCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<mindManaCost) {NotEnoughtMana(); return;}
+        }
+        currentCast=StartCoroutine(control_core());
+        IEnumerator control_core(){
+            animator.SetTrigger("cast4");
+            yield return new WaitForSeconds(controlDelay);
+            if(!GodMod){
+                stats.CurMana-=mindManaCost;
+                mindCoolDown=true;
+                CastSpell(80f,"Mind Control",()=>mindCoolDown=false);
+            }
+            
+            Debug.Log("mind control");
 
-        enemy_script enemy=control.mouseTarget.GetComponent<enemy_script>();
-        enemy.enemies=enemies;
-        enemy.aims.Clear();
+            enemy_script enemy=control.mouseTarget.GetComponent<enemy_script>();
+            enemy.enemies=enemies;
+            enemy.aims.Clear();
+        }
     }
 
     //BLACKHOLE
@@ -746,11 +791,12 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject _blackHole;
     void BlackHole(){
         if(!GodMod){
-            if(BlackHoleCoolDown) return;
-            if(stats.CurMana<BlackHoleManaCost) return;
+            if(BlackHoleCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<BlackHoleManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=BlackHoleManaCost;
-            BlackHoleCoolDown=true;}
-        CastSpell(50f,"Black Hole",()=>BlackHoleCoolDown=false);
+            BlackHoleCoolDown=true;
+            CastSpell(50f,"Black Hole",()=>BlackHoleCoolDown=false);
+        }
         Debug.Log("black hole");
         animator.SetTrigger("cast6");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -765,10 +811,11 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject _fireStorm;
     void FireStorm(){
         if(!GodMod){
-            if(FireStormCoolDown) return;
-            if(stats.CurMana<FireStormManaCost) return;
+            if(FireStormCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<FireStormManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=FireStormManaCost;
-            FireStormCoolDown=true;}
+            FireStormCoolDown=true;
+        }
         
         Debug.Log("Fire Storm");
         StartCoroutine(cast());
@@ -782,7 +829,7 @@ public class Spells_script : MonoBehaviour
             StopCoroutine(fire);
             navMesh.isStopped=false;
             animator.SetBool("casting", false);
-            CastSpell(20f,"Fire Storm",()=>FireStormCoolDown=false);
+            if(!GodMod)CastSpell(20f,"Fire Storm",()=>FireStormCoolDown=false);
         }
         IEnumerator damage(){
             while(true){
@@ -798,13 +845,15 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject _tomb;
     void Tomb(){
         if(!GodMod){
-            if(TombCoolDown) return;
-            if(stats.CurMana<TombManaCost) return;
+            if(TombCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<TombManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=TombManaCost;
-            TombCoolDown=true;}
+            TombCoolDown=true;
+            CastSpell(20f,"Tomb",()=>TombCoolDown=false);
+        }
         Debug.Log("Tomb");
         animator.SetTrigger("cast6");
-        CastSpell(20f,"Tomb",()=>TombCoolDown=false);
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
             Instantiate(_tomb, hit.point, new Quaternion());
@@ -816,13 +865,15 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject _smoke;
     void Smoke(int fire, int water){
         if(!GodMod){
-            if(SmokeCoolDown) return;
-            if(stats.CurMana<SmokeManaCost) return;
+            if(SmokeCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<SmokeManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=SmokeManaCost;
-            SmokeCoolDown=true;}
+            SmokeCoolDown=true;
+            CastSpell(30f,"Smoke",()=>SmokeCoolDown=false);
+        }
         Debug.Log("Smoke");
         animator.SetTrigger("cast4");
-        CastSpell(30f,"Smoke",()=>SmokeCoolDown=false);
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
             smoke_script smoke=Instantiate(_smoke, hit.point, new Quaternion()).GetComponent<smoke_script>();
@@ -833,16 +884,19 @@ public class Spells_script : MonoBehaviour
     //FLAME
     bool FlameCoolDown=false;
     float FlameManaCost=5f;
+    float flameDelay=0.6f;
     [SerializeField] ParticleSystem _flame;
     void Flame(int strength){
         if(!GodMod){
-            if(FlameCoolDown) return;
-            if(stats.CurMana<FlameManaCost) return;
-            FlameCoolDown=true;}
+            if(FlameCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<FlameManaCost) {NotEnoughtMana(); return;}
+        }
         Debug.Log("Flame");
-        StartCoroutine(cast());
-        IEnumerator cast(){
+        currentCast=StartCoroutine(flame_core());
+        IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
+            yield return new WaitForSeconds(flameDelay);
+            FlameCoolDown=true;
             animator.SetBool("casting", true);
             _flame.Play();
             while(Input.GetMouseButton(1)){
@@ -856,7 +910,7 @@ public class Spells_script : MonoBehaviour
             }
             _flame.Stop();
             animator.SetBool("casting", false);
-            CastSpell(5f,"Flame",()=>FlameCoolDown=false);
+            if(!GodMod)CastSpell(5f,"Flame",()=>FlameCoolDown=false);
         }
     }
 
@@ -866,12 +920,12 @@ public class Spells_script : MonoBehaviour
     [SerializeField] ParticleSystem _blood;
     void LifeDrain(){
         if(!GodMod){
-            if(SmokeCoolDown) return;
-            if(stats.CurMana<SmokeManaCost) return;
-            stats.CurMana-=SmokeManaCost;
-            SmokeCoolDown=true;}
-        Debug.Log("Smoke");
-        CastSpell(45f,"Life Drain",()=>SmokeCoolDown=false);
+            if(LifeDrainCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<LifeDrainManaCost) {NotEnoughtMana(); return;}
+            stats.CurMana-=LifeDrainManaCost;
+            LifeDrainCoolDown=true;}
+        Debug.Log("Life Drain");
+        CastSpell(45f,"Life Drain",()=>LifeDrainCoolDown=false);
         bool casting=true;
         Debug.Log("life drain");
         float _damage=buffs.damage+buffs.physicalDamage*5;
