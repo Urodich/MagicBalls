@@ -19,8 +19,10 @@ public class unit_script : MonoBehaviour
     public float armor;
     public event Action<GameObject> dieEvent;
     protected float speedFactor=1;
-    Timer stun;
-    
+    int stun;
+    //List<Effect> Effects = new List<Effect>();
+    GameObject effect;
+    GameObject effectPanel;
     public int Priority=0; 
     //Сопротивления
     public float FireResist=0;
@@ -59,7 +61,16 @@ public class unit_script : MonoBehaviour
         mainMaterial.DisableKeyword("DAMAGED");
     }
     void FixedUpdate(){
-        
+        if(stun>0){
+            isStunned=true;
+            navMesh.isStopped=true;
+            if(animator)animator.SetBool("stunned",true);
+        }
+        else{
+            isStunned=false;
+            navMesh.isStopped=false; 
+            animator.SetBool("stunned",false);
+        }
     }
     public void SetAim(Vector3 pos){
         startAim=pos;
@@ -121,15 +132,11 @@ public class unit_script : MonoBehaviour
             navMesh.enabled=true;
     }
     public virtual void Stun(float time){
-        isStunned=true;
-        navMesh.isStopped=true;
-        if(animator)animator.SetBool("stunned",true);
-        if (!stun) {
-            stun = gameObject.AddComponent<Timer>();
-            stun.func = ()=>{isStunned=false;navMesh.isStopped=false; animator.SetBool("stunned",false);};
-            stun.SetTime(time, false);
-        }
-        else stun.SetTime(time, false);
+        stun+=1;
+        Instantiate(effect,effectPanel.transform).GetComponent<Effect>().Set(time,()=>stun-=1,false);
+    }
+    public void AddEffect(Action action,float time, bool isPositive){
+        Instantiate(effect,effectPanel.transform).GetComponent<Effect>().Set(time,()=>stun-=1,isPositive);
     }
 
     public void TakeDamage(float damage, DamageType type){

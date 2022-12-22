@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5119671150068752965}
   - component: {fileID: 444057790611599681}
   m_Layer: 0
-  m_Name: mud
+  m_Name: lava
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
