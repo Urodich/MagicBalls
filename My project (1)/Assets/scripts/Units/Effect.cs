@@ -20,10 +20,10 @@ public class Effect : MonoBehaviour
 
     public void Break(){
         end();
-        Destroy(gameObject);
+        Destroy(this);
     }
     public void Dispell(){
-        if(!isPositive)Destroy(gameObject);
+        if(!isPositive)Destroy(this);
     }
     public Effect Set(float time, Action endAction, bool isPositive){
         _timeLeft=time;
@@ -31,5 +31,4 @@ public class Effect : MonoBehaviour
         end=endAction;
         return this;
     }
-
 }

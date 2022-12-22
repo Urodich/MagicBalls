@@ -220,6 +220,9 @@ MonoBehaviour:
   isFlying: 0
   isStunned: 0
   isGrounded: 1
+  ground:
+    serializedVersion: 2
+    m_Bits: 64
   model: {fileID: 363085423758927012}
   animator: {fileID: 6708927846955005096}
   maxMana: 100

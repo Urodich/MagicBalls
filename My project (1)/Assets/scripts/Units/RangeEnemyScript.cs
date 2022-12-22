@@ -12,7 +12,7 @@ public class RangeEnemyScript : enemy_script
         aims = new List<GameObject>();
     }
 
-    void FixedUpdate()
+    new void FixedUpdate()
     {
         if(isStunned) return;
         if (!aim) {animator.SetBool("run", false); return;}

@@ -21,8 +21,7 @@ public class unit_script : MonoBehaviour
     protected float speedFactor=1;
     int stun;
     //List<Effect> Effects = new List<Effect>();
-    GameObject effect;
-    GameObject effectPanel;
+    List<Effect> Effects = new List<Effect>();
     public int Priority=0; 
     //Сопротивления
     public float FireResist=0;
@@ -33,6 +32,7 @@ public class unit_script : MonoBehaviour
     public bool isFlying=false;
     public bool isStunned=false;
     public bool isGrounded=true;
+    [SerializeField]LayerMask ground;
     protected Vector3 startAim=Vector3.zero;
 
     Material mainMaterial;
@@ -44,6 +44,7 @@ public class unit_script : MonoBehaviour
     [SerializeField] public Animator animator;
     protected NavMeshAgent navMesh;
     Rigidbody rb;
+    bool disableGround=false;
 
     public void Start(){
         navMesh=gameObject.GetComponent<NavMeshAgent>();
@@ -60,16 +61,32 @@ public class unit_script : MonoBehaviour
         mainMaterial.DisableKeyword("HOVERED");
         mainMaterial.DisableKeyword("DAMAGED");
     }
-    void FixedUpdate(){
-        if(stun>0){
-            isStunned=true;
-            navMesh.isStopped=true;
-            if(animator)animator.SetBool("stunned",true);
+    public void FixedUpdate(){
+        //is grounded
+        if(!disableGround){
+            Ray ray = new Ray(transform.position, Vector3.down);
+            if(Physics.Raycast(ray, out RaycastHit hit, 0.1f, ground)){
+                isGrounded=true;
+            }
+        }
+        //Stunned
+        if(isGrounded){
+            navMesh.enabled=true;
+            rb.useGravity=false;
+            if(stun>0){
+                isStunned=true;
+                navMesh.isStopped=true;
+                if(animator)animator.SetBool("stunned",true);
+            }
+            else{
+                isStunned=false;
+                navMesh.isStopped=false; 
+                animator.SetBool("stunned",false);
+            }
         }
         else{
-            isStunned=false;
-            navMesh.isStopped=false; 
-            animator.SetBool("stunned",false);
+            isStunned=true;
+            if(animator)animator.SetBool("falling",true);
         }
     }
     public void SetAim(Vector3 pos){
@@ -116,27 +133,40 @@ public class unit_script : MonoBehaviour
     }
     //Move2
     public void Move(Vector3 direction, float power, float time, bool Stunned){
-        if(Vector3.Dot(direction, Vector3.up)>0)
+        if(Vector3.Dot(direction, Vector3.up)>0){
             isGrounded=false;
-        if (Stunned) {
-            Stun(time+0.1f);
+            disableGround=true;
             navMesh.enabled=false;
         }
-        Invoke("remove", time);
+        if (Stunned) {
+            Stun(time);
+        }
         rb.isKinematic = false;
         rb.AddForce(direction*power,ForceMode.Impulse);
-    }
-    IEnumerator remove(){
-        yield return new WaitUntil(()=>isGrounded);
+        StartCoroutine(remove());
+        
+        IEnumerator remove(){
+            yield return new WaitForSeconds(time/2);
+            rb.useGravity=true;
+            disableGround=false;
+            yield return new WaitForSeconds(time/2);
+            yield return new WaitUntil(()=>isGrounded);
             rb.isKinematic=true;
             navMesh.enabled=true;
+            rb.useGravity=false;
+        }
     }
+    
     public virtual void Stun(float time){
         stun+=1;
-        Instantiate(effect,effectPanel.transform).GetComponent<Effect>().Set(time,()=>stun-=1,false);
+        Effect eff=gameObject.AddComponent<Effect>();
+        Effects.Add(eff.Set(time,()=>{stun-=1; Effects.Remove(eff);},false));
+
     }
-    public void AddEffect(Action action,float time, bool isPositive){
-        Instantiate(effect,effectPanel.transform).GetComponent<Effect>().Set(time,()=>stun-=1,isPositive);
+    public void AddEffect(Action action,Action endAction,float time, bool isPositive){
+        action();
+        Effect eff=gameObject.AddComponent<Effect>();
+        Effects.Add(eff.Set(time,()=>{endAction(); Effects.Remove(eff);},isPositive));
     }
 
     public void TakeDamage(float damage, DamageType type){

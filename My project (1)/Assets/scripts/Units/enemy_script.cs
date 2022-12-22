@@ -27,9 +27,9 @@ public class enemy_script : unit_script
         aims = new List<GameObject>();
     }
 
-    void FixedUpdate()
+    new void FixedUpdate()
     {
-        //base.FixedUpdate();
+        base.FixedUpdate();
         if(isStunned) return;
         if (!aim) {animator.SetBool("run", false); return;}
 

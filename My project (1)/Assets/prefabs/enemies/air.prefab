@@ -179,6 +179,9 @@ MonoBehaviour:
   isFlying: 1
   isStunned: 0
   isGrounded: 1
+  ground:
+    serializedVersion: 2
+    m_Bits: 64
   model: {fileID: 8817982841357527594}
   animator: {fileID: 3518901409674300513}
   damageType: 1
