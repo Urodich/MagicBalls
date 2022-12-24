@@ -40,13 +40,13 @@ public class Spells_script : MonoBehaviour
         [9] = ()=>Smoke(1,2),
         [12] = ()=>Wave(3),
         [13] = ()=>Wind(1),
-        //[14] = Fireball(1,1),
-        //[15] = Fireball(1,2),
+        [14] = ()=>Fireball(1,1),
+        [15] = ()=>Fireball(1,2),
         [17] = ()=>Torrent(1,1),
         [18] = ()=>FireStorm(),
         [21] = ()=>Torrent(1,2),
         [26] = ()=>Wind(2),
-        //[27] = Fireball(2,1),
+        [27] = ()=>Fireball(2,1),
         [30] = ()=>Torrent(2,1),
         [39] = ()=>Wind(3),
         [40] = ()=>Earhtquake(1),
@@ -126,6 +126,10 @@ public class Spells_script : MonoBehaviour
         spell.func=func;
         spell.SrcImage=image;
         spell.SetTime(CDTime,true);
+    }
+    public void BreakCast(){
+        animator.SetBool("casting", false);
+        if(currentCast!=null)StopCoroutine(currentCast);
     }
 
     //FIREBALL
@@ -594,6 +598,8 @@ public class Spells_script : MonoBehaviour
         Debug.Log("ManaRegen");
         StartCoroutine(cast());
         IEnumerator cast(){
+            animator.SetBool("casting", true);
+            animator.SetTrigger("cast_blast");
             _manaRegen.Play();
             navMesh.isStopped=true;
             player_script ps = player.GetComponent<player_script>();
@@ -606,6 +612,7 @@ public class Spells_script : MonoBehaviour
             navMesh.isStopped=false;
             CastSpell(2f,"Mana Regen",()=>ManaRegenCoolDown=false);
             _manaRegen.Stop(true);
+            animator.SetBool("casting", false);
         }
     }
     
@@ -693,6 +700,8 @@ public class Spells_script : MonoBehaviour
     //BLAST
     bool blastCoolDown=false;
     float blastManaCost=30f;
+    [SerializeField] ParticleSystem blast;
+    [SerializeField] ParticleSystem blast_expl;
     void Blast(int fire, int thunder){
         if(!GodMod){
             if(blastCoolDown) {CoolDawn(); return;}
@@ -707,15 +716,18 @@ public class Spells_script : MonoBehaviour
         IEnumerator cast(){
             animator.SetTrigger("cast_blast");
             animator.SetBool("casting", true);
+            ParticleSystem bl = Instantiate(blast,gameObject.transform);
             while(Input.GetMouseButton(1)){
                 time+=Time.deltaTime;
-                if(time>=3f) break;
+                if(time>=5f) break;
                 yield return new WaitForEndOfFrame();
             }
+            Destroy(bl.gameObject);
+            Destroy(Instantiate(blast_expl,gameObject.transform).gameObject,2);
             animator.SetBool("casting", false);    
             Collider[] enemy = Physics.OverlapSphere(player.transform.position, 1f*thunder*time, enemies);
             foreach(Collider elem in enemy){
-                enemy_script en=elem.gameObject.GetComponent<enemy_script>();
+                unit_script en=elem.gameObject.GetComponent<unit_script>();
                 en.TakeDamage(5*fire*buffs.fireDamage*buffs.damage*time, DamageType.Fire);
                 en.Move(elem.gameObject.transform.position-player.transform.position, 2f*fire*time, .5f, false);
             }
@@ -724,7 +736,7 @@ public class Spells_script : MonoBehaviour
                 player_.TakeDamage(5*fire*buffs.fireDamage*buffs.damage*time, DamageType.Fire);
                 player_.Stun(2f);
             }
-            CastSpell(10f,"Blast",()=>blastCoolDown=false);
+            if(!GodMod)CastSpell(10f,"Blast",()=>blastCoolDown=false);
         }
         
     }
@@ -884,7 +896,7 @@ public class Spells_script : MonoBehaviour
     //FLAME
     bool FlameCoolDown=false;
     float FlameManaCost=5f;
-    float flameDelay=0.6f;
+    float flameDelay=0.2f;
     [SerializeField] ParticleSystem _flame;
     void Flame(int strength){
         if(!GodMod){
@@ -896,15 +908,15 @@ public class Spells_script : MonoBehaviour
         IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
             yield return new WaitForSeconds(flameDelay);
-            FlameCoolDown=true;
             animator.SetBool("casting", true);
+            FlameCoolDown=true;
             _flame.Play();
             while(Input.GetMouseButton(1)){
                 if(stats.CurMana<FlameManaCost) break;
                 stats.CurMana-=FlameManaCost;
                 Collider[] colliders = Physics.OverlapSphere(player.transform.position+player.transform.forward, 1.5f*strength, enemies);
                 foreach(Collider enemy in colliders){
-                    enemy.GetComponent<enemy_script>().TakeDamage(5f*buffs.fireDamage*buffs.damage*strength, DamageType.Fire);
+                    enemy.GetComponent<unit_script>().TakeDamage(5f*buffs.fireDamage*buffs.damage*strength, DamageType.Fire);
                 }
                 yield return new WaitForSeconds(.5f);
             }

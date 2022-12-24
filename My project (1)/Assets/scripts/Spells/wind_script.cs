@@ -23,6 +23,6 @@ public class wind_script : MonoBehaviour
     void OnTriggerStay(Collider collider){
         if (collider.gameObject.tag != "enemy") return;
         Debug.Log(direction);
-        collider.gameObject.GetComponent<unit_script>().Move(direction, power*strength, Time.deltaTime, false);
+        collider.gameObject.GetComponent<unit_script>().Move(direction, power*strength*buffs.repulsion, Time.deltaTime, false);
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class enemy_trigger_script : MonoBehaviour
 {
-    enemy_script parent;
+    IEnemy parent;
     void Start(){
-        parent = gameObject.GetComponentInParent<enemy_script>();
+        parent = gameObject.GetComponentInParent<IEnemy>();
     }
 
     void OnTriggerEnter(Collider collider){

@@ -88,7 +88,7 @@ public class playerControl_script : MonoBehaviour
             int sum = 0;
             while (Spheres.Count !=0 ){
                 sum+=Spheres.Dequeue();
-                Destroy(spheres.Dequeue());
+                Destroy(spheres.Dequeue().gameObject);
                 }
             spells_Script.CastSpell(sum);
             sum=0;
@@ -99,7 +99,7 @@ public class playerControl_script : MonoBehaviour
     void CastSphere(int i){
         if (Spheres.Count == 3) {
             Spheres.Dequeue();
-            Destroy(spheres.Dequeue());
+            Destroy(spheres.Dequeue().gameObject);
             } 
         switch(i){
             case 0:{

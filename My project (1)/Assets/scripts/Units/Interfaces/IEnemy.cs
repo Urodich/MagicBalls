@@ -4,6 +4,7 @@ using UnityEngine;
 
 interface IEnemy
 {
+    /*
     bool attacking{get;set;}
     public bool isFlying{get;set;}
     bool isGrounded{get;set;}
@@ -19,11 +20,9 @@ interface IEnemy
 
     Coroutine attack{get;set;}
     public LayerMask enemies{get;set;}
-
+    */
 
     public bool ChangeAim();
-    void Attack();
-    IEnumerator AttackDelay();
     public void OnColliderEnter(GameObject obj, Collider collider);
     public void OnColliderExit(GameObject obj, Collider collider);
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class enemy_script : unit_script
+public class enemy_script : unit_script, IEnemy
 {
     [SerializeField] protected DamageType damageType;
     [SerializeField] protected Collider attackCol;
@@ -87,7 +87,7 @@ public class enemy_script : unit_script
             return;}
         
         if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();}
+            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();Debug.Log("add enemy");}
             return;
         }
     } 
