@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class projectile_script : MonoBehaviour
+{
+    public int damage;
+    public DamageType type;
+    [SerializeField] float speed;
+    [SerializeField] LayerMask target;
+    [SerializeField] LayerMask enemy;
+    [SerializeField] ParticleSystem hit;
+    void Start()
+    {
+        
+    }
+
+    void FixedUpdate()
+    {
+        transform.position += speed * Time.fixedDeltaTime * transform.forward;
+        //transform.Translate(Vector3.forward*speed*Time.fixedDeltaTime, Space.Self);
+    }
+    void OnTriggerEnter(Collider collider){
+        if (1<<collider.gameObject.layer != (1 << collider.gameObject.layer & target)) return;
+        if (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemy)){
+            collider.gameObject.GetComponent<unit_script>().TakeDamage(damage, type);
+            Debug.Log(gameObject.name + " hit");
+        }
+        if (hit!=null) Destroy(Instantiate(hit, transform.position, transform.rotation).gameObject,1f);
+        Destroy(gameObject);
+    }
+}
