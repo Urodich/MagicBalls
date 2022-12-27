@@ -24,7 +24,6 @@ public class projectile_script : MonoBehaviour
         if (1<<collider.gameObject.layer != (1 << collider.gameObject.layer & target)) return;
         if (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemy)){
             collider.gameObject.GetComponent<unit_script>().TakeDamage(damage, type);
-            Debug.Log(gameObject.name + " hit");
         }
         if (hit!=null) Destroy(Instantiate(hit, transform.position, transform.rotation).gameObject,1f);
         Destroy(gameObject);

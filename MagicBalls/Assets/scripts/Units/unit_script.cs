@@ -45,6 +45,7 @@ public class unit_script : MonoBehaviour
     protected NavMeshAgent navMesh;
     Rigidbody rb;
     bool disableGround=false;
+    protected Coroutine curAction;
 
     public void Start(){
         navMesh=gameObject.GetComponent<NavMeshAgent>();
@@ -131,7 +132,7 @@ public class unit_script : MonoBehaviour
         navMesh.baseOffset=(float)baseOffset;
         if(time<=0)baseOffset=null;
     }
-    //Move2
+    //Move2 curren
     public void Move(Vector3 direction, float power, float time, bool Stunned){
         if(Vector3.Dot(direction, Vector3.up)>0){
             isGrounded=false;
@@ -158,7 +159,10 @@ public class unit_script : MonoBehaviour
     }
     
     public virtual void Stun(float time){
+        if(curAction!=null)StopCoroutine(curAction);
+        curAction=null;
         stun+=1;
+        Debug.Log(gameObject.name+" stunned");
         Effect eff=gameObject.AddComponent<Effect>();
         Effects.Add(eff.Set(time,()=>{stun-=1; Effects.Remove(eff);},false));
 

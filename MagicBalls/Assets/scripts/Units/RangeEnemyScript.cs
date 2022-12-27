@@ -81,7 +81,6 @@ public class RangeEnemyScript : unit_script, IEnemy
         {
             animator.SetTrigger("attack");
             yield return new WaitForSeconds(attackDelay); //delay
-            Debug.Log("shoot");
             Destroy(Instantiate(_projectile, transform.position + Vector3.up * 0.5f, transform.rotation), 3);
             yield return new WaitForSeconds(attackSpeed); //residual animation  
             navMesh.isStopped = false;

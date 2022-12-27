@@ -288,10 +288,10 @@ public class Spells_script : MonoBehaviour
             }
             Debug.Log("blink");
             mousePos= hit.point;
-            player.GetComponent<playerControl_script>().navMesh.enabled=false;
+            navMesh.enabled=false;
             player.transform.position=mousePos;
-            player.GetComponent<playerControl_script>().navMesh.enabled=true;
-            player.GetComponent<playerControl_script>().navMesh.destination=mousePos;
+            navMesh.enabled=true;
+            navMesh.destination=mousePos;
             _blink.Play();
             Collider[] colliders = Physics.OverlapCapsule(player.transform.position + new Vector3(0,1,0), player.transform.position, 2*earth, enemies.value);
             foreach (Collider collider in colliders){
@@ -917,6 +917,7 @@ public class Spells_script : MonoBehaviour
             if(stats.CurMana<FlameManaCost) {NotEnoughtMana(); return;}
         }
         Debug.Log("Flame");
+        navMesh.isStopped=true;
         currentCast=StartCoroutine(flame_core());
         IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
@@ -933,6 +934,7 @@ public class Spells_script : MonoBehaviour
                 }
                 yield return new WaitForSeconds(.5f);
             }
+            navMesh.isStopped=false;
             _flame.Stop();
             animator.SetBool("casting", false);
             if(!GodMod)CastSpell(5f,"Flame",()=>FlameCoolDown=false);
