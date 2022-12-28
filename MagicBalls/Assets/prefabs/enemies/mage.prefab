@@ -43,7 +43,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6, y: 3, z: 6}
+  m_Size: {x: 7, y: 3, z: 7}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &5901357106601618004
 MonoBehaviour:
@@ -223,6 +223,7 @@ MonoBehaviour:
   BlinkCD: 3
   DefCD: 5
   fearRange: 5
+  _blink: {fileID: 3596532459258366940, guid: d6f100fd43e5bed4db04933b525fe16b, type: 3}
   _bomb: {fileID: 1113236252931290614, guid: e943cbf9f84ab344a8447cf4770f4a67, type: 3}
   defSpell: {fileID: 3740554292454821972, guid: f14118eaad62b484190ae2e69170107c, type: 3}
   deadProject: {fileID: 1835696438079929584, guid: 4b057aaf1a512264896f587e16bda6ae, type: 3}

@@ -52,11 +52,14 @@ public class MageEnemy_script : unit_script, IEnemy
             }
         }
     }
+    [SerializeField] ParticleSystem _blink;
     void Blink(Vector3 aim){
         curAction=StartCoroutine(blink());
         Debug.Log("blink");
         IEnumerator blink(){
             yield return new WaitForSeconds(0.3f);
+            Destroy(Instantiate(_blink,transform.position, new Quaternion()).gameObject,1f);
+            yield return new WaitForSeconds(0.2f);
             Vector3 direction = (transform.position=aim);
             direction=Vector3.Scale(direction, new Vector3(1,0,1));
             transform.Translate(direction*blinkRange);
@@ -87,8 +90,8 @@ public class MageEnemy_script : unit_script, IEnemy
         curAction=StartCoroutine(def());
         Debug.Log("defend");
         IEnumerator def(){
-            yield return new WaitForSeconds(0.1f);
             Destroy(Instantiate(defSpell, transform).gameObject,1);
+            yield return new WaitForSeconds(0.1f);
             Collider[] proj=Physics.OverlapSphere(transform.position, 3.5f, spells);
             foreach (Collider i in proj){
                 Destroy(i.gameObject);
