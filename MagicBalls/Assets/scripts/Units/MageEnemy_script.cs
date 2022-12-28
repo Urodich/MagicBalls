@@ -22,6 +22,7 @@ public class MageEnemy_script : unit_script, IEnemy
     //SPELLS
     float blinkCD=0;
     float defCD=0;
+    float attackCD=0;
     [SerializeField] float BlinkCD;
     [SerializeField] float DefCD;
     new void Start()
@@ -30,19 +31,21 @@ public class MageEnemy_script : unit_script, IEnemy
         aims = new List<GameObject>();
     }
 
-    float fearRange=5;
+    [SerializeField]float fearRange=5;
     new void FixedUpdate()
     {
         blinkCD-=(blinkCD>0)?Time.fixedDeltaTime:0;
         defCD-=(defCD>0)?Time.fixedDeltaTime:0;
+        attackCD-=(attackCD>0)?Time.fixedDeltaTime:0;
         base.FixedUpdate();
         if (isStunned) return;
-        if (!aim) {animator.SetBool("run", false); return;}
-
-
+        if (!aim) 
+            if((transform.position-navMesh.destination).sqrMagnitude<0.5f) {animator.SetBool("run", false); return;}
+            else return;
+        transform.LookAt(aim.transform);
         if (curAction==null){
-            if (blinkCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<fearRange) {animator.SetBool("run", false); Blink(aim.transform.position); return;}
-            if ((aim.transform.position-transform.position).sqrMagnitude<=attackDistance) {animator.SetBool("run", false); Attack(aim.transform.position); return;}
+            if (blinkCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<fearRange*fearRange) {animator.SetBool("run", false); Blink(aim.transform.position); return;}
+            if (attackCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<=attackDistance*attackDistance) {animator.SetBool("run", false); Attack(aim.transform.position); return;}
             if ((aim.transform.position-transform.position).sqrMagnitude>attackDistance){
                 animator.SetBool("run", true);
                 navMesh.destination=aim.transform.position;
@@ -58,10 +61,11 @@ public class MageEnemy_script : unit_script, IEnemy
             direction=Vector3.Scale(direction, new Vector3(1,0,1));
             transform.Translate(direction*blinkRange);
             blinkCD=BlinkCD;
+            curAction=null;
         }
         
     }
-    [SerializeField] GameObject _bomb;
+    [SerializeField] bomb_script _bomb;
     void Attack(Vector3 pos){
         curAction=StartCoroutine(attack());
         Debug.Log("attack");
@@ -69,8 +73,9 @@ public class MageEnemy_script : unit_script, IEnemy
             attacking=true;
             animator.SetTrigger("attack");
             yield return new WaitForSeconds(attackDelay);
-            Instantiate(_bomb, pos, new Quaternion());
-            yield return new WaitForSeconds(attackSpeed);
+            Instantiate(_bomb, pos, new Quaternion()).Esplose(damage,damageType,enemies);
+            attackCD=attackSpeed;
+            yield return new WaitForSeconds(0.3f);
             attacking=false;
             curAction=null;
     }
@@ -82,9 +87,9 @@ public class MageEnemy_script : unit_script, IEnemy
         curAction=StartCoroutine(def());
         Debug.Log("defend");
         IEnumerator def(){
-            yield return new WaitForSeconds(0.3f);
-            defSpell.Play();
-            Collider[] proj=Physics.OverlapSphere(transform.position, 2, spells);
+            yield return new WaitForSeconds(0.1f);
+            Destroy(Instantiate(defSpell, transform).gameObject,1);
+            Collider[] proj=Physics.OverlapSphere(transform.position, 3.5f, spells);
             foreach (Collider i in proj){
                 Destroy(i.gameObject);
                 Destroy(Instantiate(deadProject, i.gameObject.transform.position, new Quaternion()).gameObject,1);
@@ -114,8 +119,11 @@ public class MageEnemy_script : unit_script, IEnemy
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();}
             return;
         }
-        if(obj.name.Equals("defend"))
-            if(collider.gameObject.layer==spells && curAction==null && defCD<=0) Defend();
+        if(obj.name.Equals("defend")){
+            Debug.Log("def_col");
+            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & spells) && curAction==null && defCD<=0) Defend();
+            
+        }
     } 
     public void OnColliderExit(GameObject obj, Collider collider){
         if(obj.name=="vision" && (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))){

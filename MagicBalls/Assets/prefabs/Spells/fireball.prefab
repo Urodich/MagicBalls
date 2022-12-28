@@ -9737,7 +9737,7 @@ GameObject:
   - component: {fileID: 3191686426852131487}
   - component: {fileID: 7118439356694991224}
   - component: {fileID: 3060183567582810846}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: fireball
   m_TagString: spell
   m_Icon: {fileID: 0}
