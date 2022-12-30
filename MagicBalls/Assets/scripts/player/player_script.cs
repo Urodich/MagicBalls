@@ -55,6 +55,7 @@ public class player_script : unit_script
     }
     public override void Stun(float time){
         base.Stun(time);
+        spells.BreakCast();
         animator.SetBool("run", false);
         animator.SetBool("moonwalk", false);
         animator.SetBool("casting", false);

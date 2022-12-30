@@ -54,10 +54,13 @@ public class Spells_script : MonoBehaviour
         [42] = ()=>Lava(1,2),
         [44] = ()=>Mud(1,1),
         [48] = ()=>Mud(2,1),
+        [53] = ()=>Wall(1,1),
         [54] = ()=>Meteor(),
+        [66] = ()=>Wall(2,1),
         [80] = ()=>Earhtquake(2),
         [81] = ()=>Lava(2,1),
         [84] = ()=>Mud(1,2),
+        [93] = ()=>Wall(1,2),
         [120] = ()=>Earhtquake(3),
         [121] = ()=>Wisp(1),
         [122] = ()=>Phoenix(1,1),
@@ -67,6 +70,7 @@ public class Spells_script : MonoBehaviour
         [129] = ()=>ManaRegen(2,1),
         [134] = ()=>Bird(1,1),
         [147] = ()=>Bird(2,1),
+        [165] = ()=>Shield(),
         [174] = ()=>Tornado(),
         [242] = ()=>Wisp(2),
         [243] = ()=>Phoenix(2,1),
@@ -245,8 +249,9 @@ public class Spells_script : MonoBehaviour
         IEnumerator earthquake_core(){
             Debug.Log("earthquake");
             animator.SetTrigger("cast6");
+            navMesh.isStopped=true;
             yield return new WaitForSeconds(earhtquakeDelay);
-
+            navMesh.isStopped=false;
             if(!GodMod){
                 stats.CurMana-=EarhtquakeManaCost*strength;
                 EarthqukeCoolDowm=true;
@@ -919,6 +924,7 @@ public class Spells_script : MonoBehaviour
         Debug.Log("Flame");
         navMesh.isStopped=true;
         currentCast=StartCoroutine(flame_core());
+
         IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
             yield return new WaitForSeconds(flameDelay);
@@ -1000,4 +1006,72 @@ public class Spells_script : MonoBehaviour
         }
     }
     
+    //SHIELD
+    bool ShieldCoolDown=false;
+    float ShieldManaCost=40f;
+    float ShieldDelay=0.3f;
+    [SerializeField] GameObject shield;
+    void Shield(){
+        if(!GodMod){
+            if(ShieldCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<ShieldManaCost) {NotEnoughtMana(); return;}
+        }
+        Debug.Log("Shield");
+        navMesh.isStopped=true;
+        currentCast=StartCoroutine(shield_core2());
+
+        IEnumerator shield_core(){
+            animator.SetBool("casting", true);
+            animator.SetTrigger("cast_global");
+            yield return new WaitForSeconds(ShieldDelay);
+            if(!GodMod) stats.CurMana-=ShieldManaCost;
+            
+            GameObject _shield=Instantiate(shield,transform);
+            while(Input.GetMouseButton(1)){
+                if(stats.CurMana<0) break;
+                if(!GodMod) stats.CurMana-=10*Time.fixedDeltaTime;
+                yield return new WaitForSeconds(0.1f);
+            }
+            ShieldCoolDown=true;
+            animator.SetBool("casting", false);
+            if(!GodMod)CastSpell(20f,"Shield",()=>ShieldCoolDown=false);
+            Destroy(_shield,0.5f);
+        }
+        IEnumerator shield_core2(){
+            animator.SetTrigger("cast_global");
+            yield return new WaitForSeconds(ShieldDelay);
+            if(!GodMod) stats.CurMana-=ShieldManaCost;
+            
+            GameObject _shield=Instantiate(shield,transform.position, new Quaternion());
+            ShieldCoolDown=true;
+            if(!GodMod)CastSpell(20f,"Shield",()=>ShieldCoolDown=false);
+            Destroy(_shield,10f);
+        }
+    }
+
+    //WALL
+    bool WallCoolDown=false;
+    float WallManaCost=40f;
+    float WallDelay=0.3f;
+    [SerializeField] GameObject wall;
+
+    void Wall(int air, int earth){
+        if(!GodMod){
+            if(WallCoolDown) {CoolDawn(); return;}
+            if(stats.CurMana<WallManaCost) {NotEnoughtMana(); return;}
+        }
+        Debug.Log("wall");
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
+            currentCast=StartCoroutine(wall_core(hit.point));
+        }
+        IEnumerator wall_core(Vector3 pos){
+            animator.SetTrigger("");
+            yield return new WaitForSeconds(WallDelay);
+            stats.CurMana-=WallManaCost;
+            WallCoolDown=true;
+            CastSpell(30f,"Wall",()=>WallCoolDown=false);
+            Instantiate(wall,pos,new Quaternion()).transform.LookAt(gameObject.transform);
+        }
+    }
 }
