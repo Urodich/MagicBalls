@@ -23,18 +23,18 @@ Material:
   stringTagMap:
     RenderType: Transparent
   disabledShaderPasses:
-  - SHADOWCASTER
   - DepthOnly
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: a82faba24d10fc442a0f87886caed14f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 271c44da640d46948aefd7ff8ec9e036, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: 9c3bb3363774a7947a1f9080272ed8a9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 638fd9bfb32b3564fbf0d0253da07ecc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:

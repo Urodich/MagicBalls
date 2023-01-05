@@ -575,7 +575,7 @@ public class Spells_script : MonoBehaviour
 
         IEnumerator VectorCast(){
             yield return StartCoroutine(vectorCast());
-            meteor_script meteor = Instantiate(_meteor,mousePos1+new Vector3(0,4,0),Quaternion.LookRotation(direction)).GetComponent<meteor_script>();
+            meteor_script meteor = Instantiate(_meteor,mousePos1+new Vector3(0,4,0),Quaternion.LookRotation(direction)).GetComponentInChildren<meteor_script>();
             meteor.direction=direction;
             animator.SetTrigger("cast4");
             CastSpell(20f,"Meteor",()=>meteorCoolDown=false);

@@ -6,19 +6,21 @@ public class meteor_script : MonoBehaviour
 {
     [SerializeField] float damage=15;
     public Vector3 direction;
-    Rigidbody rigidbody;
+    [SerializeField] Rigidbody rigidbodyParent;
     buffs_script buffs;
     GameObject player;
     LayerMask enemies;
 
     void Start()
     {
+        Physics.IgnoreLayerCollision(11,8);
+        Physics.IgnoreLayerCollision(11,7);
+        Physics.IgnoreLayerCollision(11,9);
         player = GameObject.FindGameObjectWithTag("Player");
-        rigidbody=gameObject.GetComponent<Rigidbody>();
-        rigidbody.AddForce(direction*3, ForceMode.Impulse);
+        rigidbodyParent.AddForce(direction*8, ForceMode.VelocityChange);
         buffs = player.GetComponent<buffs_script>();
         StartCoroutine(Damage());
-        Destroy(gameObject, 6f);
+        Destroy(transform.parent.gameObject, 6f);
     }
 
         IEnumerator Damage(){
