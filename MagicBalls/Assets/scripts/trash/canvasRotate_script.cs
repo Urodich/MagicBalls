@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class hp_bar_script : MonoBehaviour
+public class canvasRotate_script : MonoBehaviour
 {
     GameObject mainCamera;
     // Update is called once per frame

@@ -15,7 +15,9 @@ public class playerControl_script : MonoBehaviour
     [SerializeField] Animator animator;
     player_script player;
     public GameObject mouseTarget;
+    public GameObject itemTarget;
     [SerializeField] LayerMask enemies;
+    [SerializeField] LayerMask items;
     [SerializeField] Transform sphereParent;
     Queue<int> Spheres = new Queue<int>(3);
     
@@ -29,11 +31,24 @@ public class playerControl_script : MonoBehaviour
     void FixedUpdate()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        //предметы
+        if(Physics.Raycast(ray, out RaycastHit itemHit, float.MaxValue, items)){
+            if(itemTarget!=itemHit.collider.gameObject) {
+                if(itemTarget!=null)itemTarget.GetComponent<Item>().CloseInfo();
+                itemTarget=itemHit.collider.gameObject;
+                itemTarget.GetComponent<Item>().ShowInfo();
+            }
+        }
+        else{
+            if(itemTarget!=null)itemTarget.GetComponent<Item>().CloseInfo();
+            itemTarget=null;
+        }
         //выбор цели
-        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, enemies)){
-            if(mouseTarget!=hit.collider.gameObject) {
+        if(Physics.Raycast(ray, out RaycastHit enemyHit, float.MaxValue, enemies)){
+            if(mouseTarget!=enemyHit.collider.gameObject) {
                 if(mouseTarget!=null)mouseTarget.GetComponent<unit_script>().Lighting(false);
-                mouseTarget=hit.collider.gameObject;
+                mouseTarget=enemyHit.collider.gameObject;
                 mouseTarget.GetComponent<unit_script>().Lighting(true);
             }
         }
@@ -50,7 +65,10 @@ public class playerControl_script : MonoBehaviour
             mousePos= groundHit.point;
             transform.LookAt(mousePos);
         }
-        if(Input.GetMouseButton(0)) navMesh.destination = mousePos; 
+        if(Input.GetMouseButton(0)) {
+            navMesh.destination = mousePos; 
+            if(itemTarget!=null)itemTarget.GetComponent<Item>().Take(gameObject.GetComponent<inventory_script>());
+        }
         if (navMesh.velocity==Vector3.zero) {
             animator.SetBool("moonwalk", false);
             animator.SetBool("run", false);
