@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
 {
     public ItemType type;
     buffs_script buffs;
+    Rigidbody rb;
     [SerializeField] Canvas info;
     [SerializeField] Sprite pict;
     [SerializeField] string itemName;
@@ -27,6 +28,8 @@ public class Item : MonoBehaviour
         inf.Find("name").gameObject.GetComponent<TextMeshProUGUI>().text=itemName;
         inf.Find("description").gameObject.GetComponent<TextMeshProUGUI>().text=description+"\n"+statInfo;
         info.gameObject.SetActive(false);
+
+        rb=GetComponent<Rigidbody>();
     }
     public void ShowInfo(){
         info.gameObject.SetActive(true);
@@ -40,6 +43,7 @@ public class Item : MonoBehaviour
         Vector3 pos = gameObject.transform.position;
         gameObject.transform.SetParent(null);
         gameObject.layer=12;
+        rb.isKinematic=false;
     }
 
     public void Take(inventory_script player){
@@ -48,7 +52,7 @@ public class Item : MonoBehaviour
         gameObject.layer=0;
         Item old=player.Equip(this);
         CloseInfo();
-        //old?.Drop();
+        rb.isKinematic=true;
     }    
 }
 

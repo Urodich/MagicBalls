@@ -13,9 +13,6 @@ public class meteor_script : MonoBehaviour
 
     void Start()
     {
-        Physics.IgnoreLayerCollision(11,8);
-        Physics.IgnoreLayerCollision(11,7);
-        Physics.IgnoreLayerCollision(11,9);
         player = GameObject.FindGameObjectWithTag("Player");
         rigidbodyParent.AddForce(direction*8, ForceMode.VelocityChange);
         buffs = player.GetComponent<buffs_script>();

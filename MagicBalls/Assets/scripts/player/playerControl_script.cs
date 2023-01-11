@@ -28,6 +28,7 @@ public class playerControl_script : MonoBehaviour
         player = gameObject.GetComponent<player_script>();
     }
     bool moonwalk=false;
+    [SerializeField] float pickUpDistance=2;
     void FixedUpdate()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -67,7 +68,8 @@ public class playerControl_script : MonoBehaviour
         }
         if(Input.GetMouseButton(0)) {
             navMesh.destination = mousePos; 
-            if(itemTarget!=null)itemTarget.GetComponent<Item>().Take(gameObject.GetComponent<inventory_script>());
+            if(itemTarget!=null)
+                if(Vector3.Distance(itemTarget.transform.position, transform.position)<pickUpDistance)itemTarget.GetComponent<Item>().Take(gameObject.GetComponent<inventory_script>());
         }
         if (navMesh.velocity==Vector3.zero) {
             animator.SetBool("moonwalk", false);
