@@ -87,10 +87,15 @@ MonoBehaviour:
   navMesh: {fileID: 5573720242917285656}
   animator: {fileID: 6708927846955005096}
   mouseTarget: {fileID: 0}
+  itemTarget: {fileID: 0}
   enemies:
     serializedVersion: 2
     m_Bits: 128
+  items:
+    serializedVersion: 2
+    m_Bits: 4096
   sphereParent: {fileID: 4489135174467704389}
+  pickUpDistance: 2
   sphere:
   - {fileID: 2951065586091326984, guid: 8658de5dc3818d946adfb2eaec1c3281, type: 3}
   - {fileID: 2951065586091326984, guid: c53ad0caf7c93284c98f3bdb8cd39b11, type: 3}
@@ -198,8 +203,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &8072039409264946256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +256,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a7054957cbb5043a75eb479073b457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bootsTransformL: {fileID: 1595523873948431682}
+  bootsTransformR: {fileID: 3916392551312778184}
+  boots: {fileID: 0}
+  bracersTransformL: {fileID: 1840403480679314274}
+  bracersTransformR: {fileID: 184138221202915950}
+  bracers: {fileID: 0}
+  headTransform: {fileID: 472419016822370609}
+  head: {fileID: 0}
 --- !u!1 &7838177636615383746
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,9 +610,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
+--- !u!4 &184138221202915950 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2720362755573352876, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
+  m_PrefabInstance: {fileID: 2832371913944746946}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &363085423758927012 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6753310939652706458, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
+  m_PrefabInstance: {fileID: 2832371913944746946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &472419016822370609 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2432161124270897907, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
+  m_PrefabInstance: {fileID: 2832371913944746946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1595523873948431682 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5662454383357346176, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
+  m_PrefabInstance: {fileID: 2832371913944746946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1840403480679314274 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4523010445227866272, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
   m_PrefabInstance: {fileID: 2832371913944746946}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2361049774544989225 stripped
@@ -632,6 +665,11 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!4 &3916392551312778184 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1231533808483018762, guid: b0ba298212b85814481a6c534bcae0d7, type: 3}
+  m_PrefabInstance: {fileID: 2832371913944746946}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7057059686270505691
 PrefabInstance:
   m_ObjectHideFlags: 0

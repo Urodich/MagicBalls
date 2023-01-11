@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class buffs_script : MonoBehaviour
 {
@@ -23,9 +24,10 @@ public class buffs_script : MonoBehaviour
 
     private Dictionary<Stats, float> stats;
 
-    [SerializeField] private Text text;
+    TextMeshProUGUI text;
 
     void Start(){
+        text=GameObject.Find("StatsText").GetComponent<TextMeshProUGUI>();
         stats = new Dictionary<Stats, float>();
         foreach(Stats elem in Enum.GetValues(typeof(Stats))){
             stats[elem]=1;

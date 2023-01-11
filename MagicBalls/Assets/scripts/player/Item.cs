@@ -10,9 +10,9 @@ public class Item : MonoBehaviour
     buffs_script buffs;
     Rigidbody rb;
     [SerializeField] Canvas info;
-    [SerializeField] Sprite pict;
-    [SerializeField] string itemName;
-    [SerializeField] string description;
+    public Sprite pict;
+    public string itemName;
+    public string description;
     [SerializeField] List<StatsCount> startBuffs=new List<StatsCount>();
     Dictionary<Stats, float> changeStats = new Dictionary<Stats, float>();
     void Start(){
@@ -26,7 +26,8 @@ public class Item : MonoBehaviour
         Transform p = inf.Find("image");
         if (p!=null)p.gameObject.GetComponent<Image>().sprite=pict;
         inf.Find("name").gameObject.GetComponent<TextMeshProUGUI>().text=itemName;
-        inf.Find("description").gameObject.GetComponent<TextMeshProUGUI>().text=description+"\n"+statInfo;
+        description+="\n"+statInfo;
+        inf.Find("description").gameObject.GetComponent<TextMeshProUGUI>().text=description;
         info.gameObject.SetActive(false);
 
         rb=GetComponent<Rigidbody>();

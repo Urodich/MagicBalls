@@ -58,7 +58,6 @@ public class unit_script : MonoBehaviour
         else {renderer = gameObject.GetComponentInChildren<MeshRenderer>();mainMaterial = renderer.material;} //delete this
         rb = GetComponent<Rigidbody>();
 
-        StartCoroutine(regen());
         mainMaterial.DisableKeyword("HOVERED");
         mainMaterial.DisableKeyword("DAMAGED");
     }
@@ -70,6 +69,8 @@ public class unit_script : MonoBehaviour
                 isGrounded=true;
             }
         }
+        if(CurHp<maxHp)CurHp+=hpRegen*hpRegenFactor*Time.fixedDeltaTime;
+        if(CurHp>maxHp) CurHp=maxHp;
         //Stunned
         if(isGrounded){
             navMesh.enabled=true;
@@ -93,13 +94,7 @@ public class unit_script : MonoBehaviour
     public void SetAim(Vector3 pos){
         startAim=pos;
     }
-    IEnumerator regen(){
-        while (true){
-            if(CurHp<maxHp)CurHp+=hpRegen*hpRegenFactor;
-            if(CurHp>maxHp) CurHp=maxHp;
-            yield return new WaitForSeconds(1f);
-        }
-    }
+
     public void AddHP(float value){
         CurHp+=value;
     }
