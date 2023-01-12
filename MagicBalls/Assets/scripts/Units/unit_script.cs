@@ -13,15 +13,14 @@ public class unit_script : MonoBehaviour
     public float CurHp{get{return curHp;} set{curHp=value>maxHp?maxHp:value; if(hpBar!=null) hpBar.value=curHp;}}
     [SerializeField] protected float hpRegen;
     protected float hpRegenFactor=1;
-    [SerializeField] protected float damage;
+    
     [SerializeField] public float speed;
     [SerializeField] protected float minSpeed;
     public float armor;
     public event Action<GameObject> dieEvent;
     protected float speedFactor=1;
     int stun;
-    //List<Effect> Effects = new List<Effect>();
-    List<Effect> Effects = new List<Effect>();
+    protected List<Effect> Effects = new List<Effect>();
     public int Priority=0; 
     //Сопротивления
     public float FireResist=0;
@@ -150,6 +149,16 @@ public class unit_script : MonoBehaviour
             rb.isKinematic=true;
             navMesh.enabled=true;
             rb.useGravity=false;
+        }
+    }
+    public void PosDispell(){
+        foreach(Effect effect in Effects){
+            if (effect.isPositive) effect.Dispell();
+        }
+    }
+    public void NegDispell(){
+        foreach(Effect effect in Effects){
+            if (!effect.isPositive) effect.Dispell();
         }
     }
     

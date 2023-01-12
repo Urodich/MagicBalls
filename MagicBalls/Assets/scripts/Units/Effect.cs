@@ -7,7 +7,7 @@ public class Effect : MonoBehaviour
 {
     Action end;
     float _timeLeft = 0f;
-    bool isPositive;
+    public bool isPositive;
     //bool isAddable;
 
     void FixedUpdate()
@@ -23,7 +23,7 @@ public class Effect : MonoBehaviour
         Destroy(this);
     }
     public void Dispell(){
-        if(!isPositive)Destroy(this);
+       Destroy(this);
     }
     public Effect Set(float time, Action endAction, bool isPositive){
         _timeLeft=time;

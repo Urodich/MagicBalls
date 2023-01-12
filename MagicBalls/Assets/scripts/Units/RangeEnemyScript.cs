@@ -2,27 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeEnemyScript : unit_script, IEnemy
+public class RangeEnemyScript : enemy_script
 {
-    [SerializeField] protected float attackDistance=4f;
-    [SerializeField] protected float attackDelay=1f;
-    [SerializeField] protected float attackSpeed=1f;
-
-    [SerializeField] protected DamageType damageType;
-    [SerializeField] protected Collider visibleCol;
-
-    public List<GameObject> aims;
-    public GameObject aim;
-    protected bool attacking=false;
-    protected Coroutine attack;
-    public LayerMask enemies;
-
     [SerializeField] LayerMask obstacles;
-    new void Start()
-    {
-        base.Start();
-        aims = new List<GameObject>();
-    }
 
     new void FixedUpdate()
     {
@@ -55,50 +37,21 @@ public class RangeEnemyScript : unit_script, IEnemy
         if(!attacking) ChangeAim();
         
     }
-    public void ClearAims()
-    {
-        aims.Clear();
-    }
-    public bool ChangeAim(){
-        bool a =false;
-        if(aims.Count==0) {aim=null; return false;}
-        if (!aim) {aim = aims[0]; a=true;}
-        foreach (GameObject i in aims){
-            if(i==aim) continue;
-            if(i.GetComponent<unit_script>().Priority>aim.GetComponent<unit_script>().Priority) {aim = i; a=true; continue;}
-            if((i.transform.position-gameObject.transform.position).sqrMagnitude<(aim.transform.position-gameObject.transform.position).sqrMagnitude) {aim = i; a=true;}
-        }
-        return a;
-    }
+
     [SerializeField] GameObject _projectile;
-    void Attack(){
+    /*protected void Attack(){
         navMesh.isStopped=true;
         attacking =true;
         attack=StartCoroutine(AttackDelay());
-
-        //Attacking function
-        IEnumerator AttackDelay()
-        {
-            animator.SetTrigger("attack");
-            yield return new WaitForSeconds(attackDelay); //delay
-            Destroy(Instantiate(_projectile, transform.position + Vector3.up * 0.5f, transform.rotation), 3);
-            yield return new WaitForSeconds(attackSpeed); //residual animation  
-            navMesh.isStopped = false;
-            attacking = false;
-        }
-    }
-    
-
-    public void OnColliderEnter(GameObject obj, Collider collider){
-        if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();Debug.Log("add enemy");}
-            return;
-        }
-    } 
-    public void OnColliderExit(GameObject obj, Collider collider){
-        if(obj.name=="vision" && (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))){
-            aims.Remove(collider.gameObject);
-            if(aim==collider.gameObject)ChangeAim();
-        }
+    }*/
+    //Attacking function
+    protected override IEnumerator AttackDelay()
+    {
+        animator.SetTrigger("attack");
+        yield return new WaitForSeconds(attackDelay); //delay
+        Destroy(Instantiate(_projectile, transform.position + Vector3.up * 0.5f, transform.rotation), 3);
+        yield return new WaitForSeconds(attackSpeed); //residual animation  
+        navMesh.isStopped = false;
+        attacking = false;
     }
 }

@@ -3,20 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MageEnemy_script : unit_script, IEnemy
+public class MageEnemy_script : enemy_script
 {
-    [SerializeField] float attackDistance=4f;
-    [SerializeField] float attackDelay=1f;
-    [SerializeField] float attackSpeed=1f;
     [SerializeField] float blinkRange=2f;
-
-    [SerializeField] DamageType damageType;
-    [SerializeField] Collider visibleCol;
-
-    public List<GameObject> aims;
-    public GameObject aim;
-    bool attacking=false;
-    public LayerMask enemies;
     [SerializeField] LayerMask spells;
 
     //SPELLS
@@ -25,12 +14,6 @@ public class MageEnemy_script : unit_script, IEnemy
     float attackCD=0;
     [SerializeField] float BlinkCD;
     [SerializeField] float DefCD;
-    new void Start()
-    {
-        base.Start();
-        aims = new List<GameObject>();
-    }
-
     [SerializeField]float fearRange=5;
     new void FixedUpdate()
     {
@@ -101,7 +84,7 @@ public class MageEnemy_script : unit_script, IEnemy
             curAction=null;
         }
     }
-    public void ClearAims()
+/*    public void ClearAims()
     {
         aims.Clear();
     }
@@ -116,8 +99,8 @@ public class MageEnemy_script : unit_script, IEnemy
         }
         return a;
     }
-
-    public void OnColliderEnter(GameObject obj, Collider collider){
+*/
+    public override void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("vision")){
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();}
             return;
@@ -128,11 +111,5 @@ public class MageEnemy_script : unit_script, IEnemy
             
         }
     } 
-    public void OnColliderExit(GameObject obj, Collider collider){
-        if(obj.name=="vision" && (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))){
-            aims.Remove(collider.gameObject);
-            if(aim==collider.gameObject)ChangeAim();
-        }
-    }
 
 }

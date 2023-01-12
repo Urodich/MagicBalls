@@ -6,51 +6,23 @@ using UnityEngine.AI;
 public class enemy_script : unit_script, IEnemy
 {
     [SerializeField] protected DamageType damageType;
-    [SerializeField] protected Collider attackCol;
+    [SerializeField] protected float damage;
     [SerializeField] protected Collider visibleCol;
     [SerializeField] protected float attackDistance=4f;
     [SerializeField] protected float attackDelay=1f;
     [SerializeField] protected float attackSpeed=1f;
-    [SerializeField] protected float attackTime=1f;
+    
 
-    public List<GameObject> aims;
+    public List<GameObject> aims = new List<GameObject>();
     public GameObject aim;
     protected bool attacking=false;
     protected Coroutine attack;
     public LayerMask enemies;
 
-    new void Start()
-    {
-        base.Start();
-        attackCol.enabled=false;
-        aims = new List<GameObject>();
-    }
-
-    new void FixedUpdate()
-    {
-        base.FixedUpdate();
-        if(isStunned) return;
-        if (!aim) {animator.SetBool("run", false); return;}
-
-        transform.LookAt(aim.transform);
-        //атаки и передвижение
-        if ((aim.transform.position-gameObject.transform.position).sqrMagnitude>attackDistance*attackDistance) {
-            if(attacking){
-                StopCoroutine(attack);
-                attacking=false;
-                attackCol.enabled =false;
-                navMesh.isStopped=false;
-            } 
-            navMesh.destination = aim.transform.position;
-            animator.SetBool("run", true);
-            return;
-        }
-        else       
-            animator.SetBool("run", false);
-            if(!attacking) {Attack(); animator.SetTrigger("attack");}
-
-        if(!attacking) ChangeAim();
-        
+    protected virtual void StopAttack(){
+        StopCoroutine(attack);
+        attacking=false;
+        if(!isStunned)navMesh.isStopped=false;
     }
     public void ClearAims()
     {
@@ -68,33 +40,27 @@ public class enemy_script : unit_script, IEnemy
         }
         return a;
     }
-    void Attack(){
+    protected void Attack(){
         navMesh.isStopped=true;
         attacking =true;
         attack=StartCoroutine(AttackDelay());
     }
     //Attacking function
-    IEnumerator AttackDelay(){
+    protected virtual IEnumerator AttackDelay(){
         yield return new WaitForSeconds(attackDelay); //delay
-        attackCol.enabled=true;
-        yield return new WaitForSeconds(attackTime); //attack time
-        attackCol.enabled =false;
+        aim.gameObject.GetComponent<unit_script>().TakeDamage(damage*damageFactor, damageType);
         yield return new WaitForSeconds(attackSpeed); //residual animation  
         navMesh.isStopped=false;
         attacking=false;
     }
     //Triggers
-    public void OnColliderEnter(GameObject obj, Collider collider){
-        if (obj.name.Equals("attack")) {
-            if((1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))) {collider.gameObject.GetComponent<unit_script>().TakeDamage(damage*damageFactor, damageType); } 
-            return;}
-        
+    public virtual void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("vision")){
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();Debug.Log("add enemy");}
             return;
         }
     } 
-    public void OnColliderExit(GameObject obj, Collider collider){
+    public virtual void OnColliderExit(GameObject obj, Collider collider){
         if(obj.name=="vision" && (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))){
             aims.Remove(collider.gameObject);
             if(aim==collider.gameObject)ChangeAim();

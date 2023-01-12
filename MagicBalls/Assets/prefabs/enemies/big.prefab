@@ -67,10 +67,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3528896200965048106}
-  - component: {fileID: 6029039409261423460}
   - component: {fileID: 4330239328870436612}
   - component: {fileID: 1551489618738673353}
   - component: {fileID: 8194012590545870228}
+  - component: {fileID: 5286059947728046840}
   m_Layer: 7
   m_Name: big
   m_TagString: enemy
@@ -97,50 +97,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6029039409261423460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081131676328832195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4856622a93967c54dbc31d014b26573f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hpBar: {fileID: 2919831038156329626}
-  maxHp: 100
-  hpRegen: 2
-  damage: 25
-  speed: 2
-  minSpeed: 0
-  armor: 0
-  Priority: 0
-  FireResist: 0.15
-  ThunderResist: 0.15
-  PhysicalResist: 0.35
-  damageFactor: 1
-  isFlying: 0
-  isStunned: 0
-  isGrounded: 1
-  ground:
-    serializedVersion: 2
-    m_Bits: 64
-  model: {fileID: 9222076588357601621}
-  animator: {fileID: 4753331719373953830}
-  damageType: 2
-  attackCol: {fileID: 3313495868834008041}
-  visibleCol: {fileID: 955681278144713638}
-  attackDistance: 3
-  attackDelay: 0.6
-  attackSpeed: 2
-  attackTime: 0.5
-  aims: []
-  aim: {fileID: 0}
-  enemies:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!195 &4330239328870436612
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -192,6 +148,50 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &5286059947728046840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1081131676328832195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef806a24c52786340a3f44be920b2af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpBar: {fileID: 2919831038156329626}
+  maxHp: 130
+  hpRegen: 5
+  damage: 35
+  speed: 3
+  minSpeed: 1
+  armor: 0
+  Priority: 2
+  FireResist: 0.25
+  ThunderResist: 0
+  PhysicalResist: 0.3
+  damageFactor: 1
+  isFlying: 0
+  isStunned: 0
+  isGrounded: 1
+  ground:
+    serializedVersion: 2
+    m_Bits: 64
+  model: {fileID: 9222076588357601621}
+  animator: {fileID: 4753331719373953830}
+  damageType: 2
+  visibleCol: {fileID: 955681278144713638}
+  attackDistance: 4
+  attackDelay: 0.7
+  attackSpeed: 1
+  aims: []
+  aim: {fileID: 0}
+  enemies:
+    serializedVersion: 2
+    m_Bits: 256
+  attackCol: {fileID: 3313495868834008041}
+  attackTime: 0.3
 --- !u!1 &5643143918236512094
 GameObject:
   m_ObjectHideFlags: 0
