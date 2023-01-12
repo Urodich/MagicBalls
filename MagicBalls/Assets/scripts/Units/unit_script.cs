@@ -35,10 +35,10 @@ public class unit_script : MonoBehaviour
     protected Vector3 startAim=Vector3.zero;
 
     Material mainMaterial;
+    Material defaultMaterial;
     //[SerializeField] Material damageMaterial;
-    Color main;
     SkinnedMeshRenderer ModelRenderer;
-    MeshRenderer renderer;
+    new MeshRenderer renderer;
     [SerializeField] GameObject model;
     [SerializeField] public Animator animator;
     protected NavMeshAgent navMesh;
@@ -56,7 +56,7 @@ public class unit_script : MonoBehaviour
         if(ModelRenderer!=null)mainMaterial = ModelRenderer.material;
         else {renderer = gameObject.GetComponentInChildren<MeshRenderer>();mainMaterial = renderer.material;} //delete this
         rb = GetComponent<Rigidbody>();
-
+        defaultMaterial=mainMaterial;
         mainMaterial.DisableKeyword("HOVERED");
         mainMaterial.DisableKeyword("DAMAGED");
     }
@@ -101,7 +101,7 @@ public class unit_script : MonoBehaviour
         speedFactor+=value;
         navMesh.speed=((speed*speedFactor)<minSpeed?minSpeed:speed*speedFactor);
     }
-    //работает как говно не трогать
+    //old
     Coroutine cor=null;
     public void Move1 (Vector3 direction, float power, float time, bool Stunned){
         if(Stunned) Stun(time);
@@ -205,6 +205,7 @@ public class unit_script : MonoBehaviour
     }
 
     public void Lighting(bool value){
+        if (mainMaterial!=defaultMaterial)return;
         if(value){
             Debug.Log("hover");
             mainMaterial.EnableKeyword("HOVERED");}
@@ -213,6 +214,13 @@ public class unit_script : MonoBehaviour
             mainMaterial.DisableKeyword("HOVERED");}
     }
 
+    protected Material ChangeMaterial(Material material){
+        Lighting(false);
+        Material tmp=mainMaterial;
+        if (ModelRenderer)ModelRenderer.material=material;
+        else renderer.material=material;
+        return tmp;
+    }
 }
 
 public enum DamageType{
