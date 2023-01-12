@@ -17,7 +17,7 @@ public class inventory_script : MonoBehaviour
     [SerializeField] Transform headTransform;
     itemUI_script head;
 
-    void Start(){
+    void Awake(){
         GameObject inventory=GameObject.Find("inventory");
         boots=inventory.transform.Find("boots slot").GetComponent<itemUI_script>();
         head=inventory.transform.Find("head slot").GetComponent<itemUI_script>();
@@ -36,15 +36,13 @@ public class inventory_script : MonoBehaviour
             case ItemType.Boots: {
                 curr=boots._item;
                 Set(item,boots);
-                WearOn(boots._item, bootsTransformL);
-                WearOn(boots._item, bootsTransformR);
+                WearOn(boots._item, bootsTransformL, bootsTransformR);
                 break;
             }
             case ItemType.Bracer: {
                 curr=bracers._item;
                 Set(item,bracers);
-                WearOn(bracers._item, bracersTransformL);
-                WearOn(bracers._item, bracersTransformR);
+                WearOn(bracers._item, bracersTransformL, bracersTransformR);
                 break;
             }
             default:{
@@ -56,14 +54,26 @@ public class inventory_script : MonoBehaviour
     }
 
     Item Set(Item item, itemUI_script slot){
-        Item curr = slot.DeleteItem();
-        slot.SetItem(item);
+        Item curr = slot.DeleteItem(); //old item
+        slot.SetItem(item); //UI
         curr?.Drop();
         return slot._item;
     }
     void WearOn(Item slot, Transform transform){
         slot.transform.SetParent(transform);
         slot.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());
+    }
+    void WearOn(Item slot, Transform transformL, Transform transformR){
+        Item copy = Instantiate<Item>(slot);
+
+        slot.transform.SetParent(transformL);
+        slot.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());
+
+        copy.TakeCopy();
+        //copy.transform.localScale=Vector3.Scale(copy.transform.localScale, new Vector3(-1,1,1));
+        copy.transform.SetParent(transformR);
+        copy.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());
+        
     }
 
     

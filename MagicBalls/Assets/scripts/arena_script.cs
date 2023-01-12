@@ -17,6 +17,9 @@ public class arena_script : MonoBehaviour
     [SerializeField] Text timer;
     float time;
     buffs_script buffs_Script;
+    void Awake(){
+        pauseMenu=GameObject.Find("pause menu");
+    }
     void Start()
     {
         

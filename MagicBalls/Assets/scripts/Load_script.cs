@@ -7,7 +7,7 @@ public class Load_script : MonoBehaviour
     void Start()
     {
         disableCollisions();
-
+        GameObject.Find("pause menu").SetActive(false);
     }
 
     void disableCollisions(){

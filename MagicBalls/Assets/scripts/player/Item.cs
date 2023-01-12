@@ -54,6 +54,12 @@ public class Item : MonoBehaviour
         Item old=player.Equip(this);
         CloseInfo();
         rb.isKinematic=true;
+    }
+    public void TakeCopy(){
+        gameObject.layer=0;
+        CloseInfo();
+        rb=GetComponent<Rigidbody>();
+        rb.isKinematic=true;
     }    
 }
 
