@@ -40,6 +40,12 @@ public class enemy_script : unit_script, IEnemy
         }
         return a;
     }
+    public void AddAim(GameObject _aim){
+        if(aims.Contains(_aim)) return;
+        aims.Add(_aim);
+        ChangeAim();
+        OnFindAim(_aim);
+    }
     protected void Attack(){
         navMesh.isStopped=true;
         attacking =true;
@@ -53,10 +59,20 @@ public class enemy_script : unit_script, IEnemy
         navMesh.isStopped=false;
         attacking=false;
     }
+    void OnFindAim(GameObject _aim){
+        Collider[] friends=Physics.OverlapSphere(transform.position, 10f, 8);
+        foreach(Collider col in friends){
+            col.gameObject.GetComponent<enemy_script>().AddAim(_aim);
+        }
+
+    }
     //Triggers
     public virtual void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();Debug.Log("add enemy");}
+            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {
+                AddAim(collider.gameObject); 
+                OnFindAim(collider.gameObject);
+            }
             return;
         }
     } 

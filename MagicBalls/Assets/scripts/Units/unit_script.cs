@@ -162,13 +162,15 @@ public class unit_script : MonoBehaviour
         }
     }
     
+    [SerializeField] ParticleSystem _stun;
     public virtual void Stun(float time){
         if(curAction!=null)StopCoroutine(curAction);
+        _stun.Play();
         curAction=null;
         stun+=1;
         Debug.Log(gameObject.name+" stunned");
         Effect eff=gameObject.AddComponent<Effect>();
-        Effects.Add(eff.Set(time,()=>{stun-=1; Effects.Remove(eff);},false));
+        Effects.Add(eff.Set(time,()=>{stun-=1; Effects.Remove(eff); _stun.Stop();},false));
 
     }
     public void AddEffect(Action action,Action endAction,float time, bool isPositive){

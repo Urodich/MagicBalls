@@ -13,8 +13,9 @@ public class MeleeEnemy_script : enemy_script
         transform.LookAt(aim.transform);
         //атаки и передвижение
         if ((aim.transform.position-gameObject.transform.position).sqrMagnitude>attackDistance*attackDistance) {
-            if(attacking){
+            if(attacking && (aim.transform.position-gameObject.transform.position).sqrMagnitude>attackDistance*attackDistance*2){
                 StopAttack();
+                animator.SetTrigger("break");
             } 
             navMesh.destination = aim.transform.position;
             animator.SetBool("run", true);

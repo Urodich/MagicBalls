@@ -11,15 +11,16 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 2ae4cbe09624818448fcf0ec9fc088d5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords:
   - BOOLEAN_1C7EA7E0403B42DDABF5292A9395616D_ON
-  - _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -100,11 +101,15 @@ Material:
     - Vector1_33f52f931f2e48f1a8e07ac6e03b1c3e: 1
     - Vector1_5581f4d313ce4896be8d3f5420e01434: 0
     - Vector1_ebeba271daf24ce4a955c61019a400b5: 0
+    - _AlphaClip: 1
+    - _Blend: 0
+    - _BlendModePreserveSpecular: 0
     - _BlendOp: 0
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
+    - _CastShadows: 1
     - _ColorMask: 15
     - _Cull: 2
     - _Cutoff: 0.5
@@ -113,7 +118,7 @@ Material:
     - _DistortionEnabled: 0
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _EmissionEnabled: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
@@ -126,6 +131,7 @@ Material:
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
@@ -137,9 +143,14 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _Surface: 0
     - _UVSec: 0
     - _UseUIAlphaClip: 0
-    - _ZWrite: 0
+    - _WorkflowMode: 1
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 0
+    - _smothness: 0
     m_Colors:
     - Color_377921ad6e634e72bd542799c2c85db8: {r: 0, g: 0.08169052, b: 0.8396226, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
