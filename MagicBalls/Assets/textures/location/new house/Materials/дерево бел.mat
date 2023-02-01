@@ -78,7 +78,7 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_260c4d1a67334ff18aa428e727974f51: 1
-    - Vector1_2a79f3a608b7488697f0de86853036fb: 0.7
+    - Vector1_2a79f3a608b7488697f0de86853036fb: 0.99
     - _AO_1: 1
     - _AlphaClip: 1
     - _Alpha_1: 1
@@ -100,9 +100,12 @@ Material:
     - _ZWriteControl: 0
     - _angle: -1.7
     - _distance: 1.3
+    - _point_radius: 1
     - _radius: 2
+    - _thick: 0
     m_Colors:
     - Vector2_518aed871ed9401c91c2927bbf2f6794: {r: 3.94, g: -8.65, b: 0, a: 0}
     - _Color_1: {r: 0.4339623, g: 0.3582236, b: 0.3582236, a: 0}
+    - _constrains: {r: -0.15, g: 4.31, b: 0, a: 0}
     - _noise_point: {r: 0, g: 0.15, b: 0, a: 0}
   m_BuildTextureStacks: []

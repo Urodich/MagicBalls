@@ -31,7 +31,7 @@ public class arena_script : MonoBehaviour
         waves.Add(new GameObject[]{enemyTypes[0], enemyTypes[0], enemyTypes[2], enemyTypes[2], enemyTypes[1], enemyTypes[1]});
         player.GetComponent<player_script>().dieEvent+=(GameObject)=>{StopCoroutine(gameProcess);EndGame();};
         gameProcess=StartCoroutine(Spawning());
-        StartCoroutine(Bonuses());
+        //StartCoroutine(Bonuses());
     }
     void Update(){
         if(Input.GetKeyDown(KeyCode.Escape)){
