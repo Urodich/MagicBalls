@@ -13,9 +13,7 @@ public class bonus_script : MonoBehaviour
     }
     
     void OnTriggerEnter(Collider collider){
-        Debug.Log("Taken");
         if(collider.gameObject.tag!="Player") return;
-        Debug.Log("Taken");
         if(IsHpHeal)collider.gameObject.GetComponent<player_script>().AddHP(value);
         else collider.gameObject.GetComponent<player_script>().AddMana(value);
         Destroy(gameObject);

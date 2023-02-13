@@ -17,7 +17,7 @@ public class inventory_script : MonoBehaviour
     [SerializeField] Transform headTransform;
     itemUI_script head;
 
-    void Awake(){
+    void Start(){
         GameObject inventory=GameObject.Find("inventory");
         boots=inventory.transform.Find("boots slot").GetComponent<itemUI_script>();
         head=inventory.transform.Find("head slot").GetComponent<itemUI_script>();

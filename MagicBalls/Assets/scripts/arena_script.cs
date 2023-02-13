@@ -15,7 +15,7 @@ public class arena_script : MonoBehaviour
     Text timer;
     float time;
     buffs_script buffs;
-
+    GameObject Boost_panel;
     [SerializeField] GameObject player;
     [SerializeField] GameObject HUD;
     [SerializeField] Transform PlayerSpawnPoint;
@@ -28,7 +28,10 @@ public class arena_script : MonoBehaviour
         pauseMenu=HUD.transform.Find("pause menu").gameObject;
         timer=HUD.transform.Find("arena timer").gameObject.GetComponent<Text>();
         infoText=HUD.transform.Find("arena info").gameObject.GetComponent<Text>();
+        Boost_panel=HUD.transform.Find("boost panel").gameObject;
         infoText.enabled=false;
+        //Boost_panel.SetActive(false);
+        //pauseMenu.SetActive(false);
         buffs = player.GetComponent<buffs_script>();
         player.GetComponent<player_script>().dieEvent+=(GameObject)=>EndGame();
         gameProcess=StartCoroutine(Spawning());
@@ -69,7 +72,7 @@ public class arena_script : MonoBehaviour
         pauseMenu.SetActive(true);
         GameObject.Find("Resume").SetActive(false);
     }
-    [SerializeField] List<bonus_script> bonuses;
+    [SerializeField] bonus_script[] bonuses;
     [SerializeField] Transform center;
     [SerializeField] LayerMask ground;
     IEnumerator Bonuses(){
@@ -84,7 +87,7 @@ public class arena_script : MonoBehaviour
                     if (hit.collider.gameObject.layer==6) break;
                 }
             }
-            Instantiate(bonuses[Random.Range(0, bonuses.Count)], center.position, new Quaternion());
+            Instantiate(bonuses[Random.Range(0, bonuses.Length)], center.position, new Quaternion());
         }
     }
     int waveNumber=1;
@@ -135,7 +138,6 @@ public class arena_script : MonoBehaviour
         new boost_str(Stats.projectileDamage, "увеличить урон снарядов на 20%", .2f),
         new boost_str(Stats.repulsion, "усилить отталкивание на 20%", .15f)
     };
-    [SerializeField] GameObject Boost_panel;
     [SerializeField] GameObject boost;
     void ShowBoosts(){
         Boost_panel.SetActive(true);

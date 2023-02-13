@@ -13,7 +13,6 @@ public class player_script : unit_script
     public float manaRegen=2f;
     protected float manaRegenFactor=1;
     public bool reincarnation = false;
-    arena_script arena_Script;
     buffs_script buffs;
     [SerializeField] LayerMask enemies;
     //[SerializeField] Animator animator;
@@ -24,7 +23,6 @@ public class player_script : unit_script
     new void Start(){
         spells=gameObject.GetComponent<Spells_script>();
         startAim=Vector3.zero;
-        arena_Script=GameObject.Find("HUD").GetComponent<arena_script>();
         linkHUD();
         buffs=gameObject.GetComponent<buffs_script>();
         base.Start();
@@ -59,7 +57,6 @@ public class player_script : unit_script
     public override void TakeDamage(float damage, DamageType type)
     {
         if(!spells.GodMod)base.TakeDamage(damage, type);
-        //Debug.Log("hero take " + damage + "damage");
     }
     public override void Stun(float time){
         base.Stun(time);
@@ -76,7 +73,6 @@ public class player_script : unit_script
         }
         animator.SetTrigger("die");
         Debug.Log(gameObject.name + " died");
-        arena_Script.End();
     }
 
 }

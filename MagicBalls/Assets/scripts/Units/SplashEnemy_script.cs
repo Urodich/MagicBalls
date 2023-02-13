@@ -35,7 +35,7 @@ public class SplashEnemy_script : MeleeEnemy_script
             return;}
         
         if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();Debug.Log("add enemy");}
+            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();}
             return;
         }
     } 

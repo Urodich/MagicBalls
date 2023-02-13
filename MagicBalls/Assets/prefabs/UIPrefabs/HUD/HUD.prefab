@@ -1583,12 +1583,12 @@ GameObject:
   - component: {fileID: 8840625372282775512}
   - component: {fileID: 8840625372282775513}
   m_Layer: 5
-  m_Name: Boost_Panel
+  m_Name: boost panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8840625372282775518
 RectTransform:
   m_ObjectHideFlags: 0

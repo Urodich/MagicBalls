@@ -58,7 +58,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
-  m_Acceleration: 15
+  m_Acceleration: 100
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -163,19 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4173f4f9d1fe6454d8f74bb18136465d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 1
-  HpRegen: 1
-  MaxMana: 1
-  ManaRegen: 1
-  repulsion: 5
-  projectile: 1
-  fireDamage: 1
-  thunderDamage: 1
-  physicalDamage: 1
-  damage: 1
-  projectileDamage: 1
-  projectileSpeed: 1
-  speed: 1
 --- !u!54 &633066739
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -220,8 +207,8 @@ MonoBehaviour:
   hpBar: {fileID: 0}
   maxHp: 100
   hpRegen: 1
-  speed: 13
-  minSpeed: 0
+  speed: 7
+  minSpeed: 1
   armor: 0
   Priority: 2
   FireResist: 0.25

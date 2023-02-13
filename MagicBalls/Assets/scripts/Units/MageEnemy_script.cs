@@ -38,7 +38,6 @@ public class MageEnemy_script : enemy_script
     [SerializeField] ParticleSystem _blink;
     void Blink(Vector3 aim){
         curAction=StartCoroutine(blink());
-        Debug.Log("blink");
         IEnumerator blink(){
             yield return new WaitForSeconds(0.3f);
             Destroy(Instantiate(_blink,transform.position, new Quaternion()).gameObject,1f);
@@ -54,7 +53,6 @@ public class MageEnemy_script : enemy_script
     [SerializeField] bomb_script _bomb;
     void Attack(Vector3 pos){
         curAction=StartCoroutine(attack());
-        Debug.Log("attack");
         IEnumerator attack(){
             attacking=true;
             animator.SetTrigger("attack");
@@ -71,7 +69,6 @@ public class MageEnemy_script : enemy_script
     [SerializeField] ParticleSystem deadProject;
     void Defend(){
         curAction=StartCoroutine(def());
-        Debug.Log("defend");
         IEnumerator def(){
             Destroy(Instantiate(defSpell, transform).gameObject,1);
             yield return new WaitForSeconds(0.1f);
@@ -106,7 +103,6 @@ public class MageEnemy_script : enemy_script
             return;
         }
         if(obj.name.Equals("defend")){
-            Debug.Log("def_col");
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & spells) && curAction==null && defCD<=0) Defend();
             
         }

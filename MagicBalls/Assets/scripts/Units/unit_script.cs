@@ -119,7 +119,6 @@ public class unit_script : MonoBehaviour
         _stun.Play();
         curAction=null;
         stun+=1;
-        Debug.Log(gameObject.name+" stunned");
         Effect eff=gameObject.AddComponent<Effect>();
         Effects.Add(eff.Set(time,()=>{stun-=1; Effects.Remove(eff); _stun.Stop();},false));
 
@@ -151,7 +150,6 @@ public class unit_script : MonoBehaviour
     void resetMaterial(){mainMaterial.DisableKeyword("DAMAGED");}
     public virtual void Die(){
         if(animator)animator.SetBool("die",true);
-        Debug.Log(gameObject.name + " died");
         if(dieEvent!=null)dieEvent(gameObject);
         Stun(1);
         Destroy(gameObject,1f);
@@ -201,10 +199,8 @@ public class unit_script : MonoBehaviour
     public void Lighting(bool value){
         if (mainMaterial!=defaultMaterial)return;
         if(value){
-            Debug.Log("hover");
             model.layer=14;}
         else{
-            Debug.Log("unhover");
             model.layer=0;}
     }
 
