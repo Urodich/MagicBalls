@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+//TO DO
+//low hp mobs go away
+//
 public class enemy_script : unit_script, IEnemy
 {
     [SerializeField] protected DamageType damageType;

@@ -11,7 +11,7 @@ public class fireStorm_script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        buffs=GameObject.Find("Player").GetComponent<buffs_script>();
+        buffs=GameObject.FindWithTag("Player").GetComponent<buffs_script>();
     }
 
     // Update is called once per frame

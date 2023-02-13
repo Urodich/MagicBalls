@@ -8,6 +8,7 @@ public class Load_script : MonoBehaviour
     {
         disableCollisions();
         GameObject.Find("pause menu").SetActive(false);
+        GameObject.Find("boost panel").SetActive(false);
     }
 
     void disableCollisions(){

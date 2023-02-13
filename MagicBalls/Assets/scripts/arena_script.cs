@@ -62,7 +62,7 @@ public class arena_script : MonoBehaviour
         buffs.UpdateStatsText();
         pauseMenu.SetActive(true);
     }
-    void Resume(){
+    public void Resume(){
         isPaused=false;
         pauseMenu.SetActive(false);
         Time.timeScale=1;

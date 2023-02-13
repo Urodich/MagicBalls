@@ -921,8 +921,8 @@ public class Spells_script : MonoBehaviour
 
         IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
-            yield return new WaitForSeconds(flameDelay);
             animator.SetBool("casting", true);
+            yield return new WaitForSeconds(flameDelay);
             FlameCoolDown=true;
             _flame.Play();
             while(Input.GetMouseButton(1)){
