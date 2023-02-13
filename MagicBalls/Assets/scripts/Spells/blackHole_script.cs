@@ -24,7 +24,7 @@ public class blackHole_script : MonoBehaviour
                 if(i.tag!="enemy") continue;
                 Vector3 dir=(gameObject.transform.position-i.gameObject.transform.position);
                 dir.Scale(new Vector3(1,0,1));
-                i.gameObject.GetComponent<unit_script>().TakeDamage(damage*buffs.damage*8, DamageType.Physical);
+                i.gameObject.GetComponent<unit_script>().TakeDamage(damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.physicalDamage)*8, DamageType.Physical);
             }
         Destroy(gameObject);
     }
@@ -39,7 +39,7 @@ public class blackHole_script : MonoBehaviour
                 dir.Scale(new Vector3(1,0,1));
                 i.gameObject.GetComponent<unit_script>().Move(dir.normalized, power, 1f, false);
             }
-            float _damage=damage*buffs.damage*buffs.thunderDamage;
+            float _damage=damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.thunderDamage);
             colliders = Physics.OverlapSphere(transform.position+Vector3.up, damageRadius);
             foreach (Collider i in colliders){
                 if(i.tag!="enemy") continue;

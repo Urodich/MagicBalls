@@ -103,7 +103,7 @@ public class Spells_script : MonoBehaviour
         };
     }
 
-    public void CastSpell(int hex){
+    public void CastSpell(int hex){ //Call hex function
         Debug.Log("Casting" + hex+"  currentCor"+currentCast);
         if (Spells.ContainsKey(hex))
             Spells[hex]();
@@ -121,7 +121,7 @@ public class Spells_script : MonoBehaviour
         animator.SetTrigger("");
     }
     //create icon
-    void CastSpell(float CDTime, String imagePath, Action func){
+    void CastSpell(float CDTime, String imagePath, Action func){ //Add CD icon
         Sprite image=Resources.Load<Sprite>(imagePath);
         if(image==null) Debug.Log("no Sprite loaded");
         GameObject obj = Instantiate(spellCooDown);
@@ -136,6 +136,42 @@ public class Spells_script : MonoBehaviour
         if(currentCast!=null)StopCoroutine(currentCast);
     }
 
+    GameObject[] projectileCast(int count, GameObject projectile, float scale){
+        List<GameObject> prjs = new List<GameObject>();
+        for(int i = 0; i < count; i++){
+                GameObject obj = Instantiate(projectile, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
+                obj.transform.localScale.Scale(new Vector3(scale,1,scale));
+                prjs.Add(obj);
+                if(count==1) break;
+                obj = Instantiate(projectile, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
+                obj.transform.localScale.Scale(new Vector3(scale,1,scale));
+                prjs.Add(obj);
+            }
+        return prjs.ToArray();
+    }
+
+    //Векторное применение
+    Vector3 vectorCastDirection;
+    IEnumerator VectorCast(){
+        Vector3 mousePos1 = new Vector3(), mousePos2 = new Vector3();
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground))
+            mousePos1=hit.point;
+        mousePos2=mousePos1+Vector3.forward;
+
+        yield return new WaitUntil(()=> Input.GetMouseButtonUp(1));
+
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out RaycastHit hit2, float.MaxValue, ground)){
+            mousePos2=hit2.point;
+        }
+        vectorCastDirection = (mousePos2-mousePos1);
+        Debug.Log(vectorCastDirection);
+        vectorCastDirection.Scale(new Vector3(1,0,1));
+        vectorCastDirection.Normalize();
+        Debug.DrawLine(mousePos1+Vector3.up, mousePos2+Vector3.up);
+    }
     //FIREBALL
     [SerializeField] GameObject fireball;
     bool fireballCollDown=false;
@@ -156,11 +192,8 @@ public class Spells_script : MonoBehaviour
                 fireballCollDown=true;
                 CastSpell(2f,"FireBall",()=>fireballCollDown=false);
             }
-            fireball_script fb = Instantiate(fireball, player.transform.position+player.transform.forward, new Quaternion()).GetComponent<fireball_script>();
-            fb.damage *=damage;
-            fb.speed *=speed;
-            for(int i = 1; i < buffs.projectile; i++){
-                fb = Instantiate(fireball, player.transform.position+player.transform.forward-player.transform.right*i*0.3f, new Quaternion()).GetComponent<fireball_script>();
+            foreach (GameObject i in projectileCast((int)buffs.GetStats(Stats.projectiles),fireball, damage)){
+                fireball_script fb = i.GetComponent<fireball_script>();
                 fb.damage *=damage;
                 fb.speed *=speed;
             }
@@ -198,7 +231,7 @@ public class Spells_script : MonoBehaviour
                     Collider[] aims = Physics.OverlapSphere(gameObject.transform.position, 3, enemies);
                     foreach(Collider i in aims){
                         if(i.tag!="enemy") continue;
-                        i.gameObject.GetComponent<unit_script>().TakeDamage(5*buffs.damage*buffs.fireDamage*strength, DamageType.Fire);
+                        i.gameObject.GetComponent<unit_script>().TakeDamage(5*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.fireDamage)*strength, DamageType.Fire);
                     }
                     yield return new WaitForSeconds(0.5f);
                     time-=.5f;
@@ -226,13 +259,8 @@ public class Spells_script : MonoBehaviour
                 CastSpell(5f*scale,"Wave",()=>waveCollDown=false);
             }
                 Debug.Log("wave");
-            for(int i = 0; i < buffs.projectile; i++){
-                GameObject wave = Instantiate(waveOrig, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
-                wave.transform.localScale.Scale(new Vector3(scale,1,scale));
-                if(buffs.projectile==1) yield break;
-                wave = Instantiate(waveOrig, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
-                wave.transform.localScale.Scale(new Vector3(scale,1,scale));
-            }
+
+            projectileCast((int)buffs.GetStats(Stats.projectiles),waveOrig, scale);
         }
     }
     //Earthquake
@@ -264,7 +292,7 @@ public class Spells_script : MonoBehaviour
                 unit_script enemy = collider.gameObject.GetComponent<unit_script>();
                 if(enemy.isFlying) continue;
                 enemy.Stun(0.5f*strength);
-                enemy.TakeDamage(strength*20*buffs.damage*buffs.physicalDamage, DamageType.Physical);
+                enemy.TakeDamage(strength*20*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.physicalDamage), DamageType.Physical);
             }
         }
     }
@@ -304,7 +332,7 @@ public class Spells_script : MonoBehaviour
                 unit_script enemy = collider.gameObject.GetComponent<unit_script>();
                 if(enemy.isFlying) continue;
                 enemy.Stun(0.5f*earth);
-                enemy.TakeDamage(thunder*20*buffs.thunderDamage*buffs.damage, DamageType.Thunder);
+                enemy.TakeDamage(thunder*20*buffs.GetStats(Stats.thunderDamage)*buffs.GetStats(Stats.damage), DamageType.Thunder);
             }
         }
     }
@@ -316,38 +344,21 @@ public class Spells_script : MonoBehaviour
         if(!GodMod){
             if(windCoolDown) return;
             if(stats.CurMana<windManaCost*strength) return;
-            stats.CurMana-=windManaCost*strength;
-            windCoolDown=true;}
-        Vector3 mousePos1 = new Vector3();
-        Vector3 mousePos2;
-        Vector3 direction = new Vector3();
-
-        StartCoroutine(VectorCast());
-
-        IEnumerator VectorCast(){
-            yield return StartCoroutine(vectorCast());
-            animator.SetTrigger("cast9");
-            wind_script wind = Instantiate(windOrig,mousePos1,Quaternion.LookRotation(direction)).GetComponent<wind_script>();
-            wind.strength=strength;
-            wind.direction=direction;
-            CastSpell(15f*strength,"Wind",()=>windCoolDown=false);
         }
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
+            stats.CurMana-=windManaCost*strength;
+            windCoolDown=true;
+            StartCoroutine(Wind_core());
 
-        //векторное применение
-        IEnumerator vectorCast(){
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)) yield break;
-            mousePos1=hit.point;
-            mousePos2=mousePos1+Vector3.forward;
-            yield return new WaitUntil(()=> Input.GetMouseButtonUp(1));
-                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if(Physics.Raycast(ray, out RaycastHit hit2, float.MaxValue, ground)){
-                    mousePos2=hit2.point;
-                }
-            
-            direction = (mousePos2-mousePos1);
-            direction.Scale(new Vector3(1,0,1));
-            direction.Normalize();
+            IEnumerator Wind_core(){
+                yield return StartCoroutine(VectorCast());
+                animator.SetTrigger("cast9");
+                wind_script wind = Instantiate(windOrig,hit.point,Quaternion.LookRotation(vectorCastDirection)).GetComponent<wind_script>();
+                wind.strength=strength;
+                wind.direction=vectorCastDirection;
+                CastSpell(15f*strength,"Wind",()=>windCoolDown=false);
+            }
         }
     }
 
@@ -504,7 +515,7 @@ public class Spells_script : MonoBehaviour
                         particleSystem.Emit(param, 1);
                         //particleSystem.Emit(col.transform.position, Vector3.zero, 0, 2f,Color.white);
                         unit_script enemy = col.GetComponent<unit_script>();
-                        enemy.TakeDamage(15*buffs.thunderDamage*buffs.damage, DamageType.Thunder);
+                        enemy.TakeDamage(15*buffs.GetStats(Stats.thunderDamage)*buffs.GetStats(Stats.damage), DamageType.Thunder);
                         last=col;
                         hit=true;
                         steps--;
@@ -563,39 +574,22 @@ public class Spells_script : MonoBehaviour
         if(!GodMod){
             if(meteorCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<meteorManaCost) {NotEnoughtMana(); return;}
-            stats.CurMana-=meteorManaCost;
-            meteorCoolDown=true;}
-        
-
-        Vector3 mousePos1 = new Vector3();
-        Vector3 mousePos2;
-        Vector3 direction = new Vector3();
-
-        StartCoroutine(VectorCast());
-
-        IEnumerator VectorCast(){
-            yield return StartCoroutine(vectorCast());
-            meteor_script meteor = Instantiate(_meteor,mousePos1+new Vector3(0,4,0),Quaternion.LookRotation(direction)).GetComponentInChildren<meteor_script>();
-            meteor.direction=direction;
-            animator.SetTrigger("cast4");
-            CastSpell(20f,"Meteor",()=>meteorCoolDown=false);
+        }
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
+            StartCoroutine(meteor_core());
         }
 
-        //векторное применение
-        IEnumerator vectorCast(){
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)) yield break;
-            mousePos1=hit.point;
-            mousePos2=mousePos1+Vector3.forward;
-            yield return new WaitUntil(()=> Input.GetMouseButtonUp(1));
-                ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if(Physics.Raycast(ray, out RaycastHit hit2, float.MaxValue, ground)){
-                    mousePos2=hit2.point;
-                }
-            
-            direction = (mousePos2-mousePos1);
-            direction.Scale(new Vector3(1,0,1));
-            direction.Normalize();
+        IEnumerator meteor_core(){
+            yield return StartCoroutine(VectorCast());
+            meteor_script meteor = Instantiate(_meteor,hit.point+new Vector3(0,4,0),Quaternion.LookRotation(vectorCastDirection)).GetComponentInChildren<meteor_script>();
+            meteor.direction=vectorCastDirection;
+            animator.SetTrigger("cast4");
+            if(!GodMod){
+                stats.CurMana-=meteorManaCost;
+                meteorCoolDown=true;
+                CastSpell(20f,"Meteor",()=>meteorCoolDown=false);
+            }
         }
     }
 
@@ -662,7 +656,7 @@ public class Spells_script : MonoBehaviour
                 unit.TakeDamage(1f,DamageType.Physical);
                 Vector3 dir=(i.gameObject.transform.position-player.transform.position);
                 dir.Scale(new Vector3(1,0,1));
-                unit.Move(dir.normalized, 2f*air*buffs.repulsion, 1f, false);
+                unit.Move(dir.normalized, 2f*air*buffs.GetStats(Stats.repulsion), 1f, false);
             }
         }
         
@@ -743,12 +737,12 @@ public class Spells_script : MonoBehaviour
             Collider[] enemy = Physics.OverlapSphere(player.transform.position, 1f*thunder*time, enemies);
             foreach(Collider elem in enemy){
                 unit_script en=elem.gameObject.GetComponent<unit_script>();
-                en.TakeDamage(5*fire*buffs.fireDamage*buffs.damage*time, DamageType.Fire);
+                en.TakeDamage(5*fire*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*time, DamageType.Fire);
                 en.Move(elem.gameObject.transform.position-player.transform.position, 2f*fire*time, .5f, false);
             }
             if(time>=3){
                 player_script player_=player.GetComponent<player_script>();
-                player_.TakeDamage(5*fire*buffs.fireDamage*buffs.damage*time, DamageType.Fire);
+                player_.TakeDamage(5*fire*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*time, DamageType.Fire);
                 player_.Stun(2f);
             }
             if(!GodMod)CastSpell(10f,"Blast",()=>blastCoolDown=false);
@@ -936,7 +930,7 @@ public class Spells_script : MonoBehaviour
                 stats.CurMana-=FlameManaCost;
                 Collider[] colliders = Physics.OverlapSphere(player.transform.position+player.transform.forward, 1.5f*strength, enemies);
                 foreach(Collider enemy in colliders){
-                    enemy.GetComponent<unit_script>().TakeDamage(5f*buffs.fireDamage*buffs.damage*strength, DamageType.Fire);
+                    enemy.GetComponent<unit_script>().TakeDamage(5f*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*strength, DamageType.Fire);
                 }
                 yield return new WaitForSeconds(.5f);
             }
@@ -961,7 +955,7 @@ public class Spells_script : MonoBehaviour
         CastSpell(45f,"Life Drain",()=>LifeDrainCoolDown=false);
         bool casting=true;
         Debug.Log("life drain");
-        float _damage=buffs.damage+buffs.physicalDamage*5;
+        float _damage=buffs.GetStats(Stats.damage)+buffs.GetStats(Stats.physicalDamage)*5;
         StartCoroutine(cast());
 
         IEnumerator cast(){

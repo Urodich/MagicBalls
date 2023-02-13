@@ -29,7 +29,7 @@ public class fireball_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += direction*speed*Time.deltaTime*buffs.projectileSpeed;
+        transform.position += direction*speed*Time.deltaTime*buffs.GetStats(Stats.projectileSpeed);
     }
 
     void OnTriggerEnter(Collider collision){
@@ -37,7 +37,7 @@ public class fireball_script : MonoBehaviour
         if (collision.gameObject.layer == 6) {Destroy(gameObject); return;}
         if (collision.gameObject.tag != "enemy") return;
 
-        collision.gameObject.GetComponent<unit_script>().Move(direction, 0.5f*buffs.repulsion, 0.1f, false);
-        collision.gameObject.GetComponent<unit_script>().TakeDamage(damage*buffs.fireDamage*buffs.damage*buffs.projectileDamage, DamageType.Fire);
+        collision.gameObject.GetComponent<unit_script>().Move(direction, 0.5f*buffs.GetStats(Stats.repulsion), 0.1f, false);
+        collision.gameObject.GetComponent<unit_script>().TakeDamage(damage*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.projectileDamage), DamageType.Fire);
     }
 }

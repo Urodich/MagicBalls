@@ -9,7 +9,7 @@ public class player_script : unit_script
     public float maxMana=100f;
     protected float maxManaFactor=1;
     float curMana;
-    public float CurMana{get{return curMana;} set{curMana = value>maxMana? maxMana:value; manaBar.value=curMana;}}
+    public float CurMana{get{return curMana;} set{curMana = value>maxMana? maxMana:value; curMana=value<0?0:value; manaBar.value=curMana;}}
     public float manaRegen=2f;
     protected float manaRegenFactor=1;
     public bool reincarnation = false;
@@ -42,11 +42,16 @@ public class player_script : unit_script
         hpBar = bars.transform.Find("HpBar").GetComponent<Slider>();
         manaBar = bars.transform.Find("ManaBar").GetComponent<Slider>();
     }
-    public void UpdateStats(){
+    public void UpdateStaticStats(){
         maxHpFactor=buffs.GetStats(Stats.MaxHP);
         maxManaFactor=buffs.GetStats(Stats.MaxMana);
         manaRegenFactor=buffs.GetStats(Stats.ManaRegen);
         hpRegenFactor=buffs.GetStats(Stats.HpRegen);
+        navMesh.speed=((speed*speedFactor)<minSpeed?minSpeed:speed*speedFactor);
+    }
+    public override void ChangeSpeed(float value)
+    {
+        buffs.ChangeStats(Stats.speed, value);
     }
     public void AddMana(float value){
         CurMana+=value;

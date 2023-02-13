@@ -53,12 +53,24 @@ public class inventory_script : MonoBehaviour
         return curr;
     }
 
+///////////////////////////////////////////////////
+    public void Load(){
+
+    }
+    public void Save(){
+
+    }
+    public void Reset(){
+
+    }
+///////////////////////////////////////////////////
     Item Set(Item item, itemUI_script slot){
         Item curr = slot.DeleteItem(); //old item
         slot.SetItem(item); //UI
         curr?.Drop();
         return slot._item;
     }
+    //FOR MODELS
     void WearOn(Item slot, Transform transform){
         slot.transform.SetParent(transform);
         slot.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());

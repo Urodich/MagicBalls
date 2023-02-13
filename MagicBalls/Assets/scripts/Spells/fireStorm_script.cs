@@ -17,7 +17,7 @@ public class fireStorm_script : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position+=Vector3.down*Time.fixedDeltaTime*4f;
+        transform.position+=Vector3.down*buffs.GetStats(Stats.projectileSpeed)*Time.fixedDeltaTime*4f;
     }
     void OnTriggerEnter(Collider collider){
         if(collider.gameObject.layer==6) {Debug.Log("ground"); Die();}
@@ -27,8 +27,8 @@ public class fireStorm_script : MonoBehaviour
         Collider[] enemy=Physics.OverlapSphere(transform.position, 3f, enemies);
         foreach(Collider elem in enemy){
             unit_script en = elem.gameObject.GetComponent<unit_script>();
-            en.Move(elem.transform.position-gameObject.transform.position, 1f, .5f, true);
-            en.TakeDamage(damage*buffs.damage*buffs.fireDamage, DamageType.Fire);
+            en.Move((elem.transform.position-gameObject.transform.position)*buffs.GetStats(Stats.repulsion), 1f, .5f, true);
+            en.TakeDamage(damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.projectileDamage), DamageType.Fire);
             
         }
         Destroy(gameObject);

@@ -35,7 +35,7 @@ public class tornado_script : MonoBehaviour
             Collider[] colliders2 = Physics.OverlapSphere(transform.position+Vector3.up, radius/2);
             foreach (Collider i in colliders2){
                 if(i.tag!="enemy") continue;
-                i.gameObject.GetComponent<unit_script>().TakeDamage(damage*buffs.damage*buffs.physicalDamage, DamageType.Physical);
+                i.gameObject.GetComponent<unit_script>().TakeDamage(damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.physicalDamage), DamageType.Physical);
             }
         yield return new WaitForSeconds(.3f);
         }

@@ -7,23 +7,7 @@ using TMPro;
 
 public class buffs_script : MonoBehaviour
 {
-    public float MaxHP=1;
-    public float HpRegen=1;
-    public float MaxMana=1;
-    public float ManaRegen=1;
-    //old
-    public float repulsion = 1;
-    public int projectile = 1;
-    public float fireDamage = 1;
-    public float thunderDamage = 1;
-    public float physicalDamage = 1;
-    public float damage = 1;
-    public float projectileDamage = 1;
-    public float projectileSpeed = 1;
-    public float speed=1;
-
     private Dictionary<Stats, float> stats;
-
     TextMeshProUGUI text;
 
     void Start(){
@@ -33,10 +17,26 @@ public class buffs_script : MonoBehaviour
             stats[elem]=1;
         }
     }
-
-    public void ResetStats(){
+///////////////////////////////////////////////////
+    public void Load(){
+        foreach(Stats elem in Enum.GetValues(typeof(Stats))){           //ADD SAVES
+            stats[elem]=PlayerPrefs.GetFloat(elem.ToString(),1);
+        }
+    }
+    public void Save(){
+        foreach(Stats elem in Enum.GetValues(typeof(Stats))){           //SAVE
+            PlayerPrefs.SetFloat(elem.ToString(),stats[elem]);
+        }
+    }
+    public void Reset(){
+        foreach(Stats elem in Enum.GetValues(typeof(Stats))){           //SET PREFS TO DEFAULT
+            PlayerPrefs.SetFloat(elem.ToString(),1);
+        }
+    }
+///////////////////////////////////////////////////
+    public void UpdateStatsText(){
         text.text=$"отталкивание" + Math.Round(stats[Stats.repulsion], 2)*100+"%\n"+ 
-        "доп. снаряды"+projectile+"\n"+
+        "доп. снаряды"+(stats[Stats.projectiles]-1)+"\n"+
         "урон от огня"+ Math.Round(stats[Stats.fireDamage], 2)*100+"%\n"+
         "урон от молний"+ Math.Round(stats[Stats.thunderDamage], 2)*100+"%\n"+
         "физический урон"+ Math.Round(stats[Stats.physicalDamage], 2)*100+"%\n"+
@@ -46,10 +46,8 @@ public class buffs_script : MonoBehaviour
 
     public void ChangeStats(Stats index, float value){
         stats[index]+=value;
-        if(stats[index]<0)stats[index]=0;
         player_script player = gameObject.GetComponent<player_script>();
-        player.UpdateStats();
-        if(index==Stats.speed)player.ChangeSpeed(value);
+        player.UpdateStaticStats();
     }
     public float GetStats(Stats stats){
         return this.stats[stats];
@@ -66,7 +64,7 @@ public enum Stats{
     MaxMana,
     ManaRegen,
     repulsion,
-    ojectile ,
+    projectiles ,
     fireDamage,
     thunderDamage,
     physicalDamage,

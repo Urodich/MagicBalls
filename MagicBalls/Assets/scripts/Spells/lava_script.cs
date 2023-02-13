@@ -10,11 +10,11 @@ public class lava_script : MonoBehaviour
     [SerializeField] float time=3f;
     [SerializeField] float damage=3f;
     [SerializeField] LayerMask enemies;
-    float fireBuff;
+    buffs_script buff;
 
     void Start(){
         gameObject.transform.localScale = new Vector3(earht*3,1,earht*3);
-        fireBuff = GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>().fireDamage;
+        buff = GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>();
         StartCoroutine(Damage());
         Destroy(gameObject, time);
     }
@@ -23,7 +23,7 @@ public class lava_script : MonoBehaviour
         {   
             Collider[] colliders=Physics.OverlapSphere(transform.position, earht*3f, enemies);
             foreach(Collider i in colliders){
-                i.gameObject.GetComponent<unit_script>().TakeDamage(damage*fire*fireBuff*Time.deltaTime, DamageType.Fire);
+                i.gameObject.GetComponent<unit_script>().TakeDamage(damage*fire*buff.GetStats(Stats.fireDamage)*buff.GetStats(Stats.damage)*Time.deltaTime, DamageType.Fire);
             }
             yield return new WaitForSeconds(0.5f);
         }

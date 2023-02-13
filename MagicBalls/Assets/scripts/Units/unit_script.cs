@@ -53,8 +53,16 @@ public class unit_script : MonoBehaviour
         if(hpBar!=null) hpBar.maxValue=maxHp;
         CurHp=maxHp;
         ModelRenderer = model.GetComponentInChildren<SkinnedMeshRenderer>();
-        if(ModelRenderer!=null)mainMaterial = ModelRenderer.material;
-        else {renderer = gameObject.GetComponentInChildren<MeshRenderer>();mainMaterial = renderer.material;} //delete this
+        if(ModelRenderer!=null){
+            mainMaterial = ModelRenderer.material;
+            model=ModelRenderer.gameObject;
+        }
+        else {
+            renderer = gameObject.GetComponentInChildren<MeshRenderer>();
+            mainMaterial = renderer.material;
+            model=renderer.gameObject;
+        } //delete this
+
         rb = GetComponent<Rigidbody>();
         defaultMaterial=mainMaterial;
         mainMaterial.DisableKeyword("HOVERED");
@@ -90,66 +98,9 @@ public class unit_script : MonoBehaviour
             if(animator)animator.SetBool("falling",true);
         }
     }
-    public void SetAim(Vector3 pos){
-        startAim=pos;
-    }
-
-    public void AddHP(float value){
-        CurHp+=value;
-    }
-    public void ChangeSpeed(float value){
+    public virtual void ChangeSpeed(float value){
         speedFactor+=value;
         navMesh.speed=((speed*speedFactor)<minSpeed?minSpeed:speed*speedFactor);
-    }
-    //old
-    Coroutine cor=null;
-    public void Move1 (Vector3 direction, float power, float time, bool Stunned){
-        if(Stunned) Stun(time);
-        if(cor==null) cor=StartCoroutine(move(direction, power, time));
-        else {
-            StopCoroutine(cor);
-            cor=StartCoroutine(move(direction, power, time));
-        }
-    }
-    float? baseOffset=null;
-    IEnumerator move(Vector3 direction, float power, float time){
-        if(baseOffset==null)baseOffset = navMesh.baseOffset;
-        float baseTime=time;
-        while (time>0){
-            if(direction.y>0) 
-                if(time>baseTime/2)navMesh.baseOffset+=direction.y*power*Time.deltaTime;
-                else navMesh.baseOffset-=direction.y*power*Time.deltaTime;
-            gameObject.transform.position+=direction*power*Time.deltaTime;
-            time -=Time.deltaTime;
-            yield return null;
-        }
-        navMesh.baseOffset=(float)baseOffset;
-        if(time<=0)baseOffset=null;
-    }
-    //Move2 curren
-    public void Move(Vector3 direction, float power, float time, bool Stunned){
-        if(Vector3.Dot(direction, Vector3.up)>0){
-            isGrounded=false;
-            disableGround=true;
-            navMesh.enabled=false;
-        }
-        if (Stunned) {
-            Stun(time);
-        }
-        rb.isKinematic = false;
-        rb.AddForce(direction*power,ForceMode.Impulse);
-        StartCoroutine(remove());
-        
-        IEnumerator remove(){
-            yield return new WaitForSeconds(time/2);
-            rb.useGravity=true;
-            disableGround=false;
-            yield return new WaitForSeconds(time/2);
-            yield return new WaitUntil(()=>isGrounded);
-            rb.isKinematic=true;
-            navMesh.enabled=true;
-            rb.useGravity=false;
-        }
     }
     public void PosDispell(){
         foreach(Effect effect in Effects){
@@ -206,14 +157,55 @@ public class unit_script : MonoBehaviour
         Destroy(gameObject,1f);
     }
 
+    /////////////////////////////////
+    //LOGIC
+    public void SetStartAim(Vector3 pos){
+        startAim=pos;
+    }
+
+    public void AddHP(float value){
+        CurHp+=value;
+    }
+    
+    public void SetInactive(bool idleAnim){
+        
+    }
+    //Move2 curren
+    public void Move(Vector3 direction, float power, float time, bool Stunned){
+        if(Vector3.Dot(direction, Vector3.up)>0){
+            isGrounded=false;
+            disableGround=true;
+            navMesh.enabled=false;
+        }
+        if (Stunned) {
+            Stun(time);
+        }
+        rb.isKinematic = false;
+        rb.AddForce(direction*power,ForceMode.Impulse);
+        StartCoroutine(remove());
+        
+        IEnumerator remove(){
+            yield return new WaitForSeconds(time/2);
+            rb.useGravity=true;
+            disableGround=false;
+            yield return new WaitForSeconds(time/2);
+            yield return new WaitUntil(()=>isGrounded);
+            rb.isKinematic=true;
+            navMesh.enabled=true;
+            rb.useGravity=false;
+        }
+    }
+
+    /////////////////////////////////
+    //UI
     public void Lighting(bool value){
         if (mainMaterial!=defaultMaterial)return;
         if(value){
             Debug.Log("hover");
-            mainMaterial.EnableKeyword("HOVERED");}
+            model.layer=14;}
         else{
             Debug.Log("unhover");
-            mainMaterial.DisableKeyword("HOVERED");}
+            model.layer=0;}
     }
 
     protected Material ChangeMaterial(Material material){

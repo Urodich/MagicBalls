@@ -23,7 +23,7 @@ public class boost_script : MonoBehaviour
     public void Click(){
         buffs_script buffs = GameObject.Find("Player").GetComponent<buffs_script>();
         buffs.ChangeStats(stats,value);
-        buffs.ResetStats();
+        buffs.UpdateStatsText();
         panel.SetActive(false);
     }
 }

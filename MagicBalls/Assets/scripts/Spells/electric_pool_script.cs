@@ -8,12 +8,12 @@ public class electric_pool_script : MonoBehaviour
     public float water;
     [SerializeField] float time=3f;
     [SerializeField] float damage=3f;
-    float thunderBuff;
+    buffs_script buff;
     List<GameObject> aims = new List<GameObject>();
 
     void Start(){
         gameObject.transform.localScale = new Vector3(water,1,water);
-        thunderBuff = GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>().thunderDamage;
+        buff = GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>();
         StartCoroutine(Damage());
         Destroy(gameObject, time);
     }
@@ -21,7 +21,7 @@ public class electric_pool_script : MonoBehaviour
         while (true)
         {
             foreach(GameObject i in aims){
-                i.GetComponent<unit_script>().TakeDamage(damage*thunder*thunderBuff*Time.deltaTime, DamageType.Fire);
+                i.GetComponent<unit_script>().TakeDamage(damage*thunder*buff.GetStats(Stats.damage)*buff.GetStats(Stats.thunderDamage)*Time.deltaTime, DamageType.Thunder);
             }
             yield return new WaitForSeconds(0.5f);
         }

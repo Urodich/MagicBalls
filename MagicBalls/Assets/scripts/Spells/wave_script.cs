@@ -28,7 +28,7 @@ public class wave_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position += direction*speed*Time.deltaTime*buffs.projectileSpeed;
+        transform.position += direction*speed*Time.deltaTime*buffs.GetStats(Stats.projectileSpeed);
     }
 
     void OnTriggerEnter(Collider collision){
@@ -36,6 +36,6 @@ public class wave_script : MonoBehaviour
         if (collision.gameObject.tag != "enemy") return;
         
         if (collision.gameObject.GetComponent<unit_script>().isFlying) return;
-        collision.gameObject.GetComponent<unit_script>().Move(direction, strength*buffs.repulsion, time, false);
+        collision.gameObject.GetComponent<unit_script>().Move(direction, strength*buffs.GetStats(Stats.repulsion), time, false);
     }
 }

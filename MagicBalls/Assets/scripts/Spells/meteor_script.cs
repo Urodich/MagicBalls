@@ -26,7 +26,7 @@ public class meteor_script : MonoBehaviour
             Collider[] cols=Physics.OverlapSphere(transform.position, 1, enemies);
             foreach(Collider i in cols){
                 unit_script enemy = i.gameObject.GetComponent<unit_script>();
-                enemy.TakeDamage(damage*buffs.damage*buffs.fireDamage*Time.deltaTime, DamageType.Fire);
+                enemy.TakeDamage(damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.fireDamage)*Time.deltaTime, DamageType.Fire);
                 enemy.Stun(.2f);
             }
             yield return new WaitForSeconds(0.5f);
