@@ -98,10 +98,7 @@ public class MageEnemy_script : enemy_script
     }
 */
     public override void OnColliderEnter(GameObject obj, Collider collider){
-        if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();}
-            return;
-        }
+        base.OnColliderEnter(obj, collider);
         if(obj.name.Equals("defend")){
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & spells) && curAction==null && defCD<=0) Defend();
             

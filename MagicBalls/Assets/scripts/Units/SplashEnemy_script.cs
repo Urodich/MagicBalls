@@ -14,10 +14,8 @@ public class SplashEnemy_script : MeleeEnemy_script
 
 
     protected override void StopAttack(){
-        StopCoroutine(attack);
-        attacking=false;
         attackCol.enabled =false;
-        navMesh.isStopped=false;
+        base.StopAttack();
     }
     protected override IEnumerator AttackDelay(){
         yield return new WaitForSeconds(attackDelay); //delay
@@ -34,9 +32,6 @@ public class SplashEnemy_script : MeleeEnemy_script
             if((1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))) {collider.gameObject.GetComponent<unit_script>().TakeDamage(damage*damageFactor, damageType); } 
             return;}
         
-        if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {aims.Add(collider.gameObject); ChangeAim();}
-            return;
-        }
+        base.OnColliderEnter(obj, collider);
     } 
 }

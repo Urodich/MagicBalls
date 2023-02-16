@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
-
+using UnityEngine.Events;
 
 public class Spells_script : MonoBehaviour
 {
@@ -19,7 +19,11 @@ public class Spells_script : MonoBehaviour
     [SerializeField] GameObject spellCooDown;
     [SerializeField] public bool GodMod {get;set;}=false;
     [SerializeField] Animator animator;
+
+    //current action
     public Coroutine currentCast;
+    UnityEvent BreakCastEvent;
+
     void Start(){
         spellPanel=GameObject.Find("SpellPanel");
         player = GameObject.FindGameObjectWithTag("Player");
@@ -28,6 +32,7 @@ public class Spells_script : MonoBehaviour
         buffs = player.GetComponent<buffs_script>();
         control=player.GetComponent<playerControl_script>();
         _flame.Stop();
+        BreakCastEvent = new UnityEvent();
         Spells = new Dictionary<int, System.Action>(){
         [0]=castEmpty,
         [1] = ()=>Flame(1),
@@ -104,7 +109,6 @@ public class Spells_script : MonoBehaviour
     }
 
     public void CastSpell(int hex){ //Call hex function
-        Debug.Log("Casting" + hex+"  currentCor"+currentCast);
         if (Spells.ContainsKey(hex))
             Spells[hex]();
         else
@@ -134,6 +138,19 @@ public class Spells_script : MonoBehaviour
     public void BreakCast(){
         animator.SetBool("casting", false);
         if(currentCast!=null)StopCoroutine(currentCast);
+        BreakCastEvent.Invoke();
+        BreakCastEvent.RemoveAllListeners();
+    }
+
+    void StopMoving(bool value){
+        if(value){
+            navMesh.isStopped=true;
+            control.isStopped=true;
+        }
+        else{
+            navMesh.isStopped=false;
+            control.isStopped=false;
+        }
     }
 
     GameObject[] projectileCast(int count, GameObject projectile, float scale){
@@ -174,12 +191,12 @@ public class Spells_script : MonoBehaviour
     }
     //FIREBALL
     [SerializeField] GameObject fireball;
-    bool fireballCollDown=false;
+    bool fireballCoolDown=false;
     float fireballManaCost=10f;
     float fireballDelay=0.5f;
     void Fireball(float damage, float speed){
         if(!GodMod){
-            if(fireballCollDown) {CoolDawn(); return;}
+            if(fireballCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<fireballManaCost) {NotEnoughtMana(); return;}
         }
         currentCast=StartCoroutine(fireball_core());
@@ -189,8 +206,8 @@ public class Spells_script : MonoBehaviour
             yield return new WaitForSeconds(fireballDelay);
             if(!GodMod){
                 stats.CurMana-=fireballManaCost;
-                fireballCollDown=true;
-                CastSpell(2f,"FireBall",()=>fireballCollDown=false);
+                fireballCoolDown=true;
+                CastSpell(2f,"FireBall",()=>fireballCoolDown=false);
             }
             foreach (GameObject i in projectileCast((int)buffs.GetStats(Stats.projectiles),fireball, damage)){
                 fireball_script fb = i.GetComponent<fireball_script>();
@@ -277,9 +294,9 @@ public class Spells_script : MonoBehaviour
         IEnumerator earthquake_core(){
             Debug.Log("earthquake");
             animator.SetTrigger("cast6");
-            navMesh.isStopped=true;
+            StopMoving(true);
             yield return new WaitForSeconds(earhtquakeDelay);
-            navMesh.isStopped=false;
+            StopMoving(false);
             if(!GodMod){
                 stats.CurMana-=EarhtquakeManaCost*strength;
                 EarthqukeCoolDowm=true;
@@ -346,17 +363,18 @@ public class Spells_script : MonoBehaviour
             if(stats.CurMana<windManaCost*strength) return;
         }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
-            stats.CurMana-=windManaCost*strength;
-            windCoolDown=true;
+        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground))
             StartCoroutine(Wind_core());
 
-            IEnumerator Wind_core(){
-                yield return StartCoroutine(VectorCast());
-                animator.SetTrigger("cast9");
-                wind_script wind = Instantiate(windOrig,hit.point,Quaternion.LookRotation(vectorCastDirection)).GetComponent<wind_script>();
-                wind.strength=strength;
-                wind.direction=vectorCastDirection;
+        IEnumerator Wind_core(){
+            yield return StartCoroutine(VectorCast());
+            animator.SetTrigger("cast9");
+            wind_script wind = Instantiate(windOrig,hit.point,Quaternion.LookRotation(vectorCastDirection)).GetComponent<wind_script>();
+            wind.strength=strength;
+            wind.direction=vectorCastDirection;
+            if(!GodMod){
+                stats.CurMana-=windManaCost*strength;
+                windCoolDown=true;
                 CastSpell(15f*strength,"Wind",()=>windCoolDown=false);
             }
         }
@@ -401,8 +419,9 @@ public class Spells_script : MonoBehaviour
             if(mudCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<mudManaCost*earth) {NotEnoughtMana(); return;}
             stats.CurMana-=mudManaCost*earth;
-            mudCoolDown=true;}
-        CastSpell(7f*earth,"Mud",()=>mudCoolDown=false);
+            mudCoolDown=true;
+            CastSpell(7f*earth,"Mud",()=>mudCoolDown=false);
+        }
         animator.SetTrigger("cast6");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
@@ -421,8 +440,9 @@ public class Spells_script : MonoBehaviour
             if(lavaCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<lavaManaCost*fire) {NotEnoughtMana(); return;}
             stats.CurMana-=lavaManaCost*fire;
-            lavaCoolDown=true;}
-        CastSpell(15f*earht,"Lava",()=>lavaCoolDown=false);
+            lavaCoolDown=true;
+            CastSpell(15f*earht,"Lava",()=>lavaCoolDown=false);
+        }
         animator.SetTrigger("cast6");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
@@ -441,8 +461,9 @@ public class Spells_script : MonoBehaviour
             if(ElectricPoolCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<ElectricPoolManaCost*((thunder-1)/2+1)) {NotEnoughtMana(); return;}
             stats.CurMana-=ElectricPoolManaCost*((thunder-1)/2+1);
-            ElectricPoolCoolDown=true;}
-        CastSpell(15f*water,"Pool",()=>ElectricPoolCoolDown=false);
+            ElectricPoolCoolDown=true;
+            CastSpell(15f*water,"Pool",()=>ElectricPoolCoolDown=false);
+        }
         animator.SetTrigger("cast6");
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
@@ -461,9 +482,9 @@ public class Spells_script : MonoBehaviour
             if(HasteCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<HasteManaCost*thunder) {NotEnoughtMana(); return;}
             stats.CurMana-=HasteManaCost*thunder;
-            HasteCoolDown=true;}
-        CastSpell(10f*air,"Haste",()=>HasteCoolDown=false);
-
+            HasteCoolDown=true;
+            CastSpell(10f*air,"Haste",()=>HasteCoolDown=false);
+        }
         value=.5f*thunder;
         player.GetComponent<unit_script>().ChangeSpeed(value);
         animator.SetBool("haste",true);
@@ -539,10 +560,10 @@ public class Spells_script : MonoBehaviour
             if(illusionCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<illusionManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=illusionManaCost;
-            illusionCoolDown=true;}
-        CastSpell(10f,"Illusion",()=>illusionCoolDown=false);
+            illusionCoolDown=true;
+            CastSpell(10f,"Illusion",()=>illusionCoolDown=false);
+        }
         animator.SetTrigger("cast1");
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
             Debug.Log("illusion");
@@ -558,9 +579,9 @@ public class Spells_script : MonoBehaviour
             if(reincarnationCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<reincarnationManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=reincarnationManaCost;
-            reincarnationCoolDown=true;}
-        CastSpell(90f,"Reincarnation",()=>reincarnationCoolDown=false);
-
+            reincarnationCoolDown=true;
+            CastSpell(90f,"Reincarnation",()=>reincarnationCoolDown=false);
+        }
         Debug.Log("reincarnation");
         animator.SetTrigger("cast1");
         player.GetComponent<player_script>().reincarnation=true;
@@ -605,12 +626,13 @@ public class Spells_script : MonoBehaviour
             ManaRegenCoolDown=true;}
         
         Debug.Log("ManaRegen");
-        StartCoroutine(cast());
+        currentCast=StartCoroutine(cast());
+        BreakCastEvent.AddListener(()=>_manaRegen.Stop());
         IEnumerator cast(){
             animator.SetBool("casting", true);
             animator.SetTrigger("cast_blast");
             _manaRegen.Play();
-            navMesh.isStopped=true;
+            StopMoving(true);
             player_script ps = player.GetComponent<player_script>();
             ps.manaRegen+=5f*water;
             float ownArmor=ps.armor;
@@ -618,9 +640,10 @@ public class Spells_script : MonoBehaviour
             yield return new WaitUntil(()=>Input.GetMouseButtonUp(1));
             ps.manaRegen-=5f*water;
             if(ps.armor>ownArmor) ps.armor=ownArmor;
-            navMesh.isStopped=false;
+            StopMoving(false);
             CastSpell(2f,"Mana Regen",()=>ManaRegenCoolDown=false);
             _manaRegen.Stop(true);
+            BreakCastEvent.RemoveListener(()=>_manaRegen.Stop());
             animator.SetBool("casting", false);
         }
     }
@@ -670,9 +693,9 @@ public class Spells_script : MonoBehaviour
             if(windCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<windManaCost*strength) {NotEnoughtMana(); return;}
             stats.CurMana-=windManaCost*strength;
-            windCoolDown=true;}
-        CastSpell(15*strength,"Wisp",()=>windCoolDown=false);
-
+            windCoolDown=true;
+            CastSpell(15*strength,"Wisp",()=>windCoolDown=false);
+        }
         Debug.Log("Wisp");
         animator.SetTrigger("cast1");
         StartCoroutine(heal(5*strength));
@@ -695,9 +718,9 @@ public class Spells_script : MonoBehaviour
             if(tornadoCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<tornadoManaCast) {NotEnoughtMana(); return;}
             stats.CurMana-=tornadoManaCast;
-            tornadoCoolDown=true;}
-        CastSpell(2f,"Tornado",()=>tornadoCoolDown=false);
-
+            tornadoCoolDown=true;
+            CastSpell(2f,"Tornado",()=>tornadoCoolDown=false);
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){
             Debug.Log("Tornado");
@@ -725,12 +748,14 @@ public class Spells_script : MonoBehaviour
         IEnumerator cast(){
             animator.SetTrigger("cast_blast");
             animator.SetBool("casting", true);
+            StopMoving(true);
             ParticleSystem bl = Instantiate(blast,gameObject.transform);
             while(Input.GetMouseButton(1)){
                 time+=Time.deltaTime;
                 if(time>=5f) break;
                 yield return new WaitForEndOfFrame();
             }
+            StopMoving(false);
             Destroy(bl.gameObject);
             Destroy(Instantiate(blast_expl,gameObject.transform).gameObject,2);
             animator.SetBool("casting", false);    
@@ -844,11 +869,11 @@ public class Spells_script : MonoBehaviour
             animator.SetTrigger("cast_global");
             animator.SetBool("casting", true);
             Coroutine fire;
-            navMesh.isStopped=true;
+            StopMoving(true);
             fire=StartCoroutine(damage());
             yield return new WaitWhile(()=>Input.GetMouseButton(1));
             StopCoroutine(fire);
-            navMesh.isStopped=false;
+            StopMoving(false);
             animator.SetBool("casting", false);
             if(!GodMod)CastSpell(20f,"Fire Storm",()=>FireStormCoolDown=false);
         }
@@ -916,8 +941,9 @@ public class Spells_script : MonoBehaviour
             if(stats.CurMana<FlameManaCost) {NotEnoughtMana(); return;}
         }
         Debug.Log("Flame");
-        navMesh.isStopped=true;
+        StopMoving(true);
         currentCast=StartCoroutine(flame_core());
+        BreakCastEvent.AddListener(()=>_flame.Stop());
 
         IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
@@ -934,8 +960,9 @@ public class Spells_script : MonoBehaviour
                 }
                 yield return new WaitForSeconds(.5f);
             }
-            navMesh.isStopped=false;
+            StopMoving(false);
             _flame.Stop();
+            BreakCastEvent.RemoveListener(()=>_flame.Stop());
             animator.SetBool("casting", false);
             if(!GodMod)CastSpell(5f,"Flame",()=>FlameCoolDown=false);
         }
@@ -950,18 +977,19 @@ public class Spells_script : MonoBehaviour
             if(LifeDrainCoolDown) {CoolDawn(); return;}
             if(stats.CurMana<LifeDrainManaCost) {NotEnoughtMana(); return;}
             stats.CurMana-=LifeDrainManaCost;
-            LifeDrainCoolDown=true;}
+            LifeDrainCoolDown=true;
+            CastSpell(45f,"Life Drain",()=>LifeDrainCoolDown=false);
+        }
         Debug.Log("Life Drain");
-        CastSpell(45f,"Life Drain",()=>LifeDrainCoolDown=false);
+       
         bool casting=true;
-        Debug.Log("life drain");
         float _damage=buffs.GetStats(Stats.damage)+buffs.GetStats(Stats.physicalDamage)*5;
         StartCoroutine(cast());
 
         IEnumerator cast(){
             animator.SetBool("casting", true);
             animator.SetTrigger("cast_blast");
-            navMesh.isStopped=true;
+            StopMoving(true);
             Collider[] colliders = Physics.OverlapSphere(player.transform.position, 5f, enemies);
             foreach (Collider i in colliders){
                 if(i.tag!="enemy") continue;
@@ -979,7 +1007,7 @@ public class Spells_script : MonoBehaviour
                 if(stats.CurMana<=0) break;
                 yield return new WaitForSeconds(.5f);
             }
-            navMesh.isStopped=false;
+            StopMoving(false);
             casting=false;
             animator.SetBool("casting", false);
         }

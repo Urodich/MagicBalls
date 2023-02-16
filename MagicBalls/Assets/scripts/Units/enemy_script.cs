@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 //TO DO
 //low hp mobs go away
+//patrol
 //
 public class enemy_script : unit_script, IEnemy
 {
@@ -22,8 +23,38 @@ public class enemy_script : unit_script, IEnemy
     protected Coroutine attack;
     public LayerMask enemies;
 
+    public void SetStartAim(Vector3 pos){
+        startAim=pos;
+    }
+
+    [SerializeField] Transform[] patrolPoints;
+    protected virtual void Patrol(){
+        StartCoroutine(patrol());
+        IEnumerator patrol(){
+            animator.SetBool("walk", true);
+            if(patrolPoints.Length>1){          //has patrol path
+                int i=0;
+                while(true){
+                    navMesh.SetDestination(patrolPoints[i++].position);
+                    i=i==patrolPoints.Length?0:i;
+                    yield return new WaitUntil(()=>navMesh.remainingDistance<2);
+                }
+            }
+            else{                               //generate patrol path
+
+            }
+        }
+    }
+
+    public void StrenghtScale(float multiply){
+        maxHp*=multiply;
+        damage*=multiply;
+        speed*=multiply;
+        armor+=5*multiply;
+    }
+
     protected virtual void StopAttack(){
-        StopCoroutine(attack);
+        if(attack!=null)StopCoroutine(attack);
         attacking=false;
         if(!isStunned)navMesh.isStopped=false;
     }
@@ -34,7 +65,7 @@ public class enemy_script : unit_script, IEnemy
     //выбор цели
     public bool ChangeAim(){
         bool a =false;
-        if(aims.Count==0) {aim=null; return false;}
+        if(aims.Count==0) {aim=null; StopAttack(); return false;}
         if (!aim) {aim = aims[0]; a=true;}
         foreach (GameObject i in aims){
             if(i==aim) continue;
@@ -43,11 +74,18 @@ public class enemy_script : unit_script, IEnemy
         }
         return a;
     }
-    public void AddAim(GameObject _aim){
+    public void FindAim(GameObject _aim){
         if(aims.Contains(_aim)) return;
         aims.Add(_aim);
+        _aim.GetComponent<unit_script>().dieEvent+=LostAim;
         ChangeAim();
-        OnFindAim(_aim);
+        NotifyAllies(_aim);
+    }
+    void LostAim(GameObject _aim){
+        //_aim.GetComponent<unit_script>().dieEvent-=LostAim;         //????????
+        Debug.Log(gameObject.name+" lost " + _aim.name);
+        if(aims.Contains(_aim))aims.Remove(_aim);
+        if(aim==_aim)ChangeAim();
     }
     protected void Attack(){
         navMesh.isStopped=true;
@@ -62,10 +100,10 @@ public class enemy_script : unit_script, IEnemy
         navMesh.isStopped=false;
         attacking=false;
     }
-    void OnFindAim(GameObject _aim){
+    protected virtual void NotifyAllies(GameObject _aim){
         Collider[] friends=Physics.OverlapSphere(transform.position, 10f, 8);
         foreach(Collider col in friends){
-            col.gameObject.GetComponent<enemy_script>().AddAim(_aim);
+            col.gameObject.GetComponent<enemy_script>().FindAim(_aim);
         }
 
     }
@@ -73,16 +111,14 @@ public class enemy_script : unit_script, IEnemy
     public virtual void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("vision")){
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {
-                AddAim(collider.gameObject); 
-                OnFindAim(collider.gameObject);
+                FindAim(collider.gameObject); 
             }
             return;
         }
     } 
     public virtual void OnColliderExit(GameObject obj, Collider collider){
         if(obj.name=="vision" && (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))){
-            aims.Remove(collider.gameObject);
-            if(aim==collider.gameObject)ChangeAim();
+            LostAim(collider.gameObject);
         }
     }
 }

@@ -19,6 +19,7 @@ public class playerControl_script : MonoBehaviour
     [SerializeField] LayerMask enemies;
     [SerializeField] LayerMask items;
     [SerializeField] Transform sphereParent;
+    public bool isStopped;
     Queue<int> Spheres = new Queue<int>(3);
     
     void Start()
@@ -31,6 +32,8 @@ public class playerControl_script : MonoBehaviour
     [SerializeField] float pickUpDistance=2;
     void FixedUpdate()
     {
+        if(player.isDead) return;
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         //предметы
@@ -66,6 +69,7 @@ public class playerControl_script : MonoBehaviour
             mousePos= groundHit.point;
             transform.LookAt(mousePos);
         }
+        if (isStopped) return;
         if(Input.GetMouseButton(0)) {
             navMesh.destination = mousePos; 
             if(itemTarget!=null)
@@ -97,6 +101,7 @@ public class playerControl_script : MonoBehaviour
     //CASTS
     //
     void Update(){
+        if(player.isDead) return;
         if(Input.GetKeyDown("q")) CastSphere(0); //fire 1
         if(Input.GetKeyDown(KeyCode.W)) CastSphere(1); //water 4
         if(Input.GetKeyDown("e")) CastSphere(2); //air 13

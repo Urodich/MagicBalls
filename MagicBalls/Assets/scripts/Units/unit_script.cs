@@ -45,6 +45,7 @@ public class unit_script : MonoBehaviour
     Rigidbody rb;
     bool disableGround=false;
     protected Coroutine curAction;
+    public bool isDead=false;
 
     public void Start(){
         navMesh=gameObject.GetComponent<NavMeshAgent>();
@@ -52,6 +53,7 @@ public class unit_script : MonoBehaviour
         if(startAim!=Vector3.zero) navMesh.destination=startAim;
         if(hpBar!=null) hpBar.maxValue=maxHp;
         CurHp=maxHp;
+        if(model==null) return;
         ModelRenderer = model.GetComponentInChildren<SkinnedMeshRenderer>();
         if(ModelRenderer!=null){
             mainMaterial = ModelRenderer.material;
@@ -69,6 +71,7 @@ public class unit_script : MonoBehaviour
         mainMaterial.DisableKeyword("DAMAGED");
     }
     public void FixedUpdate(){
+        if(isDead) return;
         //is grounded
         if(!disableGround){
             Ray ray = new Ray(transform.position, Vector3.down);
@@ -130,6 +133,7 @@ public class unit_script : MonoBehaviour
     }
 
     public virtual void TakeDamage(float damage, DamageType type){
+        if (isDead) return;
         mainMaterial.EnableKeyword("DAMAGED");
         //if(animator)animator.SetTrigger("hit");
         float dameg = type switch{
@@ -149,17 +153,22 @@ public class unit_script : MonoBehaviour
     }
     void resetMaterial(){mainMaterial.DisableKeyword("DAMAGED");}
     public virtual void Die(){
+        isDead=true;
         if(animator)animator.SetBool("die",true);
-        if(dieEvent!=null)dieEvent(gameObject);
-        Stun(1);
+
+        CallDieEvent(gameObject);
+        //Stun(1);
         Destroy(gameObject,1f);
+    }
+
+    protected void CallDieEvent(GameObject g){
+        Debug.Log(gameObject.name+"Die Event");
+        if(dieEvent!=null)dieEvent(g);
+        
     }
 
     /////////////////////////////////
     //LOGIC
-    public void SetStartAim(Vector3 pos){
-        startAim=pos;
-    }
 
     public void AddHP(float value){
         CurHp+=value;

@@ -39,11 +39,7 @@ public class RangeEnemyScript : enemy_script
     }
 
     [SerializeField] GameObject _projectile;
-    /*protected void Attack(){
-        navMesh.isStopped=true;
-        attacking =true;
-        attack=StartCoroutine(AttackDelay());
-    }*/
+
     //Attacking function
     protected override IEnumerator AttackDelay()
     {

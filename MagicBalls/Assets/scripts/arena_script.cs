@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+using System.Threading.Tasks;
+
 public class arena_script : MonoBehaviour
 {
     [SerializeField] GameObject[] enemyTypes;
@@ -12,8 +14,8 @@ public class arena_script : MonoBehaviour
     List<GameObject> aliveEnemies = new List<GameObject>();
     Coroutine gameProcess;
     GameObject pauseMenu; 
-    Text timer;
-    float time;
+    Text Score;
+    int score;
     buffs_script buffs;
     GameObject Boost_panel;
     [SerializeField] GameObject player;
@@ -26,7 +28,7 @@ public class arena_script : MonoBehaviour
     void Start()
     {
         pauseMenu=HUD.transform.Find("pause menu").gameObject;
-        timer=HUD.transform.Find("arena timer").gameObject.GetComponent<Text>();
+        Score=HUD.transform.Find("arena timer").gameObject.GetComponent<Text>();
         infoText=HUD.transform.Find("arena info").gameObject.GetComponent<Text>();
         Boost_panel=HUD.transform.Find("boost panel").gameObject;
         infoText.enabled=false;
@@ -35,7 +37,7 @@ public class arena_script : MonoBehaviour
         buffs = player.GetComponent<buffs_script>();
         player.GetComponent<player_script>().dieEvent+=(GameObject)=>EndGame();
         gameProcess=StartCoroutine(Spawning());
-        //StartCoroutine(Bonuses());
+        StartCoroutine(Bonuses());
         Time.timeScale=1;
     }
     bool isPaused=false;
@@ -46,10 +48,11 @@ public class arena_script : MonoBehaviour
         }
     }
 
-    void FixedUpdate(){ //Timer
-        time+=Time.fixedDeltaTime;
-        timer.text=((int)(time/60)).ToString()+":"+ ((int)(time%60)).ToString();
+    void AddScore(int points){
+        score+=points;
+        Score.text=score.ToString();
     }
+
     public void Exit(){
         Application.Quit();
     }
@@ -99,7 +102,7 @@ public class arena_script : MonoBehaviour
             yield return new WaitForSeconds(3f);
             infoText.enabled=false;
             for(int i=0; i<waveEnemyCount[waveNumber-1]; i++){
-                SpawnEnemy(enemyTypes[Random.Range(0, enemyTypes.Length)]);
+                SpawnEnemy(enemyTypes[Random.Range(0, enemyTypes.Length)],waveNumber*10, 1+waveNumber/5);
                 yield return new WaitForSeconds(0.5f);
             }
             yield return new WaitWhile(()=>aliveEnemies.Count>0);
@@ -107,24 +110,29 @@ public class arena_script : MonoBehaviour
             yield return new WaitWhile(()=>Boost_panel.active);
             Time.timeScale=1;
         }
+        Win();
     }
-    void SpawnEnemy(GameObject enemy){
+
+    void SpawnEnemy(GameObject enemy, int points, float multiply){
         GameObject unit = Instantiate(enemy,spawnPoints[Random.Range(0,spawnPoints.Length-1)].position, new Quaternion());
         aliveEnemies.Add(unit);
         enemy_script _enemy=unit.GetComponent<enemy_script>();
-        _enemy.dieEvent+=(GameObject)=>aliveEnemies.Remove(GameObject);
+        _enemy.dieEvent+=(GameObject)=>{aliveEnemies.Remove(GameObject); };
         _enemy.SetStartAim(player.transform.position);
     }
-    IEnumerator EndGame(){
+    void EndGame() => StartCoroutine(endGame());
+    IEnumerator endGame(){
         StopCoroutine(gameProcess);
-        foreach(GameObject enemy in aliveEnemies){
+        /*foreach(GameObject enemy in aliveEnemies){
             enemy.GetComponent<enemy_script>().Stun(10f);
-        }
+        }*/
         infoText.enabled=true;
         infoText.text="You died";
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("EndGame");
+        End();
+        //SceneManager.LoadScene("EndGame");
     }
+    void Win(){}
     boost_str[] list = {
         new boost_str(Stats.MaxHP, "увеличить макс.хп на 20%", .2f),
         new boost_str(Stats.damage, "увеличить весь урон на 10%", .1f),

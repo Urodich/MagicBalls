@@ -71,6 +71,10 @@ public class player_script : unit_script
             curHp=maxHp;
             return;
         }
+        
+        isDead=true;
+        navMesh.enabled=false;
+        CallDieEvent(gameObject);
         animator.SetTrigger("die");
         Debug.Log(gameObject.name + " died");
     }
