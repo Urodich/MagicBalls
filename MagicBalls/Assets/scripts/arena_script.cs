@@ -22,7 +22,7 @@ public class arena_script : MonoBehaviour
     [SerializeField] GameObject HUD;
     [SerializeField] Transform PlayerSpawnPoint;
     void Awake(){
-        player=Instantiate(player, PlayerSpawnPoint, true);
+        player=Instantiate(player, PlayerSpawnPoint.position, new Quaternion());
         HUD=Instantiate(HUD, PlayerSpawnPoint, true);
     }
     void Start()

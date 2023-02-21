@@ -21,7 +21,6 @@ public class Item : MonoBehaviour
             changeStats.Add(elem.stat, elem.value);
             statInfo+=(elem.value>0?"+":"")+elem.value*100+"% "+elem.stat+" \n";
         }
-        buffs = GameObject.Find("Player").GetComponent<buffs_script>();
         Transform inf = transform.Find("info");
         Transform p = inf.Find("image");
         if (p!=null)p.gameObject.GetComponent<Image>().sprite=pict;
@@ -48,6 +47,7 @@ public class Item : MonoBehaviour
     }
 
     public void Take(inventory_script player){
+        buffs = player.gameObject.GetComponent<buffs_script>();
         foreach (var stat in changeStats)
             buffs.ChangeStats(stat.Key, stat.Value);
         gameObject.layer=0;

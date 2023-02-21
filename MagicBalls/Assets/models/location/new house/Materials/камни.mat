@@ -43,7 +43,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: 3b02950ba8710c343986414904e8ee04, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _AO_Tex:
+        m_Texture: {fileID: 2800000, guid: 3b02950ba8710c343986414904e8ee04, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Alpha:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Alpha_Tex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -57,6 +65,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Color:
         m_Texture: {fileID: 2800000, guid: 2e39b4c95d6cd4f458155a454516010e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Color_1:
+        m_Texture: {fileID: 2800000, guid: 2e39b4c95d6cd4f458155a454516010e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Color_T:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -87,7 +103,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Metallic_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Normal:
+        m_Texture: {fileID: 2800000, guid: 4acd8247fc4b29c46be427d174bb5293, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normal_Tex:
         m_Texture: {fileID: 2800000, guid: 4acd8247fc4b29c46be427d174bb5293, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -100,6 +124,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Smoothness:
+        m_Texture: {fileID: 2800000, guid: 97d1d819a7568804d85edfa03e19b3f3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Smoothness_Tex:
         m_Texture: {fileID: 2800000, guid: 97d1d819a7568804d85edfa03e19b3f3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -123,7 +151,9 @@ Material:
     m_Floats:
     - Vector1_260c4d1a67334ff18aa428e727974f51: 0.03
     - Vector1_2a79f3a608b7488697f0de86853036fb: 0.88
+    - _AO: 1
     - _AO_1: 1
+    - _Alpha: 1
     - _AlphaClip: 1
     - _Alpha_1: 1
     - _Blend: 0
@@ -150,7 +180,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0
+    - _Smoothness: -1
     - _SmoothnessTextureChannel: 0
     - _Smoothness_1: -1
     - _SpecularHighlights: 1
@@ -172,6 +202,7 @@ Material:
     - _BaseColor: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
     - _Color: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
     - _Color_1: {r: 1, g: 1, b: 1, a: 0}
+    - _Color_2: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _constrains: {r: 0, g: 2.6, b: 0, a: 0}

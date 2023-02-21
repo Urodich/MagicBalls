@@ -96,6 +96,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   sphereParent: {fileID: 4489135174467704389}
+  isStopped: 0
   pickUpDistance: 2
   sphere:
   - {fileID: 2951065586091326984, guid: 8658de5dc3818d946adfb2eaec1c3281, type: 3}
@@ -223,7 +224,8 @@ MonoBehaviour:
     m_Bits: 64
   model: {fileID: 363085423758927012}
   animator: {fileID: 6708927846955005096}
-  _stun: {fileID: 0}
+  isDead: 0
+  _stun: {fileID: 862935570399597433}
   maxMana: 100
   manaRegen: 2
   reincarnation: 0
@@ -789,6 +791,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 549c4ff1bff51b146b766da567ea80a3, type: 3}
+--- !u!198 &862935570399597433 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8025394983070751617, guid: 549c4ff1bff51b146b766da567ea80a3, type: 3}
+  m_PrefabInstance: {fileID: 7252534154050783480}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6745133505851500699 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4124640079405178979, guid: 549c4ff1bff51b146b766da567ea80a3, type: 3}
