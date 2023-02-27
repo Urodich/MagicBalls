@@ -190,6 +190,8 @@ public class Spells_script : MonoBehaviour
         vectorCastDirection.Normalize();
         Debug.DrawLine(mousePos1+Vector3.up, mousePos2+Vector3.up);
     }
+    
+    
     //FIREBALL
     [SerializeField] GameObject fireball;
     bool fireballCoolDown=false;
@@ -1094,7 +1096,9 @@ public class Spells_script : MonoBehaviour
             stats.CurMana-=WallManaCost;
             WallCoolDown=true;
             CastSpell(30f,"Wall",()=>WallCoolDown=false);
-            Instantiate(wall,pos,new Quaternion()).transform.LookAt(gameObject.transform);
+            Transform tf = Instantiate(wall, pos, new Quaternion()).transform;
+            tf.LookAt(gameObject.transform);
+            tf.eulerAngles = new Vector3(0,tf.eulerAngles.y, 0);
         }
     }
 }

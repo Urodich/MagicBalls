@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17757834, g: 0.22232334, b: 0.30451858, a: 1}
+  m_IndirectSpecularColor: {r: 0.17757805, g: 0.22232296, b: 0.30451798, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -166,7 +166,7 @@ MonoBehaviour:
   - {fileID: 1479179081}
   - {fileID: 1665486716}
   - {fileID: 438300385}
-  player: {fileID: 5573720242917285659, guid: 561826cc700cd5b46bbcd25d1de8e3e6, type: 3}
+  player: {fileID: 5573720242917285659, guid: b8c5dd6f223cd2745b4ce78f249f86d2, type: 3}
   HUD: {fileID: 8840625371627333846, guid: 1b9aae0921cb3ed45b8ee96349fb9ef9, type: 3}
   PlayerSpawnPoint: {fileID: 36901482}
   bonuses:
