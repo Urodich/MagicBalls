@@ -12,7 +12,7 @@ public class playerControl_script : MonoBehaviour
     [SerializeField] LayerMask layer;
     Spells_script spells_Script;
     public NavMeshAgent navMesh;
-    [SerializeField] Animator animator;
+    Animator animator;
     player_script player;
     public GameObject mouseTarget;
     public GameObject itemTarget;
@@ -27,6 +27,7 @@ public class playerControl_script : MonoBehaviour
         spells_Script = gameObject.GetComponent<Spells_script>();
         navMesh = gameObject.GetComponent<NavMeshAgent>();
         player = gameObject.GetComponent<player_script>();
+        animator=player.GetAnimator();
     }
     bool moonwalk=false;
     [SerializeField] float pickUpDistance=2;

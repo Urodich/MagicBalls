@@ -18,7 +18,7 @@ public class Spells_script : MonoBehaviour
     GameObject spellPanel;
     [SerializeField] GameObject spellCooDown;
     [SerializeField] public bool GodMod {get;set;}=false;
-    [SerializeField] Animator animator;
+    Animator animator;
 
     //current action
     public Coroutine currentCast;
@@ -33,6 +33,7 @@ public class Spells_script : MonoBehaviour
         control=player.GetComponent<playerControl_script>();
         _flame.Stop();
         BreakCastEvent = new UnityEvent();
+        animator=stats.GetAnimator();
         Spells = new Dictionary<int, System.Action>(){
         [0]=castEmpty,
         [1] = ()=>Flame(1),

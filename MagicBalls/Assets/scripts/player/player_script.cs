@@ -58,6 +58,9 @@ public class player_script : unit_script
     {
         if(!spells.GodMod)base.TakeDamage(damage, type);
     }
+    public Animator GetAnimator(){
+        return animator;
+    }
     public override void Stun(float time){
         base.Stun(time);
         spells.BreakCast();

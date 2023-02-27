@@ -80,9 +80,9 @@ public class inventory_script : MonoBehaviour
 
         slot.transform.SetParent(transformL);
         slot.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());
-
+        
         copy.TakeCopy();
-        //copy.transform.localScale=Vector3.Scale(copy.transform.localScale, new Vector3(-1,1,1));
+        copy.transform.localScale=Vector3.Scale(copy.transform.localScale, new Vector3(-1,1,1));
         copy.transform.SetParent(transformR);
         copy.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());
         

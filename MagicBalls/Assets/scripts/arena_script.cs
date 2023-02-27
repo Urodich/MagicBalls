@@ -36,7 +36,7 @@ public class arena_script : MonoBehaviour
         //pauseMenu.SetActive(false);
         buffs = player.GetComponent<buffs_script>();
         player.GetComponent<player_script>().dieEvent+=(GameObject)=>EndGame();
-        gameProcess=StartCoroutine(Spawning());
+        //gameProcess=StartCoroutine(Spawning());
         StartCoroutine(Bonuses());
         Time.timeScale=1;
     }
