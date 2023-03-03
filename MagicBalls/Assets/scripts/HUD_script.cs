@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class HUD_script : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public GameObject DialogePanel;
+    public GameObject BoostPanel;
+    public GameObject PauseMenu;
+    public GameObject Inventory;
+    public GameObject StatsText;
     arena_script Arena;
     Spells_script spells;
     void Start()
