@@ -4,16 +4,25 @@ using System;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.Audio;
 
 public class Dialoge_script : MonoBehaviour
 {
     GameObject textPanel;
     TextMeshProUGUI text;
     Coroutine dialoge;
+    AudioSource audio;
+    void Start(){
+        audio = GetComponent<AudioSource>();
+    }
     [SerializeField] List<DialogeLine> Lines=new List<DialogeLine>();
     IEnumerator Dialoge(){
         foreach(DialogeLine line in Lines){
             text.text=line.text;
+            if (line.clip!=null){
+                audio.clip=line.clip;
+                audio.Play();
+            }
             line.action.Invoke();
             yield return new WaitForSeconds(line.time); 
         }
@@ -42,4 +51,5 @@ public struct DialogeLine{
     public string text;
     public int time;
     public UnityEvent action;
+    public AudioClip clip;
 }

@@ -8,14 +8,15 @@ public class playerControl_script : MonoBehaviour
     //public float distance;
     //public float rotateSpeed;
     //public float speed = 5f;
-    public Vector3 mousePos;
+    
+    [HideInInspector] public Vector3 mousePos;
     [SerializeField] LayerMask layer;
     Spells_script spells_Script;
     public NavMeshAgent navMesh;
     Animator animator;
     player_script player;
-    public GameObject mouseTarget;
-    public GameObject itemTarget;
+    [HideInInspector] public GameObject mouseTarget;
+    [HideInInspector] public GameObject itemTarget;
     [SerializeField] LayerMask enemies;
     [SerializeField] LayerMask items;
     [SerializeField] Transform sphereParent;
@@ -119,7 +120,9 @@ public class playerControl_script : MonoBehaviour
             spells_Script.CastSpell(sum);
             sum=0;
         }
+        if(spells_Script.GodMod && Input.GetMouseButtonDown(2) && mouseTarget!=null) mouseTarget.GetComponent<unit_script>().Die(); //instante kill
     }
+
     [SerializeField]List<ParticleSystem> sphere = new List<ParticleSystem>();
     Queue<ParticleSystem> spheres = new Queue<ParticleSystem>();
     void CastSphere(int i){
