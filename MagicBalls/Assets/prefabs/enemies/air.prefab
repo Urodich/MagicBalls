@@ -108,7 +108,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.2
   m_Speed: 3.5
-  m_Acceleration: 3
+  m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -179,6 +179,7 @@ MonoBehaviour:
     m_Bits: 80
   model: {fileID: 4458189397560440510}
   animator: {fileID: 1220556215875483780}
+  isDead: 0
   _stun: {fileID: 2157277435893862449}
   damageType: 2
   damage: 10
@@ -191,6 +192,7 @@ MonoBehaviour:
   enemies:
     serializedVersion: 2
     m_Bits: 256
+  patrolPoints: []
 --- !u!1001 &945541289187274271
 PrefabInstance:
   m_ObjectHideFlags: 0

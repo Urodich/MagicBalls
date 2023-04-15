@@ -21,7 +21,7 @@ public class boost_script : MonoBehaviour
         image=boost_Str.image;
     }
     public void Click(){
-        buffs_script buffs = GameObject.Find("Player").GetComponent<buffs_script>();
+        buffs_script buffs = GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>();
         buffs.ChangeStats(stats,value);
         buffs.UpdateStatsText();
         panel.SetActive(false);

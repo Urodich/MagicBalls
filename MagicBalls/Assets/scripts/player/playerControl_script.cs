@@ -71,7 +71,9 @@ public class playerControl_script : MonoBehaviour
             mousePos= groundHit.point;
             transform.LookAt(mousePos);
         }
+        
         if (isStopped) return;
+        //Действия
         if(Input.GetMouseButton(0)) {
             navMesh.destination = mousePos; 
             if(itemTarget!=null)

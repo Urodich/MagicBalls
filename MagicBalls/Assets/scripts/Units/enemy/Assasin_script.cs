@@ -15,6 +15,8 @@ public class Assasin_script : enemy_script
         invisibilityCD-=Time.fixedDeltaTime;
         if(invisibilityCD<0)invisibilityCD=0;
 
+        if(!isActive) return;
+
         base.FixedUpdate();
 
         if(isStunned) return;

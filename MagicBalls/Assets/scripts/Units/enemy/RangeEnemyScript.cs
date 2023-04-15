@@ -8,6 +8,7 @@ public class RangeEnemyScript : enemy_script
 
     new void FixedUpdate()
     {
+        if(!isActive) return;
         base.FixedUpdate();
         
         if(isStunned) return;

@@ -21,6 +21,7 @@ public class enemy_script : unit_script, IEnemy
     public GameObject aim;
     protected bool attacking=false;
     protected Coroutine attack;
+    protected bool isActive=true;
     public LayerMask enemies;
 
     public void SetStartAim(Vector3 pos){
@@ -46,6 +47,21 @@ public class enemy_script : unit_script, IEnemy
         }
     }
 
+    public void Activate(bool value){
+        if(value){
+            isActive=true;
+            animator.speed=0;
+        }
+        else{
+            isActive=false;
+            animator.speed=1;
+        }
+    }
+    public override void Die()
+    {
+        base.Die();
+        navMesh.Stop();
+    }
     public void StrenghtScale(float multiply){
         maxHp*=multiply;
         damage*=multiply;
@@ -110,10 +126,8 @@ public class enemy_script : unit_script, IEnemy
     //Triggers
     public virtual void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies)) {
+            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))
                 FindAim(collider.gameObject); 
-            }
-            return;
         }
     } 
     public virtual void OnColliderExit(GameObject obj, Collider collider){

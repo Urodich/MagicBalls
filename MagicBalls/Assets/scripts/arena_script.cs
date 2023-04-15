@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 public class arena_script : MonoBehaviour
 {
-    [SerializeField] GameObject[] enemyTypes;
+    [SerializeField] enemy_script[] enemyTypes;
     [SerializeField] Transform[] spawnPoints;
     UnityEngine.UI.Text infoText;
-    List<GameObject> aliveEnemies = new List<GameObject>();
+    List<enemy_script> aliveEnemies = new List<enemy_script>();
     Coroutine gameProcess;
     GameObject pauseMenu; 
     Text Score;
@@ -21,6 +21,7 @@ public class arena_script : MonoBehaviour
     [SerializeField] GameObject player;
     [SerializeField] GameObject HUD;
     [SerializeField] Transform PlayerSpawnPoint;
+    [SerializeField] Item[] playerStartEquipment;
     void Awake(){
         player=Instantiate(player, PlayerSpawnPoint.position, new Quaternion());
         HUD=Instantiate(HUD, PlayerSpawnPoint, true);
@@ -31,12 +32,18 @@ public class arena_script : MonoBehaviour
         Score=HUD.transform.Find("arena timer").gameObject.GetComponent<Text>();
         infoText=HUD.transform.Find("arena info").gameObject.GetComponent<Text>();
         Boost_panel=HUD.transform.Find("boost panel").gameObject;
+
         infoText.enabled=false;
-        //Boost_panel.SetActive(false);
-        //pauseMenu.SetActive(false);
         buffs = player.GetComponent<buffs_script>();
+        
         player.GetComponent<player_script>().dieEvent+=(GameObject)=>EndGame();
-        //gameProcess=StartCoroutine(Spawning());
+
+        inventory_script inventory = player.GetComponent<inventory_script>();
+        foreach (Item item in playerStartEquipment){
+            Instantiate(item).Take(inventory);
+        }
+        
+        gameProcess=StartCoroutine(Spawning());
         StartCoroutine(Bonuses());
         Time.timeScale=1;
     }
@@ -72,6 +79,7 @@ public class arena_script : MonoBehaviour
     }
     public void End(){
         Time.timeScale=0;
+        buffs.UpdateStatsText();
         pauseMenu.SetActive(true);
         GameObject.Find("Resume").SetActive(false);
     }
@@ -113,22 +121,23 @@ public class arena_script : MonoBehaviour
         Win();
     }
 
-    void SpawnEnemy(GameObject enemy, int points, float multiply){
-        GameObject unit = Instantiate(enemy,spawnPoints[Random.Range(0,spawnPoints.Length-1)].position, new Quaternion());
-        aliveEnemies.Add(unit);
-        enemy_script _enemy=unit.GetComponent<enemy_script>();
-        _enemy.dieEvent+=(GameObject)=>{aliveEnemies.Remove(GameObject); };
+    void SpawnEnemy(enemy_script enemy, int points, float multiply){
+        enemy_script _enemy = Instantiate(enemy,spawnPoints[Random.Range(0,spawnPoints.Length-1)].position, new Quaternion());
+        aliveEnemies.Add(_enemy);
+        _enemy.dieEvent+=(GameObject)=>{aliveEnemies.Remove(_enemy); };
         _enemy.SetStartAim(player.transform.position);
     }
     void EndGame() => StartCoroutine(endGame());
+    [SerializeField] PostProcess_script post;
     IEnumerator endGame(){
         StopCoroutine(gameProcess);
-        /*foreach(GameObject enemy in aliveEnemies){
-            enemy.GetComponent<enemy_script>().Stun(10f);
-        }*/
+        foreach(enemy_script enemy in aliveEnemies){
+            enemy.Activate(false);
+        }
         infoText.enabled=true;
         infoText.text="You died";
-        yield return new WaitForSeconds(2f);
+        post.DieEffect(0.02f);
+        yield return new WaitForSeconds(4f);
         End();
         //SceneManager.LoadScene("EndGame");
     }

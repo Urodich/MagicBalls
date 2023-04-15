@@ -20,7 +20,10 @@ public class MageEnemy_script : enemy_script
         blinkCD-=(blinkCD>0)?Time.fixedDeltaTime:0;
         defCD-=(defCD>0)?Time.fixedDeltaTime:0;
         attackCD-=(attackCD>0)?Time.fixedDeltaTime:0;
+
+        if(!isActive) return;
         base.FixedUpdate();
+        
         if (isStunned) return;
         if (!aim) 
             if((transform.position-navMesh.destination).sqrMagnitude<0.5f) {animator.SetBool("run", false); return;}

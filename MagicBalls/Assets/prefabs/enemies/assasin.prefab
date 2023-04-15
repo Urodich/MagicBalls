@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 3844449399925535966}
   m_Layer: 7
   m_Name: assasin
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,6 +179,7 @@ MonoBehaviour:
     m_Bits: 64
   model: {fileID: 3844449400448678600}
   animator: {fileID: 3844449400448678615}
+  isDead: 0
   _stun: {fileID: 5458426600439824164}
   damageType: 2
   damage: 40
@@ -191,6 +192,7 @@ MonoBehaviour:
   enemies:
     serializedVersion: 2
     m_Bits: 256
+  patrolPoints: []
   blinkDistance: 6
   BlinkCD: 4
   InvisibilityCD: 10

@@ -149,7 +149,7 @@ public class Spells_script : MonoBehaviour
             control.isStopped=true;
         }
         else{
-            navMesh.isStopped=false;
+            if(navMesh.enabled)navMesh.isStopped=false;
             control.isStopped=false;
         }
     }
@@ -722,7 +722,7 @@ public class Spells_script : MonoBehaviour
             if(stats.CurMana<tornadoManaCast) {NotEnoughtMana(); return;}
             stats.CurMana-=tornadoManaCast;
             tornadoCoolDown=true;
-            CastSpell(2f,"Tornado",()=>tornadoCoolDown=false);
+            CastSpell(20f,"Tornado",()=>tornadoCoolDown=false);
         }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, ground)){

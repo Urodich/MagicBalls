@@ -28,19 +28,22 @@ public class inventory_script : MonoBehaviour
         switch (item.type)
         {
             case ItemType.Head: {
-                curr=head._item;
+                if(head)curr=head._item;
+                else curr=null;
                 Set(item,head);
                 WearOn(head._item, headTransform);
                 break;
             }
             case ItemType.Boots: {
-                curr=boots._item;
+                if(boots)curr=boots._item;
+                else curr=null;
                 Set(item,boots);
                 WearOn(boots._item, bootsTransformL, bootsTransformR);
                 break;
             }
             case ItemType.Bracer: {
-                curr=bracers._item;
+                if(bracers)curr=bracers._item;
+                else curr=null;
                 Set(item,bracers);
                 WearOn(bracers._item, bracersTransformL, bracersTransformR);
                 break;

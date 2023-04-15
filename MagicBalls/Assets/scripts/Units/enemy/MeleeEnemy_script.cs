@@ -6,7 +6,9 @@ public class MeleeEnemy_script : enemy_script
 {
     protected new void FixedUpdate()
     {
+        if(!isActive) return;
         base.FixedUpdate();
+        
         if(isStunned) return;
         if (!aim) {animator.SetBool("run", false); return;}
 

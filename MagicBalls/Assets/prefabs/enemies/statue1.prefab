@@ -203,7 +203,7 @@ GameObject:
   - component: {fileID: 6955146217913302215}
   m_Layer: 7
   m_Name: statue1
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -258,6 +258,7 @@ MonoBehaviour:
     m_Bits: 64
   model: {fileID: 1051572819481239647}
   animator: {fileID: 7882006945394806713}
+  isDead: 0
   _stun: {fileID: 5391828148302674615}
   damageType: 2
   damage: 15
@@ -270,6 +271,7 @@ MonoBehaviour:
   enemies:
     serializedVersion: 2
     m_Bits: 256
+  patrolPoints: []
 --- !u!65 &2051015440308357292
 BoxCollider:
   m_ObjectHideFlags: 0
