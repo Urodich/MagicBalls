@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class fireball_script : MonoBehaviour
+public class fireball_script : IProjectile
 {
-    Vector3 direction;
+    //Vector3 direction;
     GameObject player;
     buffs_script buffs;
 
-    BoxCollider collider;
+    //BoxCollider collider;
     public  float damage=10;
-    public float speed = 25;
+    //public float speed = 25;
     void Awake(){
         player = GameObject.FindGameObjectWithTag("Player");
         buffs = player.GetComponent<buffs_script>();
@@ -31,10 +31,10 @@ public class fireball_script : MonoBehaviour
     {
         transform.position += direction*speed*Time.deltaTime*buffs.GetStats(Stats.projectileSpeed);
     }
-
-    void OnTriggerEnter(Collider collision){
-        Debug.Log("collision");
-        if (collision.gameObject.layer == 6) {Destroy(gameObject); return;}
+    [SerializeField] LayerMask obstacles;
+    protected override void OnTriggerEnter(Collider collision){
+        base.OnTriggerEnter(collider);
+        
         if (collision.gameObject.tag != "enemy") return;
 
         collision.gameObject.GetComponent<unit_script>().Move(direction, 0.5f*buffs.GetStats(Stats.repulsion), 0.1f, false);

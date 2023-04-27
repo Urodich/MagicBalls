@@ -50,11 +50,15 @@ public class enemy_script : unit_script, IEnemy
     public void Activate(bool value){
         if(value){
             isActive=true;
-            animator.speed=0;
+            animator.enabled=true;
+            collider.enabled=true;
+            hpBar.gameObject.SetActive(true);
         }
         else{
             isActive=false;
-            animator.speed=1;
+            animator.enabled=false;
+            hpBar.gameObject.SetActive(false);
+            collider.enabled=false;
         }
     }
     public override void Die()

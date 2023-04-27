@@ -104,8 +104,10 @@ public class playerControl_script : MonoBehaviour
     //
     //CASTS
     //
+    public bool block=false;
     void Update(){
         if(player.isDead) return;
+        if(block) return;
         if(Input.GetKeyDown("q")) CastSphere(0); //fire 1
         if(Input.GetKeyDown(KeyCode.W)) CastSphere(1); //water 4
         if(Input.GetKeyDown("e")) CastSphere(2); //air 13

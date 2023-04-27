@@ -8,6 +8,7 @@ using UnityEngine.Audio;
 
 public class Dialoge_script : MonoBehaviour
 {
+    bool isActive = false;
     GameObject textPanel;
     TextMeshProUGUI text;
     Coroutine dialoge;
@@ -27,7 +28,7 @@ public class Dialoge_script : MonoBehaviour
             yield return new WaitForSeconds(line.time); 
         }
         textPanel.SetActive(false);
-        Destroy(this, 1f);
+        Destroy(gameObject);
     }
     public void PauseDialoge(){
         StopCoroutine(dialoge);
@@ -37,8 +38,12 @@ public class Dialoge_script : MonoBehaviour
         dialoge=StartCoroutine(Dialoge());
     }
 
-    void OnColliderEnter(Collider collider){
-        HUD_script hud=GameObject.Find("HUD").GetComponent<HUD_script>();
+    void OnTriggerEnter(Collider collider){
+        if(collider.gameObject.tag!="Player") return;
+        if (isActive) return;
+        Debug.Log("activate dialogue");
+        isActive=true;
+        HUD_script hud=GameObject.Find("HUD(Clone)").GetComponent<HUD_script>();
         textPanel = hud.DialogePanel;
         textPanel.SetActive(true);
         text = textPanel.transform.Find("Dialoge Text").GetComponent<TextMeshProUGUI>();

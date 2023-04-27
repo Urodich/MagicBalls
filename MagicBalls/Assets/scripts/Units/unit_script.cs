@@ -46,8 +46,12 @@ public class unit_script : MonoBehaviour
     bool disableGround=false;
     protected Coroutine curAction;
     public bool isDead=false;
-
+    protected Collider collider;
+    void Awake(){
+        collider=GetComponent<Collider>();
+    }
     public void Start(){
+        
         navMesh=gameObject.GetComponent<NavMeshAgent>();
         navMesh.speed=speed;
         if(startAim!=Vector3.zero) navMesh.destination=startAim;

@@ -17,9 +17,10 @@ public class inventory_script : MonoBehaviour
     [SerializeField] Transform headTransform;
     itemUI_script head;
 
-    void Start(){
+    void Awake(){
         GameObject inventory=GameObject.Find("inventory");
-        boots=inventory.transform.Find("boots slot").GetComponent<itemUI_script>();
+        //if(inventory==null) inventory = GameObject.Find("HUD(Clone)").GetComponent<HUD_script>().Inventory;
+        boots=inventory.transform.Find("boots slot").gameObject.GetComponent<itemUI_script>();
         head=inventory.transform.Find("head slot").GetComponent<itemUI_script>();
         bracers=inventory.transform.Find("bracers slot").GetComponent<itemUI_script>();
     }
@@ -68,7 +69,7 @@ public class inventory_script : MonoBehaviour
     }
 ///////////////////////////////////////////////////
     Item Set(Item item, itemUI_script slot){
-        Item curr = slot.DeleteItem(); //old item
+        Item curr = slot?.DeleteItem(); //old item
         slot.SetItem(item); //UI
         curr?.Drop();
         return slot._item;

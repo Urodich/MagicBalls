@@ -946,7 +946,10 @@ public class Spells_script : MonoBehaviour
         Debug.Log("Flame");
         StopMoving(true);
         currentCast=StartCoroutine(flame_core());
-        BreakCastEvent.AddListener(()=>_flame.Stop());
+        BreakCastEvent.AddListener(()=>{
+            _flame.Stop();
+            if(!GodMod)CastSpell(5f,"Flame",()=>FlameCoolDown=false);
+        });
 
         IEnumerator flame_core(){
             animator.SetTrigger("cast_flame");
@@ -965,7 +968,10 @@ public class Spells_script : MonoBehaviour
             }
             StopMoving(false);
             _flame.Stop();
-            BreakCastEvent.RemoveListener(()=>_flame.Stop());
+            BreakCastEvent.RemoveListener(()=>{
+                _flame.Stop();
+                if(!GodMod)CastSpell(5f,"Flame",()=>FlameCoolDown=false);
+            });
             animator.SetBool("casting", false);
             if(!GodMod)CastSpell(5f,"Flame",()=>FlameCoolDown=false);
         }

@@ -15,6 +15,9 @@ public class Item : MonoBehaviour
     public string description;
     [SerializeField] List<StatsCount> startBuffs=new List<StatsCount>();
     Dictionary<Stats, float> changeStats = new Dictionary<Stats, float>();
+    void Awake(){
+        rb=GetComponent<Rigidbody>();
+    }
     void Start(){
         string statInfo="";
         foreach(StatsCount elem in startBuffs){
@@ -27,9 +30,7 @@ public class Item : MonoBehaviour
         inf.Find("name").gameObject.GetComponent<TextMeshProUGUI>().text=itemName;
         description+="\n"+statInfo;
         inf.Find("description").gameObject.GetComponent<TextMeshProUGUI>().text=description;
-        info.gameObject.SetActive(false);
-
-        rb=GetComponent<Rigidbody>();
+        info.gameObject.SetActive(false); 
     }
     public void ShowInfo(){
         info.gameObject.SetActive(true);

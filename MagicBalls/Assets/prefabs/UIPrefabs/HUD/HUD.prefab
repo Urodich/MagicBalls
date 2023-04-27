@@ -170,8 +170,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 46
+  m_fontSizeBase: 46
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -506,7 +506,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Wave 1
+  m_Text: 
 --- !u!1 &8840625371530874251
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,6 +783,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DialogePanel: {fileID: 104132467212014531}
+  BoostPanel: {fileID: 8840625372282775519}
+  PauseMenu: {fileID: 8840625372077371406}
+  Inventory: {fileID: 8840625372619598375}
+  StatsText: {fileID: 8840625371745749821}
 --- !u!1 &8840625371644662619
 GameObject:
   m_ObjectHideFlags: 0
