@@ -43,11 +43,11 @@ public class playerControl_script : MonoBehaviour
             if(itemTarget!=itemHit.collider.gameObject) {
                 if(itemTarget!=null)itemTarget.GetComponent<Item>().CloseInfo();
                 itemTarget=itemHit.collider.gameObject;
-                itemTarget.GetComponent<Item>().ShowInfo();
+                itemTarget.GetComponent<IItem>().ShowInfo();
             }
         }
         else{
-            if(itemTarget!=null)itemTarget.GetComponent<Item>().CloseInfo();
+            if(itemTarget!=null)itemTarget.GetComponent<IItem>().CloseInfo();
             itemTarget=null;
         }
         //выбор цели
@@ -77,7 +77,7 @@ public class playerControl_script : MonoBehaviour
         if(Input.GetMouseButton(0)) {
             navMesh.destination = mousePos; 
             if(itemTarget!=null)
-                if(Vector3.Distance(itemTarget.transform.position, transform.position)<pickUpDistance)itemTarget.GetComponent<Item>().Take(gameObject.GetComponent<inventory_script>());
+                if(Vector3.Distance(itemTarget.transform.position, transform.position)<pickUpDistance)itemTarget.GetComponent<IItem>().Take(gameObject);
         }
         if (navMesh.velocity==Vector3.zero) {
             animator.SetBool("moonwalk", false);

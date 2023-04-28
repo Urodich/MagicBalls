@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class IProjectile : MonoBehaviour
 {
-    protected LayerMask obstacles;
+    public LayerMask obstacles;
     protected Vector3 direction;
     protected Collider collider;
     [SerializeField] protected float liveTime;

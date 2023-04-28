@@ -42,7 +42,13 @@ public class prologue_script : MonoBehaviour
             player.GetComponent<Spells_script>().GodMod=false;
         }
     }
+    [SerializeField] enemy_script ogre;
+    [SerializeField] Transform ogreSpawn;
     public void Room1(){
+        Instantiate(ogre, ogreSpawn);
+    }
+
+    public void Rescue(){
 
     }
 

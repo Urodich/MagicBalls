@@ -13,6 +13,7 @@ public class Dialoge_script : MonoBehaviour
     TextMeshProUGUI text;
     Coroutine dialoge;
     AudioSource audio;
+    static Dialoge_script activeDialogue=null;
     void Start(){
         audio = GetComponent<AudioSource>();
     }
@@ -32,6 +33,8 @@ public class Dialoge_script : MonoBehaviour
     }
     public void PauseDialoge(){
         StopCoroutine(dialoge);
+        isActive=false;
+        Destroy(gameObject);
     }
 
     public void ResumeDialoge(){
@@ -41,6 +44,8 @@ public class Dialoge_script : MonoBehaviour
     void OnTriggerEnter(Collider collider){
         if(collider.gameObject.tag!="Player") return;
         if (isActive) return;
+        if(activeDialogue) activeDialogue.PauseDialoge();
+        activeDialogue=this;
         Debug.Log("activate dialogue");
         isActive=true;
         HUD_script hud=GameObject.Find("HUD(Clone)").GetComponent<HUD_script>();

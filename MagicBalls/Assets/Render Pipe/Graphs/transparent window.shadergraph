@@ -1310,20 +1310,6 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
-                    "m_Id": "9751cebb9c344b08b5509812f8346e7b"
-                },
-                "m_SlotId": 0
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "67fc3dcbc9144368a67b79832224d0ee"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
                     "m_Id": "ac4143f7439a41e58bcb0f328164c561"
                 },
                 "m_SlotId": 2
@@ -4564,9 +4550,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 0.2641509175300598,
-        "g": 0.2641509175300598,
-        "b": 0.2641509175300598,
+        "r": 0.5,
+        "g": 0.5,
+        "b": 0.5,
         "a": 0.0
     },
     "isMainColor": false,
@@ -8090,9 +8076,9 @@
     "m_ShaderOutputName": "Specular",
     "m_StageCapability": 2,
     "m_Value": {
-        "x": 0.20754718780517579,
-        "y": 0.20754718780517579,
-        "z": 0.20754718780517579
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.5
     },
     "m_DefaultValue": {
         "x": 0.0,

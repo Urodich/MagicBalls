@@ -1,0 +1,25 @@
+# Blender 3.5.1 MTL File: 'prologue.blend'
+# www.blender.org
+
+newmtl металл_ч
+Ka 1.000000 1.000000 1.000000
+Ks 0.327273 0.327273 0.327273
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd A:/Scans/Downloaded/surface/metal/metal_Albedo.jpg
+map_Ns A:/Scans/Downloaded/surface/metal/metal_Roughness.jpg
+map_refl A:/Scans/Downloaded/surface/metal/metal_Metalness.jpg
+map_Bump -bm 1.000000 A:/Scans/Downloaded/surface/metal/metal_Normal.jpg
+
+newmtl повозка
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd A:/Scans/Downloaded/surface/wood plank/wood plank_Albedo.jpg
+map_Ns A:/Scans/Downloaded/surface/wood plank/wood plank_Roughness.jpg
+map_Bump -bm 1.000000 A:/Scans/Downloaded/surface/wood plank/wood plank_Normal.jpg

@@ -44,9 +44,9 @@ public class arena_script : MonoBehaviour
         
         player.GetComponent<player_script>().dieEvent+=(GameObject)=>EndGame();
 
-        inventory_script inventory = player.GetComponent<inventory_script>();
+        //inventory_script inventory = player.GetComponent<inventory_script>();
         foreach (Item item in playerStartEquipment){
-            Instantiate(item).Take(inventory);
+            Instantiate(item).Take(player);
         }
         
         gameProcess=StartCoroutine(Spawning());

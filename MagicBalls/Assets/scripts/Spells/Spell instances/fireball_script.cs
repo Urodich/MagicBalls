@@ -31,9 +31,9 @@ public class fireball_script : IProjectile
     {
         transform.position += direction*speed*Time.deltaTime*buffs.GetStats(Stats.projectileSpeed);
     }
-    [SerializeField] LayerMask obstacles;
+    //[SerializeField] LayerMask obstacles;
     protected override void OnTriggerEnter(Collider collision){
-        base.OnTriggerEnter(collider);
+        //base.OnTriggerEnter(collider);
         
         if (collision.gameObject.tag != "enemy") return;
 
