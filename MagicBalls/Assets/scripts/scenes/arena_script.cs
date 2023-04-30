@@ -4,11 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 using System.Threading.Tasks;
 
 public class arena_script : MonoBehaviour
 {
-    [SerializeField] enemy_script[] enemyTypes;
+    [SerializeField] wave[] Waves;
     [SerializeField] Transform[] spawnPoints;
     UnityEngine.UI.Text infoText;
     List<enemy_script> aliveEnemies = new List<enemy_script>();
@@ -28,8 +29,7 @@ public class arena_script : MonoBehaviour
         player=Instantiate(player, PlayerSpawnPoint.position, new Quaternion());
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<camera_script>().player=player;
     }
-    void Start()
-    {
+    void Start(){
         pauseMenu=HUD.PauseMenu;
         Score=HUD.gameObject.transform.Find("arena timer").gameObject.GetComponent<Text>();
         infoText=HUD.gameObject.transform.Find("arena info").gameObject.GetComponent<Text>();
@@ -109,17 +109,19 @@ public class arena_script : MonoBehaviour
         }
     }
     int waveNumber=1;
-    [SerializeField] int[] waveEnemyCount;
+    //[SerializeField] int[] waveEnemyCount;
     IEnumerator Spawning(){
-        while (true){
+        foreach (wave wave in Waves){
             infoText.enabled=true;
             infoText.text="Wave # "+waveNumber++;//.ToString();
             yield return new WaitForSeconds(3f);
             infoText.enabled=false;
-            for(int i=0; i<waveEnemyCount[waveNumber-1]; i++){
-                SpawnEnemy(enemyTypes[Random.Range(0, enemyTypes.Length)],waveNumber*10, 1+waveNumber/5);
+            
+            foreach(enemys type in wave.value){
+                SpawnEnemy(type.type, type.count, type.points, wave.scale);
                 yield return new WaitForSeconds(0.5f);
-            }
+            } 
+
             yield return new WaitWhile(()=>aliveEnemies.Count>0);
             ShowBoosts();
             yield return new WaitWhile(()=>Boost_panel.active);
@@ -128,11 +130,13 @@ public class arena_script : MonoBehaviour
         Win();
     }
 
-    void SpawnEnemy(enemy_script enemy, int points, float multiply){
-        enemy_script _enemy = Instantiate(enemy,spawnPoints[Random.Range(0,spawnPoints.Length-1)].position, new Quaternion());
-        aliveEnemies.Add(_enemy);
-        _enemy.dieEvent+=(GameObject)=>{aliveEnemies.Remove(_enemy); };
-        _enemy.SetStartAim(player.transform.position);
+    void SpawnEnemy(enemy_script enemy, int count, int points, float multiply){
+        for (int i=0;i<count;i++){
+            enemy_script _enemy = Instantiate(enemy,spawnPoints[Random.Range(0,spawnPoints.Length-1)].position, new Quaternion());
+            aliveEnemies.Add(_enemy);
+            _enemy.dieEvent+=(GameObject)=>{aliveEnemies.Remove(_enemy); };
+            _enemy.SetStartAim(player.transform.position);
+        }
     }
     void EndGame() => StartCoroutine(endGame());
     [SerializeField] PostProcess_script post;
@@ -177,4 +181,15 @@ public class arena_script : MonoBehaviour
             set.RemoveAt(index);
         }
     }
+}
+[System.Serializable]
+public struct wave{
+    public enemys[] value;
+    public float scale;
+}
+[System.Serializable]
+public struct enemys{
+    public enemy_script type;
+    public int count;
+    public int points;
 }

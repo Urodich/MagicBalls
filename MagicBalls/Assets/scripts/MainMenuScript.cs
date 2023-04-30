@@ -11,14 +11,11 @@ public class MainMenuScript : MonoBehaviour
     public void ContinueGame(){
 
     }
-    public void StartArena(int i){
-        switch(i){
-            case 0:{
-                SceneManager.LoadScene("Arena1");
-                break;
-                }
-        }
+//////////////NAVIGATION//////////
+    public void GoToScene(string name){
+        SceneManager.LoadScene(name);
     }
+    
     public void Exit(){
         Application.Quit();
     }

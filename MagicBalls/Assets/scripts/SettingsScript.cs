@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+
 
 public class SettingsScript : MonoBehaviour
 {
     FullScreenMode curMode;
+    [SerializeField] AudioMixerGroup mixer;
     int width;
     int height;
     
@@ -13,6 +16,22 @@ public class SettingsScript : MonoBehaviour
         width = PlayerPrefs.GetInt("width", 1920);
         height = PlayerPrefs.GetInt("height",1080);
     }
+    
+
+//////////////MUSIC//////////
+    public void ChangeMasterVolume(float i){
+        mixer.audioMixer.SetFloat("Master", Mathf.Lerp(-80, 0, i));
+    }
+    public void ChangeSoundVolume(float i){
+        mixer.audioMixer.SetFloat("Sounds", Mathf.Lerp(-80, 0, i));
+    }
+    public void ChangeMusicVolume(float i){
+        mixer.audioMixer.SetFloat("Music", Mathf.Lerp(-80, 0, i));
+    }
+    public void ChangeSpeechVolume(float i){
+        mixer.audioMixer.SetFloat("Speech", Mathf.Lerp(-80, 0, i));
+    }
+////////////SETINGS/////////
     public void Save(){
         PlayerPrefs.SetInt("FullScreenMode", (int)curMode);
         PlayerPrefs.SetInt("width", width);
@@ -46,10 +65,6 @@ public class SettingsScript : MonoBehaviour
             }
         }
         update();
-    }
-
-    public void ChangeVolume(float i){
-
     }
     public void ChangeDisplayMode(int i){
         curMode=getMode(i);

@@ -54,7 +54,10 @@ public class unit_script : MonoBehaviour
         
         navMesh=gameObject.GetComponent<NavMeshAgent>();
         navMesh.speed=speed;
-        if(startAim!=Vector3.zero) navMesh.destination=startAim;
+        if(startAim!=Vector3.zero) {
+            navMesh.destination=startAim;
+            animator.SetBool("run", true);
+        }
         if(hpBar!=null) hpBar.maxValue=maxHp;
         CurHp=maxHp;
         if(model==null) return;

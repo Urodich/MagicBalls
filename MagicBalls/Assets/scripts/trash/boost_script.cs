@@ -12,7 +12,7 @@ public class boost_script : MonoBehaviour
     [SerializeField] public float value;
     GameObject panel;
     void Start(){
-        panel=GameObject.Find("Boost_Panel");
+        panel=GameObject.Find("boost panel");
     }
     public void Set(boost_str boost_Str){
         stats=boost_Str.stats;
