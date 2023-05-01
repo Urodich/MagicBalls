@@ -4,46 +4,55 @@ using UnityEngine;
 using UnityEngine.AI;
 using System;
 
-public abstract class SpellBase 
+public abstract class SpellBase : MonoBehaviour
 {
-    bool CD=false;
-    [SerializeField] float dealy;
-    float CoolDown;
-    float ManaCost;
-    GameObject player;
-    player_script stats;
-    Spells_script spells;
-    playerControl_script control;
-    NavMeshAgent navMesh;
-    buffs_script buffs;
-    GameObject spellPanel;
-
-    static Coroutine currentCast;
-
-    SpellBase(){
-        spellPanel=GameObject.Find("SpellPanel");
+    protected bool CD=false;
+    [SerializeField] protected float delay, CoolDown, ManaCost;
+    //[SerializeField] protected string _animation, _icon;
+    protected GameObject player;
+    protected player_script stats;
+    protected Spells_script spells;
+    protected NavMeshAgent navMesh;
+    protected buffs_script buffs;
+    [SerializeField] protected GameObject prefab;
+    protected void Start(){
         player = GameObject.FindGameObjectWithTag("Player");
         stats = player.GetComponent<player_script>();
         navMesh = player.GetComponent<NavMeshAgent>();
         buffs = player.GetComponent<buffs_script>();
-        control=player.GetComponent<playerControl_script>();
         spells=player.GetComponent<Spells_script>();
     }
 
-    void cast(){
+    public void Cast(){
         if(!spells.GodMod){
-            if(CD) {CoolDawn(); return;}
-            if(stats.CurMana<ManaCost) {NotEnoughtMana(); return;}
+            if(CD) {spells.CoolDawn(); return;}
+            if(stats.CurMana<ManaCost) {spells.NotEnoughtMana(); return;}
         }
+        Debug.Log("cast "+this);
+        spells.currentCast = StartCoroutine(core());
     }
-    public static void Break(){
+    public void Cast(int i){
+        if(!spells.GodMod){
+            if(CD) {spells.CoolDawn(); return;}
+            if(stats.CurMana<ManaCost*i) {spells.NotEnoughtMana(); return;}
+        }
+        Debug.Log("cast "+this);
+        spells.currentCast = StartCoroutine(core(i));
     }
-    void NotEnoughtMana(){
-        Debug.Log("NotMana");
+    public void Cast(int a, int b){
+        if(!spells.GodMod){
+            if(CD) {spells.CoolDawn(); return;}
+            if(stats.CurMana<ManaCost) {spells.NotEnoughtMana(); return;}
+        }
+        Debug.Log("cast "+this);
+        spells.currentCast = StartCoroutine(core(a, b));
     }
-    void CoolDawn(){
-        Debug.Log("CoolDown");
+    protected abstract IEnumerator core();
+    protected abstract IEnumerator core(int a);
+    protected abstract IEnumerator core(int a, int b);
+    public virtual void Break(){
+        StopCoroutine(spells.currentCast);
     }
-    
 
+    
 }

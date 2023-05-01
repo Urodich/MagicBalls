@@ -162,7 +162,7 @@ public class unit_script : MonoBehaviour
     public virtual void Die(){
         isDead=true;
         if(animator)animator.SetBool("die",true);
-
+        collider.enabled=false;
         CallDieEvent(gameObject);
         //Stun(1);
         Destroy(gameObject,1f);

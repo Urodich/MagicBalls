@@ -29,7 +29,7 @@ public class SplashEnemy_script : MeleeEnemy_script
     //Triggers
     public override void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("attack")) {
-            if((1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))) {collider.gameObject.GetComponent<unit_script>().TakeDamage(damage*damageFactor, damageType); } 
+            if(Utils.LayerComparer(collider.gameObject, enemies)/*(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))*/) {collider.gameObject.GetComponent<unit_script>().TakeDamage(damage*damageFactor, damageType); } 
             return;}
         
         base.OnColliderEnter(obj, collider);

@@ -23,6 +23,7 @@ public class enemy_script : unit_script, IEnemy
     protected Coroutine attack;
     protected bool isActive=true;
     public LayerMask enemies;
+    public LayerMask friends;
 
     public void SetStartAim(Vector3 pos){
         startAim=pos;
@@ -97,15 +98,17 @@ public class enemy_script : unit_script, IEnemy
     public void FindAim(GameObject _aim){
         if(aims.Contains(_aim)) return;
         aims.Add(_aim);
+        visibleCol.transform.localScale=new Vector3(2,2,2);
         _aim.GetComponent<unit_script>().dieEvent+=LostAim;
         ChangeAim();
         NotifyAllies(_aim);
     }
     void LostAim(GameObject _aim){
-        //_aim.GetComponent<unit_script>().dieEvent-=LostAim;         //????????
+        if(this==null) return;
         Debug.Log(gameObject.name+" lost " + _aim.name);
         if(aims.Contains(_aim))aims.Remove(_aim);
         if(aim==_aim)ChangeAim();
+        visibleCol.transform.localScale=new Vector3(2,2,2);
     }
     protected void Attack(){
         navMesh.isStopped=true;
@@ -121,9 +124,10 @@ public class enemy_script : unit_script, IEnemy
         attacking=false;
     }
     protected virtual void NotifyAllies(GameObject _aim){
-        Collider[] friends=Physics.OverlapSphere(transform.position, 10f, 8);
-        foreach(Collider col in friends){
-            col.gameObject.GetComponent<enemy_script>().FindAim(_aim);
+        Collider[] cols=Physics.OverlapSphere(transform.position, 10f);
+        foreach(Collider col in cols){
+            if(Utils.LayerComparer(col.gameObject, friends)&&col.gameObject.tag!="Player")
+                col.gameObject.GetComponent<enemy_script>().FindAim(_aim);
         }
 
     }

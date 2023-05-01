@@ -77,6 +77,7 @@ public class player_script : unit_script
         
         isDead=true;
         navMesh.enabled=false;
+        collider.enabled=false;
         CallDieEvent(gameObject);
         animator.SetTrigger("die");
         Debug.Log(gameObject.name + " died");

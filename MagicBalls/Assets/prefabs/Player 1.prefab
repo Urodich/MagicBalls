@@ -1,5 +1,127 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3670958437368745414
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5508094759006176902}
+  - component: {fileID: 3991661399047907763}
+  - component: {fileID: 5659834613408375438}
+  - component: {fileID: 525422937096619506}
+  - component: {fileID: 4033386821092890700}
+  - component: {fileID: 8794524995569040111}
+  m_Layer: 8
+  m_Name: Spells
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5508094759006176902
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5573720242917285658}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3991661399047907763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c78df0881933b34fb1f14449a4411d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0.27
+  CoolDown: 3
+  ManaCost: 5
+  prefab: {fileID: 8551516209489539785, guid: e5ca6baa317143d4da78a7ee5e4cd48e, type: 3}
+  damage: 5
+  speed: 3
+--- !u!114 &5659834613408375438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e05875c0c63a35b4b8b28e9982671645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0.33
+  CoolDown: 30
+  ManaCost: 13
+  prefab: {fileID: 7626720276874181854, guid: d7739432a3ef62d449b1cc645b442ba9, type: 3}
+  damage: 5
+  time: 10
+--- !u!114 &525422937096619506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc4dcc21089bce9429b77ecafc15fef2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0
+  CoolDown: 0
+  ManaCost: 0
+  prefab: {fileID: 450162337918738636, guid: fc0c2a1ac48cc4e4097df3d169c792a1, type: 3}
+  damage: 0
+--- !u!114 &4033386821092890700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72b16e1838bd3584d8d2fda8b3e09617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0.48
+  CoolDown: 5
+  ManaCost: 10
+  prefab: {fileID: 3566970146384697055, guid: cc5c34b5bc4819f499516fb922e817dd, type: 3}
+  damage: 15
+--- !u!114 &8794524995569040111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 200179128e1484c43a2a039172ce7c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0.32
+  CoolDown: 5
+  ManaCost: 15
+  prefab: {fileID: 7002484423018250265, guid: e5822aa0f1b48b84383c89a4a04b1e87, type: 3}
 --- !u!1 &5573720242917285659
 GameObject:
   m_ObjectHideFlags: 0
@@ -44,6 +166,7 @@ Transform:
   - {fileID: 4489135174467704389}
   - {fileID: 6745133505851500699}
   - {fileID: 7063674165192903914}
+  - {fileID: 5508094759006176902}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -97,6 +220,7 @@ MonoBehaviour:
   sphereParent: {fileID: 4489135174467704389}
   isStopped: 0
   pickUpDistance: 2
+  block: 0
   sphere:
   - {fileID: 2951065586091326984, guid: 8658de5dc3818d946adfb2eaec1c3281, type: 3}
   - {fileID: 2951065586091326984, guid: c53ad0caf7c93284c98f3bdb8cd39b11, type: 3}
@@ -123,6 +247,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   spellCooDown: {fileID: 6844987144420097909, guid: dd0593f36e76b1b48b9589e94d3d8f2f, type: 3}
+  animator: {fileID: 0}
+  SPELLS: {fileID: 3670958437368745414}
   fireball: {fileID: 8551516209489539785, guid: e5ca6baa317143d4da78a7ee5e4cd48e, type: 3}
   phoenix: {fileID: 7626720276874181854, guid: d7739432a3ef62d449b1cc645b442ba9, type: 3}
   waveOrig: {fileID: 7002484423018250265, guid: e5822aa0f1b48b84383c89a4a04b1e87, type: 3}

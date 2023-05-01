@@ -10,20 +10,23 @@ public class Spells_script : MonoBehaviour
     public  Dictionary<int, System.Action> Spells;
     GameObject player;
     player_script stats;
-    playerControl_script control;
+    public playerControl_script control;
     NavMeshAgent navMesh;
     buffs_script buffs;
-    [SerializeField]LayerMask enemies;
-    [SerializeField]LayerMask ground;
+    public LayerMask enemies, ground, friends;
+
     GameObject spellPanel;
     [SerializeField] GameObject spellCooDown;
     [SerializeField] public bool GodMod {get;set;}=false;
-    Animator animator;
+    public Animator animator;
 
     //current action
     public Coroutine currentCast;
     UnityEvent BreakCastEvent;
-
+    [SerializeField] GameObject SPELLS;
+    void newcast(){
+        SPELLS.GetComponent<Fireball>().Cast();
+    }
     void Start(){
         spellPanel=GameObject.Find("SpellPanel");
         player = GameObject.FindGameObjectWithTag("Player");
@@ -39,14 +42,14 @@ public class Spells_script : MonoBehaviour
         [1] = ()=>Flame(1),
         [2] = ()=>Flame(2),
         [3] = ()=>Flame(3),
-        [4] = ()=>Wave(1),
+        [4] = ()=>SPELLS.GetComponent<Wave>().Cast(1),
         [5] = ()=>Smoke(1,1),
         [6] = ()=>Smoke(2,1),
         [8] = ()=>Wave(2),
         [9] = ()=>Smoke(1,2),
         [12] = ()=>Wave(3),
         [13] = ()=>Wind(1),
-        [14] = ()=>Fireball(1,1),
+        [14] = ()=>SPELLS.GetComponent<Fireball>().Cast(1,1),//Fireball(1,1),
         [15] = ()=>Fireball(1,2),
         [17] = ()=>Torrent(1,1),
         [18] = ()=>FireStorm(),
@@ -55,7 +58,7 @@ public class Spells_script : MonoBehaviour
         [27] = ()=>Fireball(2,1),
         [30] = ()=>Torrent(2,1),
         [39] = ()=>Wind(3),
-        [40] = ()=>Earhtquake(1),
+        [40] = ()=>SPELLS.GetComponent<Earthquake>().Cast(1),
         [41] = ()=>Lava(1,1),
         [42] = ()=>Lava(1,2),
         [44] = ()=>Mud(1,1),
@@ -92,7 +95,7 @@ public class Spells_script : MonoBehaviour
         [377] = ()=>Haste(1,1),
         [378] = ()=>BlackHole(),
         [388] = ()=>Haste(1,2),
-        [404] = ()=>Blink(1,1),
+        [404] = ()=>SPELLS.GetComponent<Blink>().Cast(1,1),
         [444] = ()=>Blink(2,1),
         [485] = ()=>Zombie(1,1),
         [486] = ()=>Reincarnation(),
@@ -109,16 +112,17 @@ public class Spells_script : MonoBehaviour
         };
     }
 
+#region ///////UTILS///////
     public void CastSpell(int hex){ //Call hex function
         if (Spells.ContainsKey(hex))
             Spells[hex]();
         else
             Spells[0]();
     }
-    void NotEnoughtMana(){
+    public void NotEnoughtMana(){
         Debug.Log("NotMana");
     }
-    void CoolDawn(){
+    public void CoolDawn(){
         Debug.Log("CoolDown");
     }
     void castEmpty(){
@@ -126,7 +130,7 @@ public class Spells_script : MonoBehaviour
         animator.SetTrigger("");
     }
     //create icon
-    void CastSpell(float CDTime, String imagePath, Action func){ //Add CD icon
+    public void CastSpell(float CDTime, String imagePath, Action func){ //Add CD icon
         Sprite image=Resources.Load<Sprite>(imagePath);
         if(image==null) Debug.Log("no Sprite loaded");
         GameObject obj = Instantiate(spellCooDown);
@@ -143,7 +147,7 @@ public class Spells_script : MonoBehaviour
         BreakCastEvent.RemoveAllListeners();
     }
 
-    void StopMoving(bool value){
+    public void StopMoving(bool value){
         if(value){
             navMesh.isStopped=true;
             control.isStopped=true;
@@ -154,7 +158,7 @@ public class Spells_script : MonoBehaviour
         }
     }
 
-    GameObject[] projectileCast(int count, GameObject projectile, float scale){
+    public GameObject[] projectileCast(int count, GameObject projectile, float scale){
         List<GameObject> prjs = new List<GameObject>();
         for(int i = 0; i < count; i++){
                 GameObject obj = Instantiate(projectile, player.transform.position+player.transform.forward+player.transform.right*i*0.3f, new Quaternion());
@@ -169,8 +173,8 @@ public class Spells_script : MonoBehaviour
     }
 
     //Векторное применение
-    Vector3 vectorCastDirection;
-    IEnumerator VectorCast(){
+    public Vector3 vectorCastDirection;
+    public IEnumerator VectorCast(){
         Vector3 mousePos1 = new Vector3(), mousePos2 = new Vector3();
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -191,6 +195,7 @@ public class Spells_script : MonoBehaviour
         Debug.DrawLine(mousePos1+Vector3.up, mousePos2+Vector3.up);
     }
     
+#endregion
     
     //FIREBALL
     [SerializeField] GameObject fireball;
