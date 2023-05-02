@@ -29,6 +29,7 @@ public abstract class SpellBase : MonoBehaviour
             if(stats.CurMana<ManaCost) {spells.NotEnoughtMana(); return;}
         }
         Debug.Log("cast "+this);
+        spells.currentSpell=this;
         spells.currentCast = StartCoroutine(core());
     }
     public void Cast(int i){
@@ -37,6 +38,7 @@ public abstract class SpellBase : MonoBehaviour
             if(stats.CurMana<ManaCost*i) {spells.NotEnoughtMana(); return;}
         }
         Debug.Log("cast "+this);
+        spells.currentSpell=this;
         spells.currentCast = StartCoroutine(core(i));
     }
     public void Cast(int a, int b){
@@ -45,13 +47,16 @@ public abstract class SpellBase : MonoBehaviour
             if(stats.CurMana<ManaCost) {spells.NotEnoughtMana(); return;}
         }
         Debug.Log("cast "+this);
+        spells.currentSpell=this;
         spells.currentCast = StartCoroutine(core(a, b));
+        
     }
     protected abstract IEnumerator core();
     protected abstract IEnumerator core(int a);
     protected abstract IEnumerator core(int a, int b);
     public virtual void Break(){
-        StopCoroutine(spells.currentCast);
+        if(spells.currentCast!=null)StopCoroutine(spells.currentCast);
+        spells.currentSpell=null;
     }
 
     

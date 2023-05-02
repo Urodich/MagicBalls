@@ -18,6 +18,8 @@ public class illusion_script : unit_script
         Debug.Log(gameObject.name + " died");
         navMesh.enabled=false;
         gameObject.transform.position=new Vector3(0,-100,0);
+        
         Destroy(gameObject, .2f);
+        Destroy(this);
     }
 }

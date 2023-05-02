@@ -16,8 +16,9 @@ public class Zombie : SpellBase
 
     protected override IEnumerator core(int a, int b)
     {
-        if(spells.control.mouseTarget==null) yield return null;
+        if(spells.control.mouseTarget==null) yield break;
 
+        Debug.Log(spells.control.mouseTarget);
         spells.animator.SetTrigger("cast4");
         yield return new WaitForSeconds(delay);
         if(!spells.GodMod){
@@ -25,7 +26,6 @@ public class Zombie : SpellBase
             CD=true;
             spells.CastSpell(15f,"Zombie",()=>CD=false);
         }
-        Debug.Log("zombie");
 
         for(int i=0;i<2*a;i++){
             Instantiate(prefab, spells.control.mouseTarget.transform.position, new Quaternion()).GetComponent<zombie>().SetZombieAim(spells.control.mouseTarget);

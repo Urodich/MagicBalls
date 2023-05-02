@@ -18,8 +18,9 @@ public class ManaRegen : SpellBase
     {
         spells.animator.SetBool("casting", true);
         spells.animator.SetTrigger("cast_blast");
-        prefab.GetComponent<ParticleSystem>().Play();
         spells.StopMoving(true);
+        yield return new WaitForSeconds(delay);
+        prefab.GetComponent<ParticleSystem>().Play();
         player_script ps = player.GetComponent<player_script>();
         ps.manaRegen+=5f*a;
         float ownArmor=ps.armor;
@@ -35,5 +36,7 @@ public class ManaRegen : SpellBase
     public override void Break(){
         base.Break();
         prefab.GetComponent<ParticleSystem>().Stop();
+        spells.StopMoving(false);
+        spells.CastSpell(CoolDown,"Mana Regen",()=>CD=false);
     }
 }

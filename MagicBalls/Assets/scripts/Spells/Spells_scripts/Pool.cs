@@ -17,7 +17,7 @@ public class Pool : SpellBase
     protected override IEnumerator core(int a, int b)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield return null;
+        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield break;
         spells.animator.SetTrigger("cast6");
         yield return new WaitForSeconds(delay);
 

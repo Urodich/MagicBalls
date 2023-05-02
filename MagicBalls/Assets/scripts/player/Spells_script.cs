@@ -22,11 +22,9 @@ public class Spells_script : MonoBehaviour
 
     //current action
     public Coroutine currentCast;
+    public SpellBase currentSpell;
     UnityEvent BreakCastEvent;
     [SerializeField] GameObject SPELLS;
-    void newcast(){
-        SPELLS.GetComponent<Fireball>().Cast();
-    }
     void Start(){
         spellPanel=GameObject.Find("SpellPanel");
         player = GameObject.FindGameObjectWithTag("Player");
@@ -39,77 +37,78 @@ public class Spells_script : MonoBehaviour
         animator=stats.GetAnimator();
         Spells = new Dictionary<int, System.Action>(){
         [0]=castEmpty,
-        [1] = ()=>Flame(1),
-        [2] = ()=>Flame(2),
-        [3] = ()=>Flame(3),
+        [1] = ()=>SPELLS.GetComponent<Flame>().Cast(1),
+        [2] = ()=>SPELLS.GetComponent<Flame>().Cast(2),
+        [3] = ()=>SPELLS.GetComponent<Flame>().Cast(3),
         [4] = ()=>SPELLS.GetComponent<Wave>().Cast(1),
-        [5] = ()=>Smoke(1,1),
-        [6] = ()=>Smoke(2,1),
-        [8] = ()=>Wave(2),
-        [9] = ()=>Smoke(1,2),
-        [12] = ()=>Wave(3),
-        [13] = ()=>Wind(1),
+        [5] = ()=>SPELLS.GetComponent<Smoke>().Cast(1,1),
+        [6] = ()=>SPELLS.GetComponent<Smoke>().Cast(2,1),
+        [8] = ()=>SPELLS.GetComponent<Wave>().Cast(2),
+        [9] = ()=>SPELLS.GetComponent<Smoke>().Cast(1,2),
+        [12] = ()=>SPELLS.GetComponent<Wave>().Cast(3),
+        [13] = ()=>SPELLS.GetComponent<Wind>().Cast(1),
         [14] = ()=>SPELLS.GetComponent<Fireball>().Cast(1,1),//Fireball(1,1),
-        [15] = ()=>Fireball(1,2),
-        [17] = ()=>Torrent(1,1),
-        [18] = ()=>FireStorm(),
-        [21] = ()=>Torrent(1,2),
-        [26] = ()=>Wind(2),
-        [27] = ()=>Fireball(2,1),
-        [30] = ()=>Torrent(2,1),
-        [39] = ()=>Wind(3),
+        [15] = ()=>SPELLS.GetComponent<Fireball>().Cast(1,2),
+        [17] = ()=>SPELLS.GetComponent<Torrent>().Cast(1,1),
+        [18] = ()=>SPELLS.GetComponent<FireStorm>().Cast(),
+        [21] = ()=>SPELLS.GetComponent<Torrent>().Cast(1,2),
+        [26] = ()=>SPELLS.GetComponent<Wind>().Cast(2),
+        [27] = ()=>SPELLS.GetComponent<Fireball>().Cast(2,1),
+        [30] = ()=>SPELLS.GetComponent<Torrent>().Cast(2,1),
+        [39] = ()=>SPELLS.GetComponent<Wind>().Cast(3),
         [40] = ()=>SPELLS.GetComponent<Earthquake>().Cast(1),
-        [41] = ()=>Lava(1,1),
-        [42] = ()=>Lava(1,2),
-        [44] = ()=>Mud(1,1),
-        [48] = ()=>Mud(2,1),
-        [53] = ()=>Wall(1,1),
-        [54] = ()=>Meteor(),
-        [66] = ()=>Wall(2,1),
-        [80] = ()=>Earhtquake(2),
-        [81] = ()=>Lava(2,1),
-        [84] = ()=>Mud(1,2),
-        [93] = ()=>Wall(1,2),
-        [120] = ()=>Earhtquake(3),
-        [121] = ()=>Wisp(1),
-        [122] = ()=>Phoenix(1,1),
-        [123] = ()=>Phoenix(1,2),
-        [125] = ()=>ManaRegen(1,1),
-        [126] = ()=>LifeDrain(),
-        [129] = ()=>ManaRegen(2,1),
-        [134] = ()=>Bird(1,1),
-        [147] = ()=>Bird(2,1),
-        [165] = ()=>Shield(),
-        [174] = ()=>Tornado(),
-        [242] = ()=>Wisp(2),
-        [243] = ()=>Phoenix(2,1),
-        [246] = ()=>ManaRegen(1,2),
-        [255] = ()=>Bird(1,2),
-        [363] = ()=>Wisp(3),
-        [364] = ()=>Chain(1),
-        [365] = ()=>Blast(1,1),
-        [366] = ()=>Blast(2,1),
-        [368] = ()=>ElectricPool(1,1),
-        [369] = ()=>MindControl(),
-        [372] = ()=>ElectricPool(2,1),
-        [377] = ()=>Haste(1,1),
-        [378] = ()=>BlackHole(),
-        [388] = ()=>Haste(1,2),
+        [41] = ()=>SPELLS.GetComponent<Lava>().Cast(1,1),
+        [42] = ()=>SPELLS.GetComponent<Lava>().Cast(1,2),
+        [44] = ()=>SPELLS.GetComponent<Mud>().Cast(1,1),
+        [48] = ()=>SPELLS.GetComponent<Mud>().Cast(2,1),
+        [53] = ()=>SPELLS.GetComponent<Wall>().Cast(1,1),
+        [54] = ()=>SPELLS.GetComponent<Meteor>().Cast(),
+        [66] = ()=>SPELLS.GetComponent<Wall>().Cast(2,1),
+        [80] = ()=>SPELLS.GetComponent<Earthquake>().Cast(2),
+        [81] = ()=>SPELLS.GetComponent<Lava>().Cast(2,1),
+        [84] = ()=>SPELLS.GetComponent<Mud>().Cast(1,2),
+        [93] = ()=>SPELLS.GetComponent<Wall>().Cast(1,2),
+        [120] = ()=>SPELLS.GetComponent<Earthquake>().Cast(3),
+        [121] = ()=>SPELLS.GetComponent<Wisp>().Cast(1),
+        [122] = ()=>SPELLS.GetComponent<Phoenix>().Cast(1,1),
+        [123] = ()=>SPELLS.GetComponent<Phoenix>().Cast(1,2),
+        [125] = ()=>SPELLS.GetComponent<ManaRegen>().Cast(1,1),
+        [126] = ()=>SPELLS.GetComponent<Drain>().Cast(),
+        [129] = ()=>SPELLS.GetComponent<ManaRegen>().Cast(2,1),
+        [134] = ()=>SPELLS.GetComponent<Bird>().Cast(1,1),
+        [147] = ()=>SPELLS.GetComponent<Bird>().Cast(2,1),
+        [165] = ()=>SPELLS.GetComponent<Shield>().Cast(),
+        [174] = ()=>SPELLS.GetComponent<Tornado>().Cast(),
+        [242] = ()=>SPELLS.GetComponent<Wisp>().Cast(2),
+        [243] = ()=>SPELLS.GetComponent<Phoenix>().Cast(2,1),
+        [246] = ()=>SPELLS.GetComponent<ManaRegen>().Cast(1,2),
+        [255] = ()=>SPELLS.GetComponent<Bird>().Cast(1,2),
+        [363] = ()=>SPELLS.GetComponent<Wisp>().Cast(3),
+        [364] = ()=>SPELLS.GetComponent<Chain>().Cast(1),
+        [365] = ()=>SPELLS.GetComponent<Blast>().Cast(1,1),
+        [366] = ()=>SPELLS.GetComponent<Blast>().Cast(2,1),
+        [368] = ()=>SPELLS.GetComponent<Pool>().Cast(1,1),
+        [369] = ()=>SPELLS.GetComponent<MindControl>().Cast(),
+        [372] = ()=>SPELLS.GetComponent<Pool>().Cast(2,1),
+        [377] = ()=>SPELLS.GetComponent<Haste>().Cast(1,1),
+        [378] = ()=>SPELLS.GetComponent<BlackHole>().Cast(),
+        [388] = ()=>SPELLS.GetComponent<Haste>().Cast(1,2),
         [404] = ()=>SPELLS.GetComponent<Blink>().Cast(1,1),
-        [444] = ()=>Blink(2,1),
-        [485] = ()=>Zombie(1,1),
-        [486] = ()=>Reincarnation(),
-        [489] = ()=>Illusion(),
-        [525] = ()=>Tomb(),
-        [606] = ()=>Zombie(2,1),
-        [728] = ()=>Chain(2),
-        [729] = ()=>Blast(1,2),
-        [732] = ()=>ElectricPool(1,2),
-        [741] = ()=>Haste(2,1),
-        [768] = ()=>Blink(1,2),
-        [849] = ()=>Zombie(1,2),
-        [1092] = ()=>Chain(3)
+        [444] = ()=>SPELLS.GetComponent<Blink>().Cast(2,1),
+        [485] = ()=>SPELLS.GetComponent<Zombie>().Cast(1,1),
+        [486] = ()=>SPELLS.GetComponent<Reincarnation>().Cast(),
+        [489] = ()=>SPELLS.GetComponent<Illusion>().Cast(),
+        [525] = ()=>SPELLS.GetComponent<Tomb>().Cast(),
+        [606] = ()=>SPELLS.GetComponent<Zombie>().Cast(2,1),
+        [728] = ()=>SPELLS.GetComponent<Chain>().Cast(2),
+        [729] = ()=>SPELLS.GetComponent<Blast>().Cast(1,2),
+        [732] = ()=>SPELLS.GetComponent<Pool>().Cast(1,2),
+        [741] = ()=>SPELLS.GetComponent<Haste>().Cast(2,1),
+        [768] = ()=>SPELLS.GetComponent<Blink>().Cast(1,2),
+        [849] = ()=>SPELLS.GetComponent<Zombie>().Cast(1,2),
+        [1092] = ()=>SPELLS.GetComponent<Chain>().Cast(3)
         };
+    
     }
 
 #region ///////UTILS///////
@@ -133,18 +132,20 @@ public class Spells_script : MonoBehaviour
     public void CastSpell(float CDTime, String imagePath, Action func){ //Add CD icon
         Sprite image=Resources.Load<Sprite>(imagePath);
         if(image==null) Debug.Log("no Sprite loaded");
+
         GameObject obj = Instantiate(spellCooDown);
         obj.transform.SetParent(spellPanel.transform,false);
         Timer spell = obj.GetComponent<Timer>();
         spell.func=func;
         spell.SrcImage=image;
         spell.SetTime(CDTime,true);
+        
+        currentSpell=null;
     }
     public void BreakCast(){
         animator.SetBool("casting", false);
         if(currentCast!=null)StopCoroutine(currentCast);
-        BreakCastEvent.Invoke();
-        BreakCastEvent.RemoveAllListeners();
+        if(currentCast!=null) currentSpell.Break();
     }
 
     public void StopMoving(bool value){
@@ -196,7 +197,8 @@ public class Spells_script : MonoBehaviour
     }
     
 #endregion
-    
+
+#region ////////OLD SPELLS/////////
     //FIREBALL
     [SerializeField] GameObject fireball;
     bool fireballCoolDown=false;
@@ -1112,4 +1114,5 @@ public class Spells_script : MonoBehaviour
             tf.eulerAngles = new Vector3(0,tf.eulerAngles.y, 0);
         }
     }
+#endregion
 }

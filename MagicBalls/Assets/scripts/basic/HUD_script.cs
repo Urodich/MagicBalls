@@ -5,18 +5,14 @@ using UnityEngine.Events;
 
 public class HUD_script : MonoBehaviour
 {
-    public GameObject DialogePanel;
-    public GameObject BoostPanel;
-    public GameObject PauseMenu;
-    public GameObject Inventory;
-    public GameObject StatsText;
+    public GameObject DialogePanel,BoostPanel,PauseMenu,Inventory,StatsText;
+    [SerializeField] SettingsScript Settings;
     Spells_script spells;
-    public UnityAction resume;
-    public UnityAction restart;
-    public UnityAction exit;
+    public UnityAction resume,restart,exit;
     void Start()
     {
         spells = GameObject.FindWithTag("Player").GetComponent<Spells_script>();
+        Settings.Start();
     }
 
     public void Resume(){

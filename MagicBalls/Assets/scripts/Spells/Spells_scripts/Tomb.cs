@@ -7,17 +7,17 @@ public class Tomb : SpellBase
     protected override IEnumerator core()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield return null;
+        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield break;
+
+        spells.animator.SetTrigger("cast6");
+        yield return new WaitForSeconds(delay);
+
         if(!spells.GodMod){
             stats.CurMana-=ManaCost;
             CD=true;
             spells.CastSpell(CoolDown,"Tomb",()=>CD=false);
         }
-        Debug.Log("Tomb");
-        spells.animator.SetTrigger("cast6");
-        
         Instantiate(prefab,hit.point, new Quaternion());
-        
     }
 
     protected override IEnumerator core(int a)

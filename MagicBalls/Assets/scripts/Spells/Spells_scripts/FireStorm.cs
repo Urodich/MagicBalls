@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class FireStorm : SpellBase
 {
+    Coroutine fire;
     protected override IEnumerator core()
     {
+        spells.animator.SetTrigger("cast_global");
+        spells.animator.SetBool("casting", true);
+        spells.StopMoving(true);
+
+        yield return new WaitForSeconds(delay);
+
         if(!spells.GodMod){
             stats.CurMana-=ManaCost;
             CD=true;
         }
-        
-        Debug.Log("Fire Storm");
 
-        spells.animator.SetTrigger("cast_global");
-        spells.animator.SetBool("casting", true);
-        Coroutine fire;
-        spells.StopMoving(true);
+        
         fire=StartCoroutine(damage());
+
         yield return new WaitWhile(()=>Input.GetMouseButton(1));
         StopCoroutine(fire);
         spells.StopMoving(false);
@@ -31,6 +34,13 @@ public class FireStorm : SpellBase
                 yield return new WaitForSeconds(.2f);
             }
         }
+    }
+    public override void Break(){
+        base.Break();
+        StopCoroutine(fire);
+        spells.StopMoving(false);
+        spells.animator.SetBool("casting", false);
+        if(!spells.GodMod)spells.CastSpell(CoolDown,"Fire Storm",()=>CD=false);
     }
 
     protected override IEnumerator core(int a)

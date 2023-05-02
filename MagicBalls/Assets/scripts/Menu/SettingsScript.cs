@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using TMPro;
 public class SettingsScript : MonoBehaviour
@@ -10,10 +10,12 @@ public class SettingsScript : MonoBehaviour
     
     [SerializeField] AudioMixerGroup mixer;
     
-    
-    void Start(){
+    UniversalRenderPipelineAsset currentPipe;
+
+    public void Start(){
         loadPrefs();
         sync();
+        update();
     }
 #region /////Base/////////
     public void Save(){
@@ -28,10 +30,12 @@ public class SettingsScript : MonoBehaviour
 
         PlayerPrefs.SetInt("Quality", Quality);
         PlayerPrefs.SetInt("msaa", msaa);
+        PlayerPrefs.SetInt("shadows", shadows?1:0);
     }
     public void Close(){
         loadPrefs();
         update();
+        sync();
     }
     void update(){
         Screen.SetResolution(width,height,curMode);
@@ -42,7 +46,10 @@ public class SettingsScript : MonoBehaviour
         mixer.audioMixer.SetFloat("Speech", Speech);
 
         QualitySettings.SetQualityLevel(Quality);
-        QualitySettings.antiAliasing=msaa;
+        
+        currentPipe = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
+        currentPipe.msaaSampleCount=msaa;
+        currentPipe.shadowDistance=shadows?50:0;
     }
     
     void loadPrefs(){
@@ -57,6 +64,7 @@ public class SettingsScript : MonoBehaviour
 
         Quality = PlayerPrefs.GetInt("Quality", 3);
         msaa = PlayerPrefs.GetInt("msaa", 4);
+        shadows = PlayerPrefs.GetInt("shadows", 1)==1;
     }
 #endregion
 
@@ -85,14 +93,14 @@ bool shadows;
 int width,height,Quality,msaa;
 FullScreenMode curMode;
 
-     public void ChangeShadows(bool value){
-        if (value) QualitySettings.shadows = ShadowQuality.All;
-        else QualitySettings.shadows = ShadowQuality.Disable;
-
+    public void ChangeShadows(bool value){
+        shadows=value;
+        currentPipe.shadowDistance=shadows?50:0;
     }
     public void QualityLevel(int i){
         Quality=i;
         QualitySettings.SetQualityLevel(i);
+        currentPipe = (UniversalRenderPipelineAsset)QualitySettings.renderPipeline;
     }
     public void MSAA(int i){
         switch(i){
@@ -101,7 +109,8 @@ FullScreenMode curMode;
             case 2: {msaa=4; break;}
             case 3: {msaa=8; break;}
         }
-        QualitySettings.antiAliasing=msaa;
+        //QualitySettings.antiAliasing=msaa;
+        currentPipe.msaaSampleCount=msaa;
     }
     public void ChangeResolution(int i){
         switch (i){

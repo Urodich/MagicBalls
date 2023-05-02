@@ -15,7 +15,7 @@ public class tornado_script : MonoBehaviour
     void Start()
     {
         navMesh=gameObject.GetComponent<NavMeshAgent>();
-        buffs=GameObject.Find("Player").GetComponent<buffs_script>();
+        buffs=GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>();
         StartCoroutine(work());
         Destroy(gameObject,lifeTime);
     }

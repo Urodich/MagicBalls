@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Blink : SpellBase
 {
-    [SerializeField] float damage;
+    [SerializeField] float damage, stunTime;
     protected override IEnumerator core()
     {
         throw new System.NotImplementedException();
@@ -19,10 +19,11 @@ public class Blink : SpellBase
     {
         Vector3 mousePos;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)){
-            spells.animator.SetTrigger("jump");
-        }
+        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield break;
+        
+        spells.animator.SetTrigger("jump");
         yield return new WaitForSeconds(delay);
+
         if(!spells.GodMod){
             stats.CurMana-=ManaCost*b;
             CD=true;
@@ -42,7 +43,7 @@ public class Blink : SpellBase
             if (collider.tag!="enemy") continue;
             unit_script enemy = collider.gameObject.GetComponent<unit_script>();
             if(enemy.isFlying) continue;
-            enemy.Stun(0.5f*a);
+            enemy.Stun(stunTime*a);
             enemy.TakeDamage(_damage, DamageType.Thunder);
         }
     }

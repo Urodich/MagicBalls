@@ -6,11 +6,8 @@ public class tomb_script : MonoBehaviour
 {
     [SerializeField] LayerMask enemies;
     [SerializeField] GameObject _zombie;
-    buffs_script buffs;
-    // Start is called before the first frame update
     void Start()
     {
-        buffs = GameObject.Find("Player").GetComponent<buffs_script>();
         StartCoroutine(spawn());
         Destroy(gameObject, 15f);
     }

@@ -6,7 +6,7 @@ public class MindControl : SpellBase
 {
     protected override IEnumerator core()
     {
-        if(spells.control.mouseTarget==null) yield return null;
+        if(spells.control.mouseTarget==null) yield break;
 
         spells.animator.SetTrigger("cast4");
         yield return new WaitForSeconds(delay);

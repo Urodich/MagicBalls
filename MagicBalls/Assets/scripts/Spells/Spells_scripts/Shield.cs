@@ -11,11 +11,13 @@ public class Shield : SpellBase
 
         spells.animator.SetTrigger("cast_global");
         yield return new WaitForSeconds(delay);
-        if(!spells.GodMod) stats.CurMana-=ManaCost;
+        if(!spells.GodMod) {
+            stats.CurMana-=ManaCost;
+            CD=true;
+            spells.CastSpell(CoolDown,"Shield",()=>CD=false);
+        }
         
         GameObject _shield=Instantiate(prefab,transform.position, new Quaternion());
-        CD=true;
-        if(!spells.GodMod)spells.CastSpell(CoolDown,"Shield",()=>CD=false);
         Destroy(_shield, time);
     }
 

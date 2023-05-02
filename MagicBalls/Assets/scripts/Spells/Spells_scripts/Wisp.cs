@@ -19,8 +19,6 @@ public class Wisp : SpellBase
             CD=true;
             spells.CastSpell(CoolDown*a,"Wisp",()=>CD=false);
         }
-        Debug.Log("Wisp");
-        
         StartCoroutine(heal(5*a));
 
         IEnumerator heal(float time){

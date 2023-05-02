@@ -87,7 +87,7 @@ public class enemy_script : unit_script, IEnemy
     public bool ChangeAim(){
         bool a =false;
         if(aims.Count==0) {aim=null; StopAttack(); return false;}
-        if (!aim) {aim = aims[0]; a=true;}
+        if (aim==null) {aim = aims[0]; a=true;}
         foreach (GameObject i in aims){
             if(i==aim) continue;
             if(i.GetComponent<unit_script>().Priority>aim.GetComponent<unit_script>().Priority) {aim = i; a=true; continue;}
@@ -97,18 +97,19 @@ public class enemy_script : unit_script, IEnemy
     }
     public void FindAim(GameObject _aim){
         if(aims.Contains(_aim)) return;
+        //Debug.Log(gameObject.name+" find " + _aim.name);
         aims.Add(_aim);
-        visibleCol.transform.localScale=new Vector3(2,2,2);
+        visibleCol.transform.localScale=new Vector3(2,1,2);
         _aim.GetComponent<unit_script>().dieEvent+=LostAim;
         ChangeAim();
         NotifyAllies(_aim);
     }
     void LostAim(GameObject _aim){
         if(this==null) return;
-        Debug.Log(gameObject.name+" lost " + _aim.name);
+        //Debug.Log(gameObject.name+" lost " + _aim.name);
         if(aims.Contains(_aim))aims.Remove(_aim);
-        if(aim==_aim)ChangeAim();
-        visibleCol.transform.localScale=new Vector3(2,2,2);
+        if(aim==_aim){aim=null; ChangeAim();}
+        visibleCol.transform.localScale=new Vector3(1,1,1);
     }
     protected void Attack(){
         navMesh.isStopped=true;

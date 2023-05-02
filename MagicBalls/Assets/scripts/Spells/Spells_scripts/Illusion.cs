@@ -7,9 +7,11 @@ public class Illusion : SpellBase
     protected override IEnumerator core()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield return null;
+        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield break;
+
         spells.animator.SetTrigger("cast1");
         yield return new WaitForSeconds(delay);
+        
         if(!spells.GodMod){
             stats.CurMana-=ManaCost;
             CD=true;

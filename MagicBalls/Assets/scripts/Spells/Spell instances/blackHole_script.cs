@@ -13,8 +13,7 @@ public class blackHole_script : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        buffs=GameObject.Find("Player").GetComponent<buffs_script>();
+        buffs=GameObject.FindGameObjectWithTag("Player").GetComponent<buffs_script>();
         StartCoroutine(work());
         Invoke("Die", lifeTime);
     }

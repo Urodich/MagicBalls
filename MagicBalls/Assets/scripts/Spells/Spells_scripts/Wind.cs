@@ -12,19 +12,22 @@ public class Wind : SpellBase
     protected override IEnumerator core(int a)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield return null;
+        if(!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, spells.ground)) yield break;
        
         yield return StartCoroutine(spells.VectorCast());
+        
         spells.animator.SetTrigger("cast9");
-        wind_script wind = Instantiate(prefab,hit.point,Quaternion.LookRotation(spells.vectorCastDirection)).GetComponent<wind_script>();
-        wind.strength=a;
-        wind.direction=spells.vectorCastDirection;
+        yield return new WaitForSeconds(delay);
+
         if(!spells.GodMod){
             stats.CurMana-=ManaCost*a;
             CD=true;
             spells.CastSpell(CoolDown*a,"Wind",()=>CD=false);
         }
 
+        wind_script wind = Instantiate(prefab,hit.point,Quaternion.LookRotation(spells.vectorCastDirection)).GetComponent<wind_script>();
+        wind.strength=a;
+        wind.direction=spells.vectorCastDirection;
     }
 
     protected override IEnumerator core(int a, int b)
