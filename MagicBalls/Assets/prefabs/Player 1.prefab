@@ -361,6 +361,7 @@ MonoBehaviour:
   prefab: {fileID: 7626720276874181854, guid: d7739432a3ef62d449b1cc645b442ba9, type: 3}
   damage: 5
   time: 10
+  parent: {fileID: 3670958437368745414}
 --- !u!114 &7651821564166460382
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class Phoenix : SpellBase
 {
     [SerializeField] float damage, time;
     GameObject phoen;
+    [SerializeField] GameObject parent;
     protected override IEnumerator core()
     {
         throw new System.NotImplementedException();
@@ -25,7 +26,7 @@ public class Phoenix : SpellBase
             spells.CastSpell(CoolDown,"Phoenix",()=>CD=false);
         }
         if(phoen) Destroy(phoen);
-        if(prefab!=null) phoen = Instantiate(prefab);
+        if(prefab!=null) phoen = Instantiate(prefab, parent.transform);
         Debug.Log("phoenix");
         
         float _damage=damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.fireDamage)*b;
