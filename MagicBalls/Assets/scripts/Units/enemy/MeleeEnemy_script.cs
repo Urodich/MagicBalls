@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class MeleeEnemy_script : enemy_script
 {
     protected new void FixedUpdate()

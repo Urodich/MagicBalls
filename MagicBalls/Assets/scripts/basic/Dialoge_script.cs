@@ -34,7 +34,7 @@ public class Dialoge_script : MonoBehaviour
     public void PauseDialoge(){
         StopCoroutine(dialoge);
         isActive=false;
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     public void ResumeDialoge(){
@@ -44,7 +44,7 @@ public class Dialoge_script : MonoBehaviour
     void OnTriggerEnter(Collider collider){
         if(collider.gameObject.tag!="Player") return;
         if (isActive) return;
-        if(activeDialogue) activeDialogue.PauseDialoge();
+        if(activeDialogue!=null) return;//activeDialogue.PauseDialoge();
         activeDialogue=this;
         Debug.Log("activate dialogue");
         isActive=true;
@@ -56,10 +56,4 @@ public class Dialoge_script : MonoBehaviour
     }
 }
 
-[Serializable]
-public struct DialogeLine{
-    public string text;
-    public int time;
-    public UnityEvent action;
-    public AudioClip clip;
-}
+

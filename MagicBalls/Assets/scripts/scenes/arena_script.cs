@@ -68,7 +68,7 @@ public class arena_script : MonoBehaviour
     }
 
     public void Exit(){
-        Application.Quit();
+        SceneManager.LoadScene("MainMenu");
     }
     public void Restart(){
         SceneManager.LoadScene( SceneManager.GetActiveScene().buildIndex);
@@ -182,14 +182,4 @@ public class arena_script : MonoBehaviour
         }
     }
 }
-[System.Serializable]
-public struct wave{
-    public enemys[] value;
-    public float scale;
-}
-[System.Serializable]
-public struct enemys{
-    public enemy_script type;
-    public int count;
-    public int points;
-}
+

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class projectile_script : MonoBehaviour
@@ -10,10 +8,6 @@ public class projectile_script : MonoBehaviour
     [SerializeField] LayerMask target;
     [SerializeField] LayerMask enemy;
     [SerializeField] ParticleSystem hit;
-    void Start()
-    {
-        
-    }
 
     void FixedUpdate()
     {

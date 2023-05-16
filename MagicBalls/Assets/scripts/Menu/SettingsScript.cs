@@ -19,7 +19,7 @@ public class SettingsScript : MonoBehaviour
     }
 #region /////Base/////////
     public void Save(){
-        PlayerPrefs.SetInt("FullScreenMode", (int)curMode);
+        PlayerPrefs.SetInt("FullScreenMode", (int)curMode-1);
         PlayerPrefs.SetInt("width", width);
         PlayerPrefs.SetInt("height", height);
 
@@ -147,6 +147,7 @@ FullScreenMode curMode;
         }
     }
     public void ChangeDisplayMode(int i){
+        Debug.Log(i);
         curMode=getMode(i);
         Screen.SetResolution(width,height,curMode);
     }
@@ -168,7 +169,7 @@ FullScreenMode curMode;
     [SerializeField] Toggle _shadows;
 
     void sync(){
-        _display.SetValueWithoutNotify((int)curMode);
+        _display.SetValueWithoutNotify((int)curMode-1);
         _resolution.SetValueWithoutNotify(getResolution());
         _msaa.SetValueWithoutNotify(msaa);
         _quality.SetValueWithoutNotify(Quality);

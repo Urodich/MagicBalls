@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class mud_script : MonoBehaviour
@@ -19,5 +17,4 @@ public class mud_script : MonoBehaviour
     void OnTriggerExit(Collider collider){
         if (collider.gameObject.tag=="enemy") collider.gameObject.GetComponent<unit_script>().ChangeSpeed(+slow*water);
     }
-
 }

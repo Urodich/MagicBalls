@@ -229,8 +229,3 @@ public class unit_script : MonoBehaviour
     }
 }
 
-public enum DamageType{
-    Fire,
-    Thunder,
-    Physical
-}

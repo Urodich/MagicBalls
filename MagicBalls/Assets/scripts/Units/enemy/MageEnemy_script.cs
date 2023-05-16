@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class MageEnemy_script : enemy_script
 {
@@ -104,8 +102,6 @@ public class MageEnemy_script : enemy_script
         base.OnColliderEnter(obj, collider);
         if(obj.name.Equals("defend")){
             if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & spells) && curAction==null && defCD<=0) Defend();
-            
         }
     } 
-
 }

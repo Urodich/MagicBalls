@@ -65,8 +65,3 @@ public class Item : MonoBehaviour, IItem
     }    
 }
 
-public enum ItemType{
-    Head,
-    Bracer,
-    Boots
-}

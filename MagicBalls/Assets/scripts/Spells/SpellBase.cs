@@ -58,6 +58,4 @@ public abstract class SpellBase : MonoBehaviour
         if(spells.currentCast!=null)StopCoroutine(spells.currentCast);
         spells.currentSpell=null;
     }
-
-    
 }

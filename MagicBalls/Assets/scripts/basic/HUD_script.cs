@@ -27,5 +27,4 @@ public class HUD_script : MonoBehaviour
     public void GodMod(bool value){
         spells.GodMod=value;
     }
-
 }

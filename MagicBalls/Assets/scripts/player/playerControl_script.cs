@@ -70,6 +70,7 @@ public class playerControl_script : MonoBehaviour
         if(Physics.Raycast(ray, out RaycastHit groundHit, float.MaxValue, layer)){
             mousePos= groundHit.point;
             transform.LookAt(mousePos);
+            Debug.DrawLine(transform.position, mousePos);
         }
         
         if (isStopped) return;

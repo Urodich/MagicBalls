@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.UIElements;
+//using UnityEditor.UIElements;
 
 public class player_script : unit_script
 {
@@ -82,5 +82,4 @@ public class player_script : unit_script
         animator.SetTrigger("die");
         Debug.Log(gameObject.name + " died");
     }
-
 }

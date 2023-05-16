@@ -95,7 +95,7 @@ public class prologue_script : MonoBehaviour
         pauseMenu.SetActive(true);
     }
     void Exit(){
-
+        SceneManager.LoadScene("MainMenu");
     }
     
 }

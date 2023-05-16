@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class inventory_script : MonoBehaviour
 {
-
     //BOOTS
     [SerializeField] Transform bootsTransformL;
     [SerializeField] Transform bootsTransformR;
@@ -90,7 +89,5 @@ public class inventory_script : MonoBehaviour
         copy.transform.SetParent(transformR);
         copy.transform.SetLocalPositionAndRotation(Vector3.zero, new Quaternion());
         
-    }
-
-    
+    }    
 }

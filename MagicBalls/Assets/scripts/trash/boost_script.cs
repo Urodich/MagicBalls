@@ -28,15 +28,4 @@ public class boost_script : MonoBehaviour
     }
 }
 
-public struct boost_str{
-    public string description;
-    public Image image;
-    public Stats stats;
-    public float value;
-    public boost_str(Stats stats, string description, float value){
-        image=null;
-        this.stats=stats;
-        this.description=description;
-        this.value=value;
-    }
-}
+

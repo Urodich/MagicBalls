@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class bonus_script : MonoBehaviour
 {
-
     [SerializeField] float value;
     [SerializeField] bool IsHpHeal;
     void Start()
@@ -18,5 +14,4 @@ public class bonus_script : MonoBehaviour
         else collider.gameObject.GetComponent<player_script>().AddMana(value);
         Destroy(gameObject);
     }
-    
 }

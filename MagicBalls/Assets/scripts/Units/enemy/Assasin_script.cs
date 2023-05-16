@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Assasin_script : enemy_script
@@ -75,6 +73,4 @@ public class Assasin_script : enemy_script
         invisible=false;
         gameObject.layer=layer;
     }
-
-
 }

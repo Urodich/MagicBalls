@@ -53,23 +53,3 @@ public class buffs_script : MonoBehaviour
         return this.stats[stats];
     }
 }
-[Serializable]
-public struct StatsCount{
-    public Stats stat;
-    public float value;
-}
-public enum Stats{
-    MaxHP,
-    HpRegen,
-    MaxMana,
-    ManaRegen,
-    repulsion,
-    projectiles ,
-    fireDamage,
-    thunderDamage,
-    physicalDamage,
-    damage,
-    projectileDamage,
-    projectileSpeed,
-    speed
-}
