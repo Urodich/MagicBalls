@@ -570,7 +570,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 755c43b3a2cce754f96174bc2d40859a, type: 3}
+  - {fileID: 2100000, guid: a0181b2d47cb06548a864d1853483e78, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   info: {fileID: 2297355884466824267}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: f7fcc6c5ddf513c4e97fb9c6b959f20b, type: 3}
   itemName: armed boots
   description: boots of japan warrior
   startBuffs:

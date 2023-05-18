@@ -222,7 +222,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 755c43b3a2cce754f96174bc2d40859a, type: 3}
+  - {fileID: 2100000, guid: 35c30cfea347e4c43bc5d2b8599e9b28, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   info: {fileID: 8593286685790424567}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: 2def6ca4dbdbfe04eb34dd77cbb926ad, type: 3}
   itemName: square hat
   description: usual chinese hat
   startBuffs:

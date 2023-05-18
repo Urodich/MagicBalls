@@ -222,7 +222,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 85d793936a653ba43a57960c21d2e9dc, type: 3}
+  - {fileID: 2100000, guid: 29133cfae4c09cf458a61b5b059c631e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   info: {fileID: 6417548493862320121}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: f559cb8c25ca5fd4c993b0aa685febe5, type: 3}
   itemName: standart boots
   description: poor boots
   startBuffs:

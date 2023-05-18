@@ -15,7 +15,10 @@ public abstract class SpellBase : MonoBehaviour
     protected NavMeshAgent navMesh;
     protected buffs_script buffs;
     [SerializeField] protected GameObject prefab;
+    protected AudioSource audio;
+    [SerializeField] protected AudioClip clip;
     protected void Start(){
+        audio=GetComponent<AudioSource>();
         player = GameObject.FindGameObjectWithTag("Player");
         stats = player.GetComponent<player_script>();
         navMesh = player.GetComponent<NavMeshAgent>();
@@ -57,5 +60,17 @@ public abstract class SpellBase : MonoBehaviour
     public virtual void Break(){
         if(spells.currentCast!=null)StopCoroutine(spells.currentCast);
         spells.currentSpell=null;
+    }
+    protected void Play(){
+        if(audio) {
+            audio.clip=clip;
+            audio.Play();
+        }
+    }
+    protected void Play(AudioClip clip){
+        if(audio) {
+            audio.clip=clip;
+            audio.Play();
+        }
     }
 }

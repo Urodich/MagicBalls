@@ -202,7 +202,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 755c43b3a2cce754f96174bc2d40859a, type: 3}
+  - {fileID: 2100000, guid: 7eba47ee2e5a1fc4388ac8b0cd8cc498, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   info: {fileID: 7289189163114063532}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: 8abdcf1f1efc2df46943e506c128a70d, type: 3}
   itemName: bronze bracers
   description: strange bracers
   startBuffs:

@@ -15,12 +15,11 @@ public class MeleeEnemy_script : enemy_script
                 StopAttack();
                 animator.SetTrigger("break");
             } 
-            navMesh.destination = aim.transform.position;
-            animator.SetBool("run", true);
+            WalkTo(aim.transform.position);
             return;
         }
         else       
-            animator.SetBool("run", false);
+            StopWalking();
             if(!attacking) {Attack(); animator.SetTrigger("attack");}
 
         if(!attacking) ChangeAim();

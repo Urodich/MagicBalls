@@ -10,7 +10,10 @@ public class unit_script : MonoBehaviour
     [SerializeField] protected float maxHp;
     protected float maxHpFactor=1;
     protected float curHp;
-    public float CurHp{get{return curHp;} set{curHp=value>maxHp?maxHp:value; if(hpBar!=null) hpBar.value=curHp;}}
+    public float CurHp{get{return curHp;} set{
+        curHp=value>maxHp?maxHp:value; 
+        if(isDead) curHp=0;
+        if(hpBar!=null) hpBar.value=curHp;}}
     [SerializeField] protected float hpRegen;
     protected float hpRegenFactor=1;
     
@@ -45,19 +48,18 @@ public class unit_script : MonoBehaviour
     Rigidbody rb;
     bool disableGround=false;
     protected Coroutine curAction;
+    [SerializeField] ParticleSystem _stun;
     public bool isDead=false;
     protected Collider collider;
+
+    [SerializeField] protected UnitSound_script sound;
     void Awake(){
         collider=GetComponent<Collider>();
     }
     public void Start(){
-        
         navMesh=gameObject.GetComponent<NavMeshAgent>();
         navMesh.speed=speed;
-        if(startAim!=Vector3.zero) {
-            navMesh.destination=startAim;
-            animator.SetBool("run", true);
-        }
+        if(startAim!=Vector3.zero) WalkTo(startAim);
         if(hpBar!=null) hpBar.maxValue=maxHp;
         CurHp=maxHp;
         if(model==null) return;
@@ -108,6 +110,15 @@ public class unit_script : MonoBehaviour
             if(animator)animator.SetBool("falling",true);
         }
     }
+    public void WalkTo(Vector3 destination){
+        navMesh.destination = destination; 
+        animator.SetBool("run", true);
+        if(sound) sound.Walk(true);
+    }
+    public void StopWalking(){
+        animator.SetBool("run", false);
+        if(sound) sound.Walk(false);
+    }
     public virtual void ChangeSpeed(float value){
         speedFactor+=value;
         navMesh.speed=((speed*speedFactor)<minSpeed?minSpeed:speed*speedFactor);
@@ -123,7 +134,7 @@ public class unit_script : MonoBehaviour
         }
     }
     
-    [SerializeField] ParticleSystem _stun;
+    
     public virtual void Stun(float time){
         if(curAction!=null)StopCoroutine(curAction);
         _stun.Play();
@@ -143,6 +154,7 @@ public class unit_script : MonoBehaviour
         if (isDead) return;
         mainMaterial.EnableKeyword("DAMAGED");
         //if(animator)animator.SetTrigger("hit");
+        if(sound) sound.Damaged();
         float dameg = type switch{
             DamageType.Fire => damage * (1 - (FireResist>1?1:FireResist)),
             DamageType.Thunder => damage * (1 - (ThunderResist>1?1:ThunderResist)),
@@ -159,8 +171,10 @@ public class unit_script : MonoBehaviour
         }
     }
     void resetMaterial(){mainMaterial.DisableKeyword("DAMAGED");}
+    
     public virtual void Die(){
         isDead=true;
+        if(sound) sound.Die();
         if(animator)animator.SetBool("die",true);
         collider.enabled=false;
         CallDieEvent(gameObject);

@@ -413,7 +413,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 755c43b3a2cce754f96174bc2d40859a, type: 3}
+  - {fileID: 2100000, guid: 315de1b710c53a84eb83317d4f13d3c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -462,7 +462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 1
   info: {fileID: 8004307423507138915}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: 0a0b7cf6471acee4490b9dfcf1ffafe8, type: 3}
   itemName: old bracers
   description: mystic golden bracers
   startBuffs:

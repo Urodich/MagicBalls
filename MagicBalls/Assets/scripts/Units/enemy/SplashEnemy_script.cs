@@ -21,6 +21,7 @@ public class SplashEnemy_script : MeleeEnemy_script
         yield return new WaitForSeconds(attackDelay); //delay
         attackCol.enabled=true;
         yield return new WaitForSeconds(attackTime); //attack time
+        if(sound) sound.Attack();
         attackCol.enabled =false;
         yield return new WaitForSeconds(attackSpeed); //residual animation  
         navMesh.isStopped=false;

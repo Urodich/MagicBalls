@@ -15,15 +15,15 @@ public class enemy_script : unit_script, IEnemy
     [SerializeField] protected float attackDistance=4f;
     [SerializeField] protected float attackDelay=1f;
     [SerializeField] protected float attackSpeed=1f;
-    
 
     public List<GameObject> aims = new List<GameObject>();
-    public GameObject aim;
+    [HideInInspector] public GameObject aim;
     protected bool attacking=false;
     protected Coroutine attack;
     protected bool isActive=true;
     public LayerMask enemies;
     public LayerMask friends;
+    
 
     public void SetStartAim(Vector3 pos){
         startAim=pos;
@@ -97,7 +97,6 @@ public class enemy_script : unit_script, IEnemy
     }
     public void FindAim(GameObject _aim){
         if(aims.Contains(_aim)) return;
-        //Debug.Log(gameObject.name+" find " + _aim.name);
         aims.Add(_aim);
         visibleCol.transform.localScale=new Vector3(2,1,2);
         _aim.GetComponent<unit_script>().dieEvent+=LostAim;
@@ -106,7 +105,6 @@ public class enemy_script : unit_script, IEnemy
     }
     void LostAim(GameObject _aim){
         if(this==null) return;
-        //Debug.Log(gameObject.name+" lost " + _aim.name);
         if(aims.Contains(_aim))aims.Remove(_aim);
         if(aim==_aim){aim=null; ChangeAim();}
         visibleCol.transform.localScale=new Vector3(1,1,1);
@@ -119,6 +117,7 @@ public class enemy_script : unit_script, IEnemy
     //Attacking function
     protected virtual IEnumerator AttackDelay(){
         yield return new WaitForSeconds(attackDelay); //delay
+        if(sound) sound.Attack();
         aim.gameObject.GetComponent<unit_script>().TakeDamage(damage*damageFactor, damageType);
         yield return new WaitForSeconds(attackSpeed); //residual animation  
         navMesh.isStopped=false;

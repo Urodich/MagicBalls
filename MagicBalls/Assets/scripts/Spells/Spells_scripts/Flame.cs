@@ -18,6 +18,8 @@ public class Flame : SpellBase
         spells.animator.SetTrigger("cast_flame");
         spells.animator.SetBool("casting", true);
         yield return new WaitForSeconds(delay);
+        if(audio)audio.loop=true;
+        Play();
         float _damage = damage*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*a;
         CD=true;
         prefab.GetComponent<ParticleSystem>().Play();
@@ -32,6 +34,8 @@ public class Flame : SpellBase
         }
         spells.StopMoving(false);
         prefab.GetComponent<ParticleSystem>().Stop();
+        if(audio){audio.Stop();
+            audio.loop=false;}
         spells.animator.SetBool("casting", false);
         if(!spells.GodMod) spells.CastSpell(CoolDown,"Flame",()=>CD=false);
         
@@ -45,6 +49,8 @@ public class Flame : SpellBase
     public override void Break()
     {
         base.Break();
+        if(audio){audio.Stop();
+            audio.loop=false;}
         prefab.GetComponent<ParticleSystem>().Stop();
         if(!spells.GodMod) spells.CastSpell(CoolDown,"Flame",()=>CD=false);
     }

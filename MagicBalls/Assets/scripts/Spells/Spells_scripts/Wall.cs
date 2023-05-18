@@ -28,7 +28,7 @@ public class Wall : SpellBase
             CD=true;
             spells.CastSpell(CoolDown,"Wall",()=>CD=false);
         }
-        
+        Play();
         Transform tf = Instantiate(prefab, hit.point, new Quaternion()).transform;
         tf.LookAt(gameObject.transform);
         tf.eulerAngles = new Vector3(0,tf.eulerAngles.y, 0);

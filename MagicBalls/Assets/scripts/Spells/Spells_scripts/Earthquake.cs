@@ -21,6 +21,7 @@ public class Earthquake : SpellBase
             CD=true;
             spells.CastSpell(CoolDown*a,"Earthquake",()=>CD=false);
         }
+        Play();
         prefab.GetComponent<ParticleSystem>().Play();
         float _damage = a*damage*buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.physicalDamage);
         Collider[] colliders = Physics.OverlapSphere(player.transform.position, 2*a, spells.enemies);

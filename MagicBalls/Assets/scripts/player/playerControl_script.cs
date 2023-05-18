@@ -76,16 +76,13 @@ public class playerControl_script : MonoBehaviour
         if (isStopped) return;
         //Действия
         if(Input.GetMouseButton(0)) {
-            navMesh.destination = mousePos; 
+            player.WalkTo(mousePos);
             if(itemTarget!=null)
                 if(Vector3.Distance(itemTarget.transform.position, transform.position)<pickUpDistance)itemTarget.GetComponent<IItem>().Take(gameObject);
         }
         if (navMesh.velocity==Vector3.zero) {
+            player.StopWalking();
             animator.SetBool("moonwalk", false);
-            animator.SetBool("run", false);
-            }
-        else{
-            animator.SetBool("run", true);
         }
         if (Vector3.Angle(navMesh.velocity, gameObject.transform.forward)>90) {
             if(!moonwalk){

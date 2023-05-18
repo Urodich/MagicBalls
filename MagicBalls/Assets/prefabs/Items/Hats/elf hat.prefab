@@ -570,7 +570,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 755c43b3a2cce754f96174bc2d40859a, type: 3}
+  - {fileID: 2100000, guid: 5bab6514b16b9514cb965f3bbaf1b433, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   info: {fileID: 8294968218840620890}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: 7c5e504aa2b4b6b48ac9499b4b0e6679, type: 3}
   itemName: elf hat
   description: idn what's it
   startBuffs:

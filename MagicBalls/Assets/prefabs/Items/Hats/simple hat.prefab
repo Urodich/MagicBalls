@@ -222,7 +222,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 24506fdfe3b86fb45ad66d1d72fdb5c1, type: 3}
+  - {fileID: 2100000, guid: 1be1b31aee29062449549949de9f7f7c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   info: {fileID: 5922329889660213084}
-  pict: {fileID: 0}
+  pict: {fileID: 21300000, guid: cc2fd66b99da4d64e88fab8d5cfe8ce7, type: 3}
   itemName: simple hat
   description: common wood hat
   startBuffs:

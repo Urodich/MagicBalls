@@ -23,17 +23,15 @@ public class MageEnemy_script : enemy_script
         base.FixedUpdate();
         
         if (isStunned) return;
-        if (!aim) 
-            if((transform.position-navMesh.destination).sqrMagnitude<0.5f) {animator.SetBool("run", false); return;}
-            else return;
+        if (!aim) {
+            if((transform.position-navMesh.destination).sqrMagnitude<0.5f) StopWalking();
+            return;
+        }
         transform.LookAt(aim.transform);
         if (curAction==null){
-            if (blinkCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<fearRange*fearRange) {animator.SetBool("run", false); Blink(aim.transform.position); return;}
-            if (attackCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<=attackDistance*attackDistance) {animator.SetBool("run", false); Attack(aim.transform.position); return;}
-            if ((aim.transform.position-transform.position).sqrMagnitude>attackDistance){
-                animator.SetBool("run", true);
-                navMesh.destination=aim.transform.position;
-            }
+            if (blinkCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<fearRange*fearRange) {StopWalking(); Blink(aim.transform.position); return;}
+            if (attackCD<=0 && (aim.transform.position-transform.position).sqrMagnitude<=attackDistance*attackDistance) {StopWalking(); Attack(aim.transform.position); return;}
+            if ((aim.transform.position-transform.position).sqrMagnitude>attackDistance) WalkTo(aim.transform.position);
         }
     }
     [SerializeField] ParticleSystem _blink;
