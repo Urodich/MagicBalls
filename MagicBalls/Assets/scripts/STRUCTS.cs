@@ -22,11 +22,11 @@ public struct enemys{
 }
 public struct boost_str{
     public string description;
-    public Image image;
+    public Sprite image;
     public Stats stats;
     public float value;
-    public boost_str(Stats stats, string description, float value){
-        image=null;
+    public boost_str(Stats stats, string _image, string description, float value){
+        image=Resources.Load<Sprite>(_image);
         this.stats=stats;
         this.description=description;
         this.value=value;

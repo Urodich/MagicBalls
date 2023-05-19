@@ -27,6 +27,7 @@ public class arena_script : MonoBehaviour
     void Awake(){
         HUD=Instantiate(HUD, PlayerSpawnPoint, true);
         player=Instantiate(player, PlayerSpawnPoint.position, new Quaternion());
+        AddBoost();
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<camera_script>().player=player;
     }
     void Start(){
@@ -153,19 +154,22 @@ public class arena_script : MonoBehaviour
         //SceneManager.LoadScene("EndGame");
     }
     void Win(){}
-    boost_str[] list = {
-        new boost_str(Stats.MaxHP, "увеличить макс.хп на 20%", .2f),
-        new boost_str(Stats.damage, "увеличить весь урон на 10%", .1f),
-        new boost_str(Stats.fireDamage, "увеличить урон от огня на 25%", .25f),
-        new boost_str(Stats.physicalDamage, "увеличить физ.урон на 25%", .25f),
-        new boost_str(Stats.thunderDamage, "увеличить урон от молнии на 25%", .25f),
-        new boost_str(Stats.MaxMana, "увеличить макс.ману на 20%", .2f),
-        new boost_str(Stats.HpRegen, "увеличить регенерацию хп на 50%", .5f),
-        new boost_str(Stats.ManaRegen, "увеличить регенерацию маны на 50%", .5f),
-        new boost_str(Stats.speed, "увеличить скорость на 10%", .1f),
-        new boost_str(Stats.projectileDamage, "увеличить урон снарядов на 20%", .2f),
-        new boost_str(Stats.repulsion, "усилить отталкивание на 20%", .15f)
+    boost_str[] list;
+    void AddBoost(){ 
+        list = new boost_str[]{
+        new boost_str(Stats.MaxHP, "buffs/MaxHP","увеличить макс.хп на 20%", .2f),
+        new boost_str(Stats.damage, "buffs/damage","увеличить весь урон на 10%", .1f),
+        new boost_str(Stats.fireDamage, "buffs/fireDamage","увеличить урон от огня на 25%", .25f),
+        new boost_str(Stats.physicalDamage, "buffs/physicalDamage", "увеличить физ.урон на 25%", .25f),
+        new boost_str(Stats.thunderDamage, "buffs/thunderDamage", "увеличить урон от молнии на 25%", .25f),
+        new boost_str(Stats.MaxMana, "buffs/MaxMana", "увеличить макс.ману на 20%", .2f),
+        //new boost_str(Stats.HpRegen, "buffs/HpRegen", "увеличить регенерацию хп на 50%", .5f),
+        //new boost_str(Stats.ManaRegen, "buffs/ManaRegen", "увеличить регенерацию маны на 50%", .5f),
+        new boost_str(Stats.speed, "buffs/speed", "увеличить скорость на 10%", .1f),
+        //new boost_str(Stats.projectileDamage, "buffs/projectileDamage", "увеличить урон снарядов на 20%", .2f),
+        new boost_str(Stats.repulsion, "buffs/repulsion", "усилить отталкивание на 20%", .15f)
     };
+    }
     [SerializeField] GameObject boost;
     void ShowBoosts(){
         Boost_panel.SetActive(true);

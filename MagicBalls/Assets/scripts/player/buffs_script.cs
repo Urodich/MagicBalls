@@ -35,13 +35,16 @@ public class buffs_script : MonoBehaviour
     }
 ///////////////////////////////////////////////////
     public void UpdateStatsText(){
-        text.text=$"отталкивание" + Math.Round(stats[Stats.repulsion], 2)*100+"%\n"+ 
-        "доп. снаряды"+(stats[Stats.projectiles]-1)+"\n"+
-        "урон от огня"+ Math.Round(stats[Stats.fireDamage], 2)*100+"%\n"+
-        "урон от молний"+ Math.Round(stats[Stats.thunderDamage], 2)*100+"%\n"+
-        "физический урон"+ Math.Round(stats[Stats.physicalDamage], 2)*100+"%\n"+
-        "урон"+ Math.Round(stats[Stats.damage], 2)*100+"%\n"+
-        "скорость"+Math.Round(stats[Stats.speed], 2)*100+"%";
+        text.text=
+        String.Format("отталкивание {0,0}", Math.Round(stats[Stats.repulsion], 2)*100)+"%\n"+ 
+        String.Format("доп. снаряды {0,0}",(stats[Stats.projectiles]-1))+"\n"+
+        String.Format("урон от огня {0,0}", Math.Round(stats[Stats.fireDamage], 2)*100)+"%\n"+
+        String.Format("урон от молний {0,0}", Math.Round(stats[Stats.thunderDamage], 2)*100)+"%\n"+
+        String.Format("физический урон {0,0}", Math.Round(stats[Stats.physicalDamage], 2)*100)+"%\n"+
+        String.Format("урон {0,0}", Math.Round(stats[Stats.damage], 2)*100)+"%\n"+
+        String.Format("скорость {0,0}",Math.Round(stats[Stats.speed], 2)*100)+"%"+
+        String.Format("здоровье {0,0}",Math.Round(stats[Stats.MaxHP], 2)*100)+"%"+
+        String.Format("мана {0,0}",Math.Round(stats[Stats.MaxMana], 2)*100)+"%";
     }
 
     public void ChangeStats(Stats index, float value){
