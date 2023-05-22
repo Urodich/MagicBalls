@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Chain : SpellBase
 {
+    [SerializeField] float damage=15;
     protected override IEnumerator core()
     {
         throw new System.NotImplementedException();
@@ -43,7 +44,7 @@ public class Chain : SpellBase
                     particleSystem.Emit(param, 1);
                     //particleSystem.Emit(col.transform.position, Vector3.zero, 0, 2f,Color.white);
                     unit_script enemy = col.GetComponent<unit_script>();
-                    enemy.TakeDamage(15*buffs.GetStats(Stats.thunderDamage)*buffs.GetStats(Stats.damage), DamageType.Thunder);
+                    enemy.TakeDamage(damage*buffs.GetStats(Stats.thunderDamage)*buffs.GetStats(Stats.damage), DamageType.Thunder);
                     last=col;
                     hit=true;
                     steps--;

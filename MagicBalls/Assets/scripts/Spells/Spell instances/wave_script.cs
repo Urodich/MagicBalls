@@ -20,7 +20,7 @@ public class wave_script : MonoBehaviour
         direction = (gameObject.transform.position - player.transform.position).normalized;
         collider = gameObject.GetComponent<BoxCollider>();
         gameObject.transform.rotation = Quaternion.LookRotation(direction);
-        Destroy(gameObject, 1.5f);
+        Destroy(gameObject, time);
     }
 
     // Update is called once per frame

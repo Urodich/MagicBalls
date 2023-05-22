@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class UnitSound_script : MonoBehaviour
 {
-    [SerializeField] AudioSource step, attack, damage, die;
+    [SerializeField] AudioSource step, attack, damage, die, cast;
+    [SerializeField] AudioClip[] spells;
     public void Die(){
         if(die==null || die.clip==null) return;
         die.pitch=Random.Range(0.8f, 1.2f);
@@ -24,5 +25,9 @@ public class UnitSound_script : MonoBehaviour
         if(attack==null || attack.clip==null) return;
         attack.pitch=Random.Range(0.8f, 1.2f);
         attack.Play();
+    }
+    public void Cast(int i){
+        if(cast==null) return;
+        cast.PlayOneShot(spells[i]);
     }
 }

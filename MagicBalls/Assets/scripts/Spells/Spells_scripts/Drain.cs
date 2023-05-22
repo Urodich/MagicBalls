@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Drain : SpellBase
 {
+    [SerializeField] float damage=5;
+    [SerializeField] float manaPerTick=5;
+    [SerializeField] float radius=5;
     protected override IEnumerator core()
     {
         if(!spells.GodMod){
@@ -13,12 +16,12 @@ public class Drain : SpellBase
         }
        
         bool casting=true;
-        float _damage=buffs.GetStats(Stats.damage)+buffs.GetStats(Stats.physicalDamage)*5;
+        float _damage=buffs.GetStats(Stats.damage)*buffs.GetStats(Stats.physicalDamage)*damage;
 
         spells.animator.SetBool("casting", true);
         spells.animator.SetTrigger("cast_blast");
         spells.StopMoving(true);
-        Collider[] colliders = Physics.OverlapSphere(player.transform.position, 5f, spells.enemies);
+        Collider[] colliders = Physics.OverlapSphere(player.transform.position, radius, spells.enemies);
         foreach (Collider i in colliders){
             if(i.tag!="enemy") continue;
             StartCoroutine(bloodTail(Instantiate(prefab, i.transform, false).GetComponent<ParticleSystem>()));
@@ -31,7 +34,7 @@ public class Drain : SpellBase
                 enemy.TakeDamage(_damage, DamageType.Physical);
                 stats.AddHP(_damage);
             }
-            stats.CurMana-=5;
+            stats.CurMana-=manaPerTick;
             if(stats.CurMana<=0) break;
             yield return new WaitForSeconds(.5f);
         }

@@ -38,10 +38,12 @@ public class MageEnemy_script : enemy_script
     void Blink(Vector3 aim){
         curAction=StartCoroutine(blink());
         IEnumerator blink(){
+            yield return new WaitForSeconds(0.1f);
+            animator.SetTrigger("blink");
             yield return new WaitForSeconds(0.3f);
             Destroy(Instantiate(_blink,transform.position, new Quaternion()).gameObject,1f);
             yield return new WaitForSeconds(0.2f);
-            Vector3 direction = (transform.position=aim);
+            Vector3 direction = (transform.position-aim);
             direction=Vector3.Scale(direction, new Vector3(1,0,1));
             transform.Translate(direction*blinkRange);
             blinkCD=BlinkCD;
@@ -69,6 +71,8 @@ public class MageEnemy_script : enemy_script
     void Defend(){
         curAction=StartCoroutine(def());
         IEnumerator def(){
+            yield return new WaitForFixedUpdate();
+            animator.SetTrigger("def");
             Destroy(Instantiate(defSpell, transform).gameObject,1);
             yield return new WaitForSeconds(0.1f);
             Collider[] proj=Physics.OverlapSphere(transform.position, 3.5f, spells);

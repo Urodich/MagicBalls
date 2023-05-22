@@ -42,12 +42,12 @@ public class Blast : SpellBase
         Collider[] enemy = Physics.OverlapSphere(player.transform.position, 1f*b*time, spells.enemies);
         foreach(Collider elem in enemy){
             unit_script en=elem.gameObject.GetComponent<unit_script>();
-            en.TakeDamage(_damage*time, DamageType.Fire);
+            en.TakeDamage(_damage*a*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*time, DamageType.Fire);
             en.Move(elem.gameObject.transform.position-player.transform.position, 2f*a*time, .5f, false);
         }
-        if(time>=3){
+        if(time>=5 && !spells.GodMod){
             player_script player_=player.GetComponent<player_script>();
-            player_.TakeDamage(5*a*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*time, DamageType.Fire);
+            player_.TakeDamage(_damage*a*buffs.GetStats(Stats.fireDamage)*buffs.GetStats(Stats.damage)*time, DamageType.Fire);
             player_.Stun(2f);
         }
         if(!spells.GodMod) spells.CastSpell(CoolDown,"Blast",()=>CD=false);
