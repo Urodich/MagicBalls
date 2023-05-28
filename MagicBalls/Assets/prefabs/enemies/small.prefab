@@ -84,6 +84,8 @@ MonoBehaviour:
   attack: {fileID: 4097285029707317359}
   damage: {fileID: 8844206165158331910}
   die: {fileID: 4632057310257289138}
+  cast: {fileID: 0}
+  spells: []
 --- !u!82 &2017569185059544344
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2603,7 +2605,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7865919886816744997}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 8.659561e-17, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 1.1648117, z: 0}
+  m_LocalPosition: {x: -0, y: 0.04, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:

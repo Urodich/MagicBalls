@@ -14,7 +14,7 @@ public class itemUI_script : MonoBehaviour
     Color _empty = Color.white, _fill = Color.white;
     void Start(){
         _empty.a=0.5f;
-        _fill.a=0.5f;
+        _fill.a=1f;
         if(!_item)_image.raycastTarget=false;
     }
     public void SetItem(Item item){
