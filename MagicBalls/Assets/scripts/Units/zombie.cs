@@ -25,7 +25,7 @@ public class zombie : enemy_script
         //атаки и передвижение
         if ((aim.transform.position-gameObject.transform.position).sqrMagnitude>attackDistance*attackDistance) {
             if(attacking){
-                StopCoroutine(attack);
+                StopCoroutine(curAction);
                 attacking=false;
                 navMesh.isStopped=false;
             } 
@@ -41,7 +41,7 @@ public class zombie : enemy_script
     void Attack(){
         navMesh.isStopped=true;
         attacking =true;
-        attack=StartCoroutine(AttackDelay());
+        curAction =StartCoroutine(AttackDelay());
     }
     //Attacking function
     IEnumerator AttackDelay(){
