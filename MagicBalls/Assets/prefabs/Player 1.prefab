@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 3991661399047907763}
   - component: {fileID: 1375307629615726936}
   - component: {fileID: 3864664356896931130}
+  - component: {fileID: 3205924707106422411}
   - component: {fileID: 6441369930753432606}
   - component: {fileID: 5023852248379601169}
   - component: {fileID: 2354498789987047764}
@@ -152,6 +153,7 @@ MonoBehaviour:
   ManaCost: 15
   prefab: {fileID: 3656249069635650482, guid: f0df4e8da220a27428b5c46d72cdf438, type: 3}
   clip: {fileID: 0}
+  damage: 15
 --- !u!114 &1319557961327763603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +171,9 @@ MonoBehaviour:
   ManaCost: 35
   prefab: {fileID: 5751594473771702709, guid: 6f6b14925800a7a46931e623b58027e9, type: 3}
   clip: {fileID: 0}
+  damage: 5
+  manaPerTick: 5
+  radius: 5
 --- !u!114 &525422937096619506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +228,7 @@ MonoBehaviour:
   ManaCost: 45
   prefab: {fileID: 5999812651272828713, guid: f9169fba3ecf8314d99f1a83511b9342, type: 3}
   clip: {fileID: 0}
+  manaPerCast: 0
 --- !u!114 &3864664356896931130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +247,23 @@ MonoBehaviour:
   prefab: {fileID: 4203942057214748151}
   clip: {fileID: 8300000, guid: d14441f740fcd5346b7981c33493b69f, type: 3}
   damage: 5
+--- !u!114 &3205924707106422411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3670958437368745414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88816ce0223ef343ada46138b18b624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0.5
+  CoolDown: 40
+  ManaCost: 65
+  prefab: {fileID: 6605731922090596992, guid: e5308bdd761c6af4cb93f78bbf091ee7, type: 3}
+  clip: {fileID: 0}
 --- !u!114 &6441369930753432606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -994,6 +1017,8 @@ MonoBehaviour:
   attack: {fileID: 0}
   damage: {fileID: 8305228119119347338}
   die: {fileID: 4737142150440373296}
+  cast: {fileID: 0}
+  spells: []
 --- !u!82 &8621054881021530471
 AudioSource:
   m_ObjectHideFlags: 0

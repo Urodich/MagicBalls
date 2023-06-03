@@ -18,7 +18,7 @@ public class RangeEnemyScript : enemy_script
         //атаки и передвижение
         if ((aim.transform.position-gameObject.transform.position).sqrMagnitude>attackDistance*attackDistance) {
             if(attacking){
-                StopCoroutine(attack);
+                StopCoroutine(curAction);
                 attacking=false;
                 navMesh.isStopped=false;
             } 

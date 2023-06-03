@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Diagnostics;
 
 //TO DO
 //low hp mobs go away
@@ -19,7 +20,7 @@ public class enemy_script : unit_script, IEnemy
     public List<GameObject> aims = new List<GameObject>();
     [HideInInspector] public GameObject aim;
     protected bool attacking=false;
-    protected Coroutine attack;
+    //protected Coroutine attack;
     protected bool isActive=true;
     public LayerMask enemies;
     public LayerMask friends;
@@ -75,7 +76,7 @@ public class enemy_script : unit_script, IEnemy
     }
 
     protected virtual void StopAttack(){
-        if(attack!=null)StopCoroutine(attack);
+        if(curAction!=null)StopCoroutine(curAction);
         attacking=false;
         if(!isStunned)navMesh.isStopped=false;
     }
@@ -112,7 +113,7 @@ public class enemy_script : unit_script, IEnemy
     protected void Attack(){
         navMesh.isStopped=true;
         attacking =true;
-        attack=StartCoroutine(AttackDelay());
+        curAction =StartCoroutine(AttackDelay());
     }
     //Attacking function
     protected virtual IEnumerator AttackDelay(){
@@ -124,7 +125,8 @@ public class enemy_script : unit_script, IEnemy
         attacking=false;
     }
     protected virtual void NotifyAllies(GameObject _aim){
-        Collider[] cols=Physics.OverlapSphere(transform.position, 10f);
+        Collider[] cols=Physics.OverlapSphere(transform.position, 10f, friends);
+        if (cols == null) return;
         foreach(Collider col in cols){
             if(Utils.LayerComparer(col.gameObject, friends)&&col.gameObject.tag!="Player")
                 col.gameObject.GetComponent<enemy_script>().FindAim(_aim);
@@ -134,12 +136,12 @@ public class enemy_script : unit_script, IEnemy
     //Triggers
     public virtual void OnColliderEnter(GameObject obj, Collider collider){
         if (obj.name.Equals("vision")){
-            if(1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))
+            if(Utils.LayerComparer(collider.gameObject, enemies))
                 FindAim(collider.gameObject); 
-        }
+            }
     } 
     public virtual void OnColliderExit(GameObject obj, Collider collider){
-        if(obj.name=="vision" && (1<<collider.gameObject.layer == (1 << collider.gameObject.layer & enemies))){
+        if(obj.name=="vision" && Utils.LayerComparer(collider.gameObject, enemies)){
             LostAim(collider.gameObject);
         }
     }
