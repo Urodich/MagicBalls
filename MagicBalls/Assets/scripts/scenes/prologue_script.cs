@@ -48,8 +48,28 @@ public class prologue_script : MonoBehaviour
         Instantiate(ogre, ogreSpawn);
     }
 
+    [SerializeField] Transform[] EndSpawnPoints;
+    [SerializeField] enemy_script[] enemyTypes;
+    Coroutine end;
     public void Rescue(){
+        end=StartCoroutine(ending());
 
+        IEnumerator ending(){
+            while(true){
+                foreach(var elem in EndSpawnPoints)
+                    Instantiate(enemyTypes[Random.Range(0,1)], elem.position, new Quaternion()).SetStartAim(player.transform.position);
+                yield return new WaitForSeconds(1f);
+            }
+        }
+    }
+    public void End(){
+        StopCoroutine(end);
+        StartCoroutine(core());
+        IEnumerator core(){
+            post.SetColor(Color.white, 2);
+            yield return new WaitForSeconds(2);
+            Time.timeScale=0;
+        }
     }
 
     void Awake(){

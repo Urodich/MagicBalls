@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
 
@@ -9,9 +10,32 @@ public class PostProcess_script : MonoBehaviour
     [SerializeField] Volume volume;
     Vignette vignette;
     ColorAdjustments colorAdjustments;
+    HUD_script hud;
     public void Start(){
         vignette=(Vignette)volume.profile.components.Find((component)=>component.name=="Vignette(Clone)");
         colorAdjustments=(ColorAdjustments)volume.profile.components.Find((component)=>component.name=="ColorAdjustments(Clone)");
+        hud=GameObject.Find("HUD(Clone)").GetComponent<HUD_script>();
+    }
+
+    public void SetColor(Color color, float time){
+        if(hud==null) return;
+        hud.FrontImage.SetActive(true);
+        Image image = hud.FrontImage.GetComponent<Image>();
+
+        StartCoroutine(core());
+
+        IEnumerator core(){
+            image.color=color;
+            for (float i=0;i<time;i+=Time.fixedDeltaTime){
+                color.a = Mathf.Lerp(0,time,i);
+                image.color=color;
+                yield return new WaitForFixedUpdate();
+            }
+        }
+    }
+    public void DeleteColor(){
+        if(hud==null) return;
+        hud.FrontImage.SetActive(false);
     }
 
     public void DieEffect(float speed){
