@@ -72,7 +72,7 @@ public class prologue_script : MonoBehaviour
         IEnumerator core(){
             post.SetColor(Color.white, 2);
             yield return new WaitForSeconds(2);
-            //Time.timeScale=0;
+            player.GetComponent<Spells_script>().GodMod=true;
             yield return new WaitForSeconds(2);
             loader.Delete();
             SceneManager.LoadScene("MainMenu");
@@ -94,6 +94,7 @@ public class prologue_script : MonoBehaviour
         navMesh=player.GetComponent<NavMeshAgent>();
 
         pauseMenu=HUD.PauseMenu;
+        spheres_panel = HUD.transform.Find("spheres").gameObject;
         pauseMenu.transform.Find("Toggle").gameObject.SetActive(false);
         Boost_panel=HUD.BoostPanel;
         
@@ -103,7 +104,6 @@ public class prologue_script : MonoBehaviour
 
         if(loader!=null && loader.Load()) return;
 
-        spheres_panel = HUD.transform.Find("spheres").gameObject;
         spheres_panel.SetActive(false);
         player.GetComponent<playerControl_script>().block=true;
         
@@ -120,6 +120,7 @@ public class prologue_script : MonoBehaviour
     }
     void Resume(){
         isPaused=false;
+        HUD.Settings.gameObject.SetActive(false);
         pauseMenu.SetActive(false);
         Time.timeScale=1;
     }

@@ -83,6 +83,7 @@ public class arena_script : MonoBehaviour
     }
     public void Resume(){
         isPaused=false;
+        HUD.Settings.gameObject.SetActive(false);
         pauseMenu.SetActive(false);
         Time.timeScale=1;
     }

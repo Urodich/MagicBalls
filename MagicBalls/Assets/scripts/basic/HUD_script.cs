@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class HUD_script : MonoBehaviour
 {
     public GameObject DialogePanel,BoostPanel,PauseMenu,Inventory,StatsText, FrontImage;
-    [SerializeField] SettingsScript Settings;
+    [SerializeField] public SettingsScript Settings;
     Spells_script spells;
     public UnityAction resume,restart,exit;
     void Start()
