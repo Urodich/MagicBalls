@@ -41,7 +41,7 @@ public class playerControl_script : MonoBehaviour
         //предметы
         if(Physics.Raycast(ray, out RaycastHit itemHit, float.MaxValue, items)){
             if(itemTarget!=itemHit.collider.gameObject) {
-                if(itemTarget!=null)itemTarget.GetComponent<Item>().CloseInfo();
+                if(itemTarget!=null)itemTarget.GetComponent<IItem>().CloseInfo();
                 itemTarget=itemHit.collider.gameObject;
                 itemTarget.GetComponent<IItem>().ShowInfo();
             }

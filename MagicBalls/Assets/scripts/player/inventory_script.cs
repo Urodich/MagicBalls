@@ -57,14 +57,14 @@ public class inventory_script : MonoBehaviour
     }
 
 ///////////////////////////////////////////////////
-    public void Load(){
-
+    public Item[] GetItems(){
+        return new List<Item>(){head._item, bracers._item, boots._item}.ToArray();
     }
-    public void Save(){
 
-    }
-    public void Reset(){
-
+    public void DropAll(){
+        head?.DeleteItem();
+        bracers?.DeleteItem();
+        boots?.DeleteItem();
     }
 ///////////////////////////////////////////////////
     Item Set(Item item, itemUI_script slot){

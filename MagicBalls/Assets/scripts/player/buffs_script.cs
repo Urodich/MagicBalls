@@ -10,7 +10,7 @@ public class buffs_script : MonoBehaviour
     private Dictionary<Stats, float> stats;
     TextMeshProUGUI text;
 
-    void Start(){
+    void Awake(){
         text=GameObject.Find("StatsText").GetComponent<TextMeshProUGUI>();
         stats = new Dictionary<Stats, float>();
         foreach(Stats elem in Enum.GetValues(typeof(Stats))){

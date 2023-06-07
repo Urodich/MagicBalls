@@ -34,7 +34,7 @@ Transform:
   - {fileID: 4941115330748579264}
   - {fileID: 8953483181175158232}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2459845923437189909
 MonoBehaviour:
@@ -57,7 +57,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1692176730699802548}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3.313014, y: 1.91048, z: 1.488284}
@@ -74,7 +74,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 1.665, y: 0.935, z: 0.715}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.91, z: 0}
   m_TimeToStationary: 0.5
@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 4941115330748579264}
   - component: {fileID: 2212914140553549870}
   - component: {fileID: 7347785144757946606}
+  - component: {fileID: 1126385882263353977}
   m_Layer: 0
   m_Name: "\u041A\u0443\u0431.022_\u041A\u0443\u0431.031"
   m_TagString: Untagged
@@ -194,6 +195,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1126385882263353977
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4716107670817597145}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.313014, y: 0.91752017, z: 1.488284}
+  m_Center: {x: 0, y: 0.4291851, z: -0.0054939985}
 --- !u!1 &8500097019546997970
 GameObject:
   m_ObjectHideFlags: 0

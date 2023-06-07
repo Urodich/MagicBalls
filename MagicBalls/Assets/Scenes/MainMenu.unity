@@ -345,7 +345,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72.5
+  m_fontSize: 97.35
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1155,6 +1155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa4dab6848257be4b9211a92706ff005, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  continueButton: {fileID: 1345327806}
 --- !u!114 &1170692082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1815,6 +1816,11 @@ PrefabInstance:
 --- !u!224 &1345327805 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6779239826590816141, guid: f657d94eeaf085543b629c07ba417633, type: 3}
+  m_PrefabInstance: {fileID: 1345327804}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1345327806 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4932661525075125190, guid: f657d94eeaf085543b629c07ba417633, type: 3}
   m_PrefabInstance: {fileID: 1345327804}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1386849214
@@ -2756,6 +2762,10 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1301006949}
     m_Modifications:
+    - target: {fileID: 1585360082174918462, guid: f657d94eeaf085543b629c07ba417633, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4114574609133088263, guid: f657d94eeaf085543b629c07ba417633, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

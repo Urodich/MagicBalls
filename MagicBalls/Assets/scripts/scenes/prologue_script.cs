@@ -8,13 +8,16 @@ public class prologue_script : MonoBehaviour
     GameObject Boost_panel, pauseMenu, spheres_panel; 
     bool isPaused=false;
     buffs_script buffs;
+    [SerializeField] Loader loader;
     [SerializeField] Load_script load;
     [SerializeField] GameObject player;
     [SerializeField] HUD_script HUD;
     [SerializeField] PostProcess_script post;
     NavMeshAgent navMesh;
-    Vector3 playerPos;
+    Vector3 playerPos = new Vector3(0,0,0);
+    [SerializeField] Transform playerDefaultPos;
     [SerializeField] Transform ArenaSpawn;
+    [SerializeField] Item[] playerStartEquipment;
     public void Dream(){
         StartCoroutine(core());
         IEnumerator core(){
@@ -36,7 +39,8 @@ public class prologue_script : MonoBehaviour
             post.ScreenDarkening(true);
             yield return new WaitForSeconds(1f);
             navMesh.enabled=false;
-            player.transform.position=playerPos;
+            if(Vector3.Distance(playerPos, new Vector3(0,0,0))!=0) player.transform.position=playerPos;
+            else player.transform.position=playerDefaultPos.position;
             navMesh.enabled=true;
             post.ScreenDarkening(false);
             player.GetComponent<Spells_script>().GodMod=false;
@@ -44,8 +48,8 @@ public class prologue_script : MonoBehaviour
     }
     [SerializeField] enemy_script ogre;
     [SerializeField] Transform ogreSpawn;
-    public void Room1(){
-        Instantiate(ogre, ogreSpawn);
+    public void Room1(room_activator room){
+        room.AddEnemy( Instantiate(ogre, ogreSpawn));
     }
 
     [SerializeField] Transform[] EndSpawnPoints;
@@ -75,6 +79,7 @@ public class prologue_script : MonoBehaviour
     void Awake(){
         HUD=Instantiate(HUD, transform, true);
         player=Instantiate(player, transform.position, new Quaternion());
+        loader.player = player;
         GameObject.FindGameObjectWithTag("MainCamera").GetComponent<camera_script>().player=player;
         buffs = player.GetComponent<buffs_script>();
     }
@@ -87,11 +92,20 @@ public class prologue_script : MonoBehaviour
 
         pauseMenu=HUD.PauseMenu;
         Boost_panel=HUD.BoostPanel;
+        
+        player.GetComponent<player_script>().dieEvent+=(player)=>Die(player);
+
+        Instantiate(load);
+
+        if(loader!=null && loader.Load()) return;
+
         spheres_panel = HUD.transform.Find("spheres").gameObject;
         spheres_panel.SetActive(false);
         player.GetComponent<playerControl_script>().block=true;
-
-        Instantiate(load);
+        
+        foreach (Item item in playerStartEquipment){
+                Instantiate(item).Take(player);
+        };
     }
 
     void Update(){
@@ -114,7 +128,20 @@ public class prologue_script : MonoBehaviour
         buffs.UpdateStatsText();
         pauseMenu.SetActive(true);
     }
+
+    void Die(GameObject player){
+        StopAllCoroutines();
+        StartCoroutine(end());
+
+        IEnumerator end(){
+            post.DieEffect(0.02f);
+            yield return new WaitForSeconds(4f);
+            //if(loader!=null)loader.Save();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
     void Exit(){
+        if(loader!=null)loader.Save();
         SceneManager.LoadScene("MainMenu");
     }
     

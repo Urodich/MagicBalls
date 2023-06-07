@@ -6,16 +6,33 @@ public class Golem_script : SplashEnemy_script
 {
     [SerializeField] float echoDelay=0.5f;
     [SerializeField] float echoRadius = 3;
+    [SerializeField] float echoCD = 5;
+    float _echoCD = 0;
     [SerializeField] ParticleSystem echo;
-    void FixedUpdate()
+    GameObject player;
+    void Awake(){
+        base.Start();
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
+
+    new void FixedUpdate()
     {
         base.FixedUpdate();
 
+        if(_echoCD > 0) _echoCD-=Time.fixedDeltaTime;
         if (isStunned) return;
-        if (!aim) { animator.SetBool("run", false); return; }
+        if (!aim) {
+            if((transform.position-player.transform.position).sqrMagnitude>4) {
+                WalkTo(player.transform.position);
+                animator.SetBool("run", true);
+                transform.LookAt(player.transform);
+            }
+            else animator.SetBool("run", false); 
+            return; 
+        }
 
         transform.LookAt(aim.transform);
-        //атаки и передвижение
+        //пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if ((aim.transform.position - gameObject.transform.position).sqrMagnitude > attackDistance * attackDistance)
         {
             if (attacking && (aim.transform.position - gameObject.transform.position).sqrMagnitude > attackDistance * attackDistance * 2)
@@ -23,12 +40,12 @@ public class Golem_script : SplashEnemy_script
                 StopAttack();
                 animator.SetTrigger("break");
             }
-            WalkTo(aim.transform.position);
+            if(!attacking) WalkTo(aim.transform.position);
             return;
         }
         else
             StopWalking();
-        if (!attacking) curAction =StartCoroutine(Echo());
+        if (!attacking && _echoCD<=0) curAction = StartCoroutine(Echo());
         if (!attacking) { Attack(); Debug.Log("golem attack"); animator.SetTrigger("attack"); }
 
         if (!attacking) ChangeAim();
@@ -36,9 +53,11 @@ public class Golem_script : SplashEnemy_script
 
     IEnumerator Echo()
     {
+        Debug.Log("ECHO");
         attacking = true;
-        animator.SetTrigger("Echo");
+        animator.SetTrigger("echo");
         yield return new WaitForSeconds(echoDelay);
+        _echoCD=echoCD;
         echo.Play();
         Collider[] col = Physics.OverlapSphere(transform.position, echoRadius, enemies);
         foreach (Collider elem in col)
