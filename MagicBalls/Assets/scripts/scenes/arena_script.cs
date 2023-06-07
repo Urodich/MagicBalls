@@ -32,6 +32,7 @@ public class arena_script : MonoBehaviour
     }
     void Start(){
         pauseMenu=HUD.PauseMenu;
+        pauseMenu.transform.Find("Toggle").gameObject.SetActive(false);
         Score=HUD.gameObject.transform.Find("arena timer").gameObject.GetComponent<Text>();
         infoText=HUD.gameObject.transform.Find("arena info").gameObject.GetComponent<Text>();
         Boost_panel=HUD.BoostPanel;

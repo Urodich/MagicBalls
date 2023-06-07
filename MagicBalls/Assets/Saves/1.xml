@@ -9,7 +9,7 @@
         </arrayItem>
         <arrayItem>
           <Name>Dialoge лестница</Name>
-          <IsActive>true</IsActive>
+          <IsActive>false</IsActive>
         </arrayItem>
         <arrayItem>
           <Name>Dialoge выход</Name>
@@ -17,15 +17,11 @@
         </arrayItem>
         <arrayItem>
           <Name>Dialoge двери</Name>
-          <IsActive>true</IsActive>
+          <IsActive>false</IsActive>
         </arrayItem>
         <arrayItem>
-          <Name>Dialoge музей</Name>
-          <IsActive>true</IsActive>
-        </arrayItem>
-        <arrayItem>
-          <Name>Dialoge</Name>
-          <IsActive>true</IsActive>
+          <Name>Dialoge маска</Name>
+          <IsActive>false</IsActive>
         </arrayItem>
         <arrayItem>
           <Name>Dialoge арена</Name>
@@ -52,29 +48,17 @@
           <Name>square hat</Name>
           <IsActive>true</IsActive>
         </arrayItem>
+        <arrayItem>
+          <Name>old bracers</Name>
+          <IsActive>true</IsActive>
+        </arrayItem>
       </objects>
       <Name>Items</Name>
     </Room>
     <Room>
       <objects>
         <arrayItem>
-          <Name>statue1 (1)</Name>
-          <IsActive>true</IsActive>
-        </arrayItem>
-        <arrayItem>
-          <Name>statue1</Name>
-          <IsActive>true</IsActive>
-        </arrayItem>
-        <arrayItem>
-          <Name>statue2 (1)</Name>
-          <IsActive>true</IsActive>
-        </arrayItem>
-        <arrayItem>
           <Name>statue2</Name>
-          <IsActive>true</IsActive>
-        </arrayItem>
-        <arrayItem>
-          <Name>room activator 1</Name>
           <IsActive>true</IsActive>
         </arrayItem>
       </objects>
@@ -109,9 +93,9 @@
       <string>base boots</string>
     </items>
     <Position>
-      <x>29.78008</x>
+      <x>18.5328617</x>
       <y>10.6000023</y>
-      <z>42.4534264</z>
+      <z>38.62295</z>
     </Position>
   </PlayerData>
 </Save>

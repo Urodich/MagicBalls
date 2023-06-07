@@ -49,7 +49,7 @@ public class prologue_script : MonoBehaviour
     [SerializeField] enemy_script ogre;
     [SerializeField] Transform ogreSpawn;
     public void Room1(room_activator room){
-        room.AddEnemy( Instantiate(ogre, ogreSpawn));
+        room.AddEnemy( Instantiate(ogre, ogreSpawn.position, new Quaternion()));
     }
 
     [SerializeField] Transform[] EndSpawnPoints;
@@ -72,7 +72,10 @@ public class prologue_script : MonoBehaviour
         IEnumerator core(){
             post.SetColor(Color.white, 2);
             yield return new WaitForSeconds(2);
-            Time.timeScale=0;
+            //Time.timeScale=0;
+            yield return new WaitForSeconds(2);
+            loader.Delete();
+            SceneManager.LoadScene("MainMenu");
         }
     }
 
@@ -91,6 +94,7 @@ public class prologue_script : MonoBehaviour
         navMesh=player.GetComponent<NavMeshAgent>();
 
         pauseMenu=HUD.PauseMenu;
+        pauseMenu.transform.Find("Toggle").gameObject.SetActive(false);
         Boost_panel=HUD.BoostPanel;
         
         player.GetComponent<player_script>().dieEvent+=(player)=>Die(player);
@@ -136,7 +140,9 @@ public class prologue_script : MonoBehaviour
         IEnumerator end(){
             post.DieEffect(0.02f);
             yield return new WaitForSeconds(4f);
-            //if(loader!=null)loader.Save();
+            post.ScreenDarkening(true);
+            yield return new WaitForSeconds(2f);
+            post.ScreenDarkening(false);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
