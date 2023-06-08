@@ -69,6 +69,7 @@ public class Loader : MonoBehaviour
 
             foreach(Transform elem in room.GetComponentInChildren<Transform>()){
                 if (roomState.objects.Find((el)=>el.Name==elem.name)==null) elem.gameObject.SetActive(false);
+                else if (!roomState.objects.Find((el)=>el.Name==elem.name).IsActive) elem.gameObject.SetActive(false);
             }
         }
         NavMeshAgent navMesh = player.GetComponent<NavMeshAgent>();

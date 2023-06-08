@@ -2,7 +2,7 @@ using UnityEngine;
 public class bonus_script : MonoBehaviour
 {
     [SerializeField] float value;
-    [SerializeField] bool IsHpHeal;
+    [SerializeField] Stats stat;
     void Start()
     {
         Destroy(gameObject, 10f);
@@ -10,8 +10,8 @@ public class bonus_script : MonoBehaviour
     
     void OnTriggerEnter(Collider collider){
         if(collider.gameObject.tag!="Player") return;
-        if(IsHpHeal)collider.gameObject.GetComponent<player_script>().AddHP(value);
-        else collider.gameObject.GetComponent<player_script>().AddMana(value);
+        buffs_script buff = collider.gameObject.GetComponent<buffs_script>();
+        collider.gameObject.GetComponent<player_script>().AddEffect(()=>buff.ChangeStats(stat, value), ()=>buff.ChangeStats(stat, -value), 5, true);
         Destroy(gameObject);
     }
 }
